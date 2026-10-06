@@ -1,647 +1,2791 @@
-/* =========================================
-   ELEMENTS
-========================================= */
+/* =========================================================
+   WANDERLUST - CLEAN FINAL SCRIPT
+========================================================= */
 
-const body = document.body;
 
-const themeBtn =
-    document.getElementById("themeBtn");
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
 
-const menuBtn =
-    document.getElementById("menuBtn");
+const USERS_KEY = "wanderlust_users";
+const SESSION_KEY = "wanderlust_session";
+const BOOKINGS_KEY = "wanderlust_bookings";
+const FAVORITES_KEY = "wanderlust_favorites";
+const THEME_KEY = "wanderlust_theme";
 
-const navLinks =
-    document.getElementById("navLinks");
 
-const searchInput =
-    document.getElementById("searchInput");
+/* =========================================================
+   DOM
+========================================================= */
 
-const searchBtn =
-    document.getElementById("searchBtn");
+const landingPage =
+  document.getElementById("landingPage");
 
-const destinationGrid =
-    document.getElementById("destinationGrid");
+const dashboardPage =
+  document.getElementById("dashboard");
 
-const emptyState =
-    document.getElementById("emptyState");
+const userNav =
+  document.getElementById("userNav");
+
+const authModal =
+  document.getElementById("authModal");
+
+const authClose =
+  document.getElementById("authClose");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const registerForm =
+  document.getElementById("registerForm");
+
+const showRegisterBtn =
+  document.getElementById("showRegisterBtn");
+
+const showLoginBtn =
+  document.getElementById("showLoginBtn");
 
 const bookingForm =
-    document.getElementById("bookingForm");
+  document.getElementById("bookingForm");
 
-const contactForm =
-    document.getElementById("contactForm");
+const themeBtn =
+  document.getElementById("themeBtn");
+
+const navLinks =
+  document.getElementById("navLinks");
+
+const menuBtn =
+  document.getElementById("menuBtn");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const searchBtn =
+  document.getElementById("searchBtn");
+
+const destinationCards =
+  document.querySelectorAll(".destination-card");
+
+const emptyState =
+  document.getElementById("emptyState");
 
 const toast =
-    document.getElementById("toast");
-
-const year =
-    document.getElementById("year");
+  document.getElementById("toast");
 
 
-/* =========================================
-   CURRENT YEAR
-========================================= */
+/* =========================================================
+   STATE
+========================================================= */
 
-year.textContent =
-    new Date().getFullYear();
+let pendingAction = null;
 
+let currentSlide = 0;
 
-/* =========================================
-   THEME
-========================================= */
-
-const savedTheme =
-    localStorage.getItem("wanderlustTheme");
+let carouselTimer = null;
 
 
-if (savedTheme === "dark") {
+/* =========================================================
+   STORAGE FUNCTIONS
+========================================================= */
 
-    body.classList.add("dark");
+function getUsers() {
 
-    themeBtn.textContent = "☀️";
+  try {
 
-} else {
+    return JSON.parse(
+      localStorage.getItem(USERS_KEY) || "[]"
+    );
 
-    themeBtn.textContent = "🌙";
+  } catch {
+
+    return [];
+
+  }
+}
+
+
+function saveUsers(users) {
+
+  localStorage.setItem(
+    USERS_KEY,
+    JSON.stringify(users)
+  );
 
 }
 
 
-themeBtn.addEventListener("click", () => {
+function getSession() {
 
-    body.classList.toggle("dark");
+  try {
 
-    const isDark =
-        body.classList.contains("dark");
+    return JSON.parse(
+      localStorage.getItem(SESSION_KEY) || "null"
+    );
+
+  } catch {
+
+    return null;
+
+  }
+}
 
 
-    if (isDark) {
+function setSession(user) {
 
-        themeBtn.textContent = "☀️";
+  localStorage.setItem(
+    SESSION_KEY,
+    JSON.stringify(user)
+  );
 
-        localStorage.setItem(
-            "wanderlustTheme",
-            "dark"
-        );
+}
 
-    } else {
 
-        themeBtn.textContent = "🌙";
+function clearSession() {
 
-        localStorage.setItem(
-            "wanderlustTheme",
-            "light"
-        );
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+}
+
+
+function getBookings() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(BOOKINGS_KEY) || "[]"
+    );
+
+  } catch {
+
+    return [];
+
+  }
+}
+
+
+function saveBookings(bookings) {
+
+  localStorage.setItem(
+    BOOKINGS_KEY,
+    JSON.stringify(bookings)
+  );
+
+}
+
+
+function getFavorites() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(FAVORITES_KEY) || "{}"
+    );
+
+  } catch {
+
+    return {};
+
+  }
+}
+
+
+function saveFavorites(favorites) {
+
+  localStorage.setItem(
+    FAVORITES_KEY,
+    JSON.stringify(favorites)
+  );
+
+}
+
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function showToast(message) {
+
+  if (!toast) return;
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    showToast.timer
+  );
+
+  showToast.timer =
+    setTimeout(() => {
+
+      toast.classList.remove(
+        "show"
+      );
+
+    }, 3000);
+
+}
+
+
+/* =========================================================
+   ROUTING
+========================================================= */
+
+function goTo(route) {
+
+  if (!route.startsWith("#")) {
+
+    route =
+      "#" + route;
+
+  }
+
+
+  if (
+    window.location.hash ===
+    route
+  ) {
+
+    renderRoute();
+
+  } else {
+
+    window.location.hash =
+      route;
+
+  }
+
+}
+
+
+function renderRoute() {
+
+  const route =
+    window.location.hash || "#home";
+
+
+  /* -------------------------
+     DASHBOARD ROUTE
+  ------------------------- */
+
+  if (
+    route === "#dashboard"
+  ) {
+
+    const session =
+      getSession();
+
+
+    if (!session) {
+
+      pendingAction = {
+        type: "dashboard"
+      };
+
+
+      /*
+          Change route back to home
+          while login modal is shown.
+      */
+
+      window.history.replaceState(
+        {},
+        "",
+        "#home"
+      );
+
+
+      showLanding();
+
+      openLogin();
+
+      return;
 
     }
 
-});
+
+    showDashboard();
+
+    return;
+
+  }
 
 
-/* =========================================
-   MOBILE MENU
-========================================= */
+  /* -------------------------
+     ALL OTHER ROUTES
+  ------------------------- */
 
-menuBtn.addEventListener("click", () => {
-
-    navLinks.classList.toggle("show");
-
-});
+  showLanding();
 
 
-navLinks.querySelectorAll("a").forEach(link => {
-
-    link.addEventListener("click", () => {
-
-        navLinks.classList.remove("show");
-
-    });
-
-});
+  const target =
+    route.replace(
+      "#",
+      ""
+    );
 
 
-/* =========================================
-   FAVORITES
-========================================= */
+  if (
+    target &&
+    target !== "home"
+  ) {
 
-document
-    .querySelectorAll(".favorite-btn")
-    .forEach(button => {
+    setTimeout(() => {
 
-        button.addEventListener("click", () => {
+      const section =
+        document.getElementById(
+          target
+        );
 
-            button.classList.toggle("active");
 
+      if (section) {
 
-            if (button.classList.contains("active")) {
-
-                button.textContent = "♥";
-
-                showToast(
-                    "❤️ Added to your favorites."
-                );
-
-            } else {
-
-                button.textContent = "♡";
-
-                showToast(
-                    "Removed from favorites."
-                );
-
-            }
-
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
         });
 
+      }
+
+    }, 60);
+
+  } else {
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
     });
 
+  }
 
-/* =========================================
-   SEARCH DESTINATIONS
-========================================= */
-
-function filterDestinations() {
-
-    const value =
-        searchInput.value
-        .trim()
-        .toLowerCase();
+}
 
 
-    const cards =
-        destinationGrid
-        .querySelectorAll(".destination-card");
+function showLanding() {
+
+  if (landingPage) {
+
+    landingPage.classList.remove(
+      "hidden"
+    );
+
+  }
 
 
-    let visibleCount = 0;
+  if (dashboardPage) {
+
+    dashboardPage.classList.add(
+      "hidden"
+    );
+
+  }
 
 
-    cards.forEach(card => {
+  updateNavActiveState();
 
-        const name =
-            card.dataset.name.toLowerCase();
+}
 
 
-        if (
-            !value ||
-            name.includes(value)
-        ) {
+function showDashboard() {
 
-            card.style.display = "";
+  if (landingPage) {
 
-            visibleCount++;
+    landingPage.classList.add(
+      "hidden"
+    );
 
-        } else {
+  }
 
-            card.style.display = "none";
 
-        }
+  if (dashboardPage) {
+
+    dashboardPage.classList.remove(
+      "hidden"
+    );
+
+  }
+
+
+  renderDashboard();
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+function navigateHome() {
+
+  goTo("#home");
+
+}
+
+
+/* Browser Back / Forward */
+
+window.addEventListener(
+  "hashchange",
+  renderRoute
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+navLinks
+  .querySelectorAll("a")
+  .forEach(link => {
+
+    link.addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        const href =
+          link.getAttribute(
+            "href"
+          );
+
+
+        navLinks.classList.remove(
+          "show"
+        );
+
+
+        goTo(href);
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   ACTIVE NAV
+========================================================= */
+
+function updateNavActiveState() {
+
+  const route =
+    window.location.hash || "#home";
+
+
+  navLinks
+    .querySelectorAll("a")
+    .forEach(link => {
+
+      link.classList.toggle(
+        "active",
+        link.getAttribute(
+          "href"
+        ) === route
+      );
 
     });
 
+}
 
-    if (visibleCount === 0) {
 
-        emptyState.style.display = "block";
+window.addEventListener(
+  "scroll",
+  updateNavActiveState
+);
 
-    } else {
 
-        emptyState.style.display = "none";
+/* =========================================================
+   AUTH MODAL
+========================================================= */
+
+function openLogin(action = null) {
+
+  pendingAction =
+    action;
+
+
+  loginForm.classList.remove(
+    "hidden"
+  );
+
+
+  registerForm.classList.add(
+    "hidden"
+  );
+
+
+  authModal.classList.add(
+    "show"
+  );
+
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+
+  setTimeout(() => {
+
+    const email =
+      document.getElementById(
+        "loginEmail"
+      );
+
+    if (email) {
+
+      email.focus();
 
     }
+
+  }, 100);
+
+}
+
+
+function openRegister(prefillEmail = "") {
+
+  loginForm.classList.add(
+    "hidden"
+  );
+
+
+  registerForm.classList.remove(
+    "hidden"
+  );
+
+
+  authModal.classList.add(
+    "show"
+  );
+
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+
+  if (prefillEmail) {
+
+    document.getElementById(
+      "registerEmail"
+    ).value =
+      prefillEmail;
+
+  }
+
+}
+
+
+function closeAuth() {
+
+  authModal.classList.remove(
+    "show"
+  );
+
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+
+}
+
+
+authClose.addEventListener(
+  "click",
+  closeAuth
+);
+
+
+authModal.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      authModal
+    ) {
+
+      closeAuth();
+
+    }
+
+  }
+);
+
+
+showRegisterBtn.addEventListener(
+  "click",
+  () => {
+
+    const email =
+      document.getElementById(
+        "loginEmail"
+      ).value.trim();
+
+
+    openRegister(
+      email
+    );
+
+  }
+);
+
+
+showLoginBtn.addEventListener(
+  "click",
+  () => {
+
+    loginForm.classList.remove(
+      "hidden"
+    );
+
+    registerForm.classList.add(
+      "hidden"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+registerForm.addEventListener(
+  "submit",
+  event => {
+
+    event.preventDefault();
+
+
+    const name =
+      document.getElementById(
+        "registerName"
+      ).value.trim();
+
+
+    const email =
+      document.getElementById(
+        "registerEmail"
+      ).value.trim().toLowerCase();
+
+
+    const phone =
+      document.getElementById(
+        "registerPhone"
+      ).value.trim();
+
+
+    const password =
+      document.getElementById(
+        "registerPassword"
+      ).value;
+
+
+    const confirmPassword =
+      document.getElementById(
+        "registerConfirmPassword"
+      ).value;
+
+
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !password ||
+      !confirmPassword
+    ) {
+
+      showToast(
+        "❌ Please fill in all fields."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      password.length < 6
+    ) {
+
+      showToast(
+        "❌ Password must be at least 6 characters."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      password !==
+      confirmPassword
+    ) {
+
+      showToast(
+        "❌ Passwords do not match."
+      );
+
+      return;
+
+    }
+
+
+    const users =
+      getUsers();
+
+
+    const exists =
+      users.some(
+        user =>
+          user.email === email
+      );
+
+
+    if (exists) {
+
+      showToast(
+        "⚠️ Account already exists. Please login."
+      );
+
+
+      openLogin(
+        pendingAction
+      );
+
+
+      document.getElementById(
+        "loginEmail"
+      ).value =
+        email;
+
+
+      return;
+
+    }
+
+
+    const newUser = {
+
+      id:
+        Date.now(),
+
+      name,
+
+      email,
+
+      phone,
+
+      password
+
+    };
+
+
+    users.push(
+      newUser
+    );
+
+
+    saveUsers(
+      users
+    );
+
+
+    /*
+        AUTO LOGIN
+    */
+
+    setSession({
+
+      id:
+        newUser.id,
+
+      name:
+        newUser.name,
+
+      email:
+        newUser.email,
+
+      phone:
+        newUser.phone
+
+    });
+
+
+    registerForm.reset();
+
+    closeAuth();
+
+
+    updateUserUI();
+
+    updateBookingFields();
+
+    updateFavoriteButtons();
+
+
+    showToast(
+      `✅ Welcome to Wanderlust, ${newUser.name}!`
+    );
+
+
+    setTimeout(() => {
+
+      continuePendingAction();
+
+    }, 250);
+
+  }
+);
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+  "submit",
+  event => {
+
+    event.preventDefault();
+
+
+    const email =
+      document.getElementById(
+        "loginEmail"
+      ).value.trim().toLowerCase();
+
+
+    const password =
+      document.getElementById(
+        "loginPassword"
+      ).value;
+
+
+    if (
+      !email ||
+      !password
+    ) {
+
+      showToast(
+        "❌ Enter email and password."
+      );
+
+      return;
+
+    }
+
+
+    const users =
+      getUsers();
+
+
+    const user =
+      users.find(
+        item =>
+          item.email ===
+          email
+      );
+
+
+    /*
+        No account
+        → Register
+    */
+
+    if (!user) {
+
+      showToast(
+        "⚠️ Account not found. Create an account first."
+      );
+
+
+      setTimeout(() => {
+
+        openRegister(
+          email
+        );
+
+      }, 450);
+
+
+      return;
+
+    }
+
+
+    /*
+        Wrong password
+    */
+
+    if (
+      user.password !==
+      password
+    ) {
+
+      showToast(
+        "❌ Incorrect password."
+      );
+
+      return;
+
+    }
+
+
+    /*
+        SAVE SESSION
+    */
+
+    setSession({
+
+      id:
+        user.id,
+
+      name:
+        user.name,
+
+      email:
+        user.email,
+
+      phone:
+        user.phone
+
+    });
+
+
+    loginForm.reset();
+
+    closeAuth();
+
+
+    updateUserUI();
+
+    updateBookingFields();
+
+    updateFavoriteButtons();
+
+
+    showToast(
+      `✅ Welcome back, ${user.name}!`
+    );
+
+
+    setTimeout(() => {
+
+      continuePendingAction();
+
+    }, 250);
+
+  }
+);
+
+
+/* =========================================================
+   CONTINUE AFTER AUTH
+========================================================= */
+
+function continuePendingAction() {
+
+  const action =
+    pendingAction;
+
+
+  pendingAction =
+    null;
+
+
+  /*
+      Nothing pending
+      → just stay on current page
+  */
+
+  if (!action) {
+
+    updateBookingFields();
+
+    return;
+
+  }
+
+
+  /* -------------------------
+     BOOKING
+  ------------------------- */
+
+  if (
+    action.type ===
+    "booking"
+  ) {
+
+    const select =
+      document.getElementById(
+        "bookingDestination"
+      );
+
+
+    if (
+      select &&
+      action.destination
+    ) {
+
+      select.value =
+        action.destination;
+
+    }
+
+
+    goTo("#booking");
+
+    return;
+
+  }
+
+
+  /* -------------------------
+     DASHBOARD
+  ------------------------- */
+
+  if (
+    action.type ===
+    "dashboard"
+  ) {
+
+    goTo("#dashboard");
+
+    return;
+
+  }
+
+
+  /* -------------------------
+     FAVORITE
+  ------------------------- */
+
+  if (
+    action.type ===
+    "favorite"
+  ) {
+
+    saveFavorite(
+      action.destination
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NAVBAR USER UI
+========================================================= */
+
+function updateUserUI() {
+
+  const session =
+    getSession();
+
+
+  /*
+      LOGGED OUT
+  */
+
+  if (!session) {
+
+    userNav.innerHTML = `
+
+            <button
+                type="button"
+                class="login-nav-btn"
+                id="loginNavButton"
+            >
+                Login
+            </button>
+
+        `;
 
 
     document
-        .getElementById("destinations")
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+      .getElementById(
+        "loginNavButton"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          openLogin();
+
+        }
+      );
+
+
+    updateBookingFields();
+
+    return;
+
+  }
+
+
+  /*
+      LOGGED IN
+  */
+
+  const initial =
+    session.name
+      .trim()
+      .charAt(0)
+      .toUpperCase();
+
+
+  userNav.innerHTML = `
+
+        <div class="user-profile">
+
+            <button
+                type="button"
+                class="profile-btn"
+                id="profileBtn"
+            >
+
+                <span class="profile-avatar-small">
+                    ${escapeHtml(initial)}
+                </span>
+
+                <span>
+                    ${escapeHtml(
+    session.name.split(" ")[0]
+  )}
+                </span>
+
+                <span class="profile-arrow">
+                    ▾
+                </span>
+
+            </button>
+
+
+            <div
+                class="profile-dropdown"
+                id="profileDropdown"
+            >
+
+                <div
+                    class="profile-dropdown-header"
+                >
+
+                    <strong>
+                        ${escapeHtml(
+    session.name
+  )}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+    session.email
+  )}
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="dashboardMenuBtn"
+                >
+                    📊 My Dashboard
+                </button>
+
+
+                <button
+                    type="button"
+                    id="bookingMenuBtn"
+                >
+                    ✈️ My Booking
+                </button>
+
+
+                <button
+                    type="button"
+                    id="logoutMenuBtn"
+                >
+                    🚪 Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+  const profileBtn =
+    document.getElementById(
+      "profileBtn"
+    );
+
+
+  const profileDropdown =
+    document.getElementById(
+      "profileDropdown"
+    );
+
+
+  profileBtn.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      profileDropdown.classList.toggle(
+        "show"
+      );
+
+    }
+  );
+
+
+  document
+    .getElementById(
+      "dashboardMenuBtn"
+    )
+    .addEventListener(
+      "click",
+      () => {
+
+        profileDropdown.classList.remove(
+          "show"
+        );
+
+        goTo("#dashboard");
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "bookingMenuBtn"
+    )
+    .addEventListener(
+      "click",
+      () => {
+
+        profileDropdown.classList.remove(
+          "show"
+        );
+
+        goTo("#booking");
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "logoutMenuBtn"
+    )
+    .addEventListener(
+      "click",
+      event => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        logout();
+
+      }
+    );
+
+
+  updateBookingFields();
+
+}
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const dropdown =
+      document.getElementById(
+        "profileDropdown"
+      );
+
+
+    if (
+      dropdown &&
+      !event.target.closest(
+        ".user-profile"
+      )
+    ) {
+
+      dropdown.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+  /*
+      Remove session
+  */
+
+  clearSession();
+
+
+  /*
+      Clear pending action
+  */
+
+  pendingAction =
+    null;
+
+
+  /*
+      Update UI
+  */
+
+  updateUserUI();
+
+  updateBookingFields();
+
+  updateFavoriteButtons();
+
+
+  /*
+      Return to home
+  */
+
+  goTo("#home");
+
+
+  showToast(
+    "✅ You have been logged out successfully."
+  );
+
+}
+
+
+/* =========================================================
+   BOOKING USER DETAILS
+========================================================= */
+
+function updateBookingFields() {
+
+  const session =
+    getSession();
+
+
+  const nameInput =
+    document.getElementById(
+      "bookingName"
+    );
+
+
+  const emailInput =
+    document.getElementById(
+      "bookingEmail"
+    );
+
+
+  const phoneInput =
+    document.getElementById(
+      "bookingPhone"
+    );
+
+
+  const submitButton =
+    document.getElementById(
+      "bookingSubmitBtn"
+    );
+
+
+  const note =
+    document.getElementById(
+      "loginRequiredNote"
+    );
+
+
+  if (
+    !nameInput ||
+    !emailInput ||
+    !phoneInput ||
+    !submitButton ||
+    !note
+  ) {
+
+    return;
+
+  }
+
+
+  if (!session) {
+
+    nameInput.value =
+      "";
+
+    emailInput.value =
+      "";
+
+    phoneInput.value =
+      "";
+
+    nameInput.placeholder =
+      "Login required";
+
+    emailInput.placeholder =
+      "Login required";
+
+    phoneInput.placeholder =
+      "Login required";
+
+    submitButton.textContent =
+      "Login To Book 🔐";
+
+    note.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  nameInput.value =
+    session.name;
+
+  emailInput.value =
+    session.email;
+
+  phoneInput.value =
+    session.phone;
+
+  submitButton.textContent =
+    "Confirm Booking ✈️";
+
+  note.style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+   BOOKING SUBMIT
+========================================================= */
+
+bookingForm.addEventListener(
+  "submit",
+  event => {
+
+    event.preventDefault();
+
+
+    const session =
+      getSession();
+
+
+    /*
+        USER NOT LOGGED IN
+    */
+
+    if (!session) {
+
+      const selectedDestination =
+        document
+          .getElementById(
+            "bookingDestination"
+          )
+          .value;
+
+
+      pendingAction = {
+
+        type:
+          "booking",
+
+        destination:
+          selectedDestination
+
+      };
+
+
+      openLogin();
+
+      return;
+
+    }
+
+
+    const destination =
+      document
+        .getElementById(
+          "bookingDestination"
+        )
+        .value;
+
+
+    const date =
+      document
+        .getElementById(
+          "bookingDate"
+        )
+        .value;
+
+
+    const travelers =
+      document
+        .getElementById(
+          "bookingTravelers"
+        )
+        .value;
+
+
+    const message =
+      document
+        .getElementById(
+          "bookingMessage"
+        )
+        .value
+        .trim();
+
+
+    if (!destination) {
+
+      showToast(
+        "📍 Please select a destination."
+      );
+
+      return;
+
+    }
+
+
+    if (!date) {
+
+      showToast(
+        "📅 Please select travel date."
+      );
+
+      return;
+
+    }
+
+
+    const booking = {
+
+      id:
+        "WL-" +
+        Date.now(),
+
+      userId:
+        session.id,
+
+      name:
+        session.name,
+
+      email:
+        session.email,
+
+      phone:
+        session.phone,
+
+      destination,
+
+      date,
+
+      travelers,
+
+      message,
+
+      status:
+        "Pending",
+
+      createdAt:
+        new Date().toISOString()
+
+    };
+
+
+    const bookings =
+      getBookings();
+
+
+    bookings.push(
+      booking
+    );
+
+
+    saveBookings(
+      bookings
+    );
+
+
+    /*
+        Reset
+    */
+
+    document
+      .getElementById(
+        "bookingDestination"
+      )
+      .value =
+      "";
+
+
+    document
+      .getElementById(
+        "bookingDate"
+      )
+      .value =
+      "";
+
+
+    document
+      .getElementById(
+        "bookingTravelers"
+      )
+      .value =
+      "2";
+
+
+    document
+      .getElementById(
+        "bookingMessage"
+      )
+      .value =
+      "";
+
+
+    showToast(
+      "✅ Booking submitted successfully!"
+    );
+
+
+    /*
+        Dashboard
+    */
+
+    setTimeout(
+      () => {
+
+        goTo(
+          "#dashboard"
+        );
+
+      },
+      500
+    );
+
+  }
+);
+
+
+/* =========================================================
+   DESTINATION BOOK BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".book-destination-btn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const destination =
+          button.dataset
+            .destination;
+
+
+        const session =
+          getSession();
+
+
+        if (!session) {
+
+          pendingAction = {
+
+            type:
+              "booking",
+
+            destination
+
+          };
+
+
+          openLogin();
+
+          return;
+
+        }
+
+
+        document
+          .getElementById(
+            "bookingDestination"
+          )
+          .value =
+          destination;
+
+
+        goTo("#booking");
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   PACKAGE BOOK BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".package-book-btn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const destination =
+          button.dataset
+            .destination;
+
+
+        const session =
+          getSession();
+
+
+        if (!session) {
+
+          pendingAction = {
+
+            type:
+              "booking",
+
+            destination
+
+          };
+
+
+          openLogin();
+
+          return;
+
+        }
+
+
+        document
+          .getElementById(
+            "bookingDestination"
+          )
+          .value =
+          destination;
+
+
+        goTo("#booking");
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+function getUserFavorites(userId) {
+
+  const all =
+    getFavorites();
+
+
+  return all[userId] || [];
+
+}
+
+
+function saveFavorite(destination) {
+
+  const session =
+    getSession();
+
+
+  if (!session) {
+
+    pendingAction = {
+
+      type:
+        "favorite",
+
+      destination
+
+    };
+
+
+    openLogin();
+
+    return;
+
+  }
+
+
+  const favorites =
+    getFavorites();
+
+
+  const list =
+    favorites[session.id] ||
+    [];
+
+
+  if (
+    list.includes(
+      destination
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  list.push(
+    destination
+  );
+
+
+  favorites[session.id] =
+    list;
+
+
+  saveFavorites(
+    favorites
+  );
+
+
+  updateFavoriteButtons();
+
+  showToast(
+    "❤️ Added to favorites."
+  );
+
+}
+
+
+function toggleFavorite(destination) {
+
+  const session =
+    getSession();
+
+
+  if (!session) {
+
+    pendingAction = {
+
+      type:
+        "favorite",
+
+      destination
+
+    };
+
+
+    openLogin();
+
+    return;
+
+  }
+
+
+  const favorites =
+    getFavorites();
+
+
+  const list =
+    favorites[session.id] ||
+    [];
+
+
+  const index =
+    list.indexOf(
+      destination
+    );
+
+
+  if (index === -1) {
+
+    list.push(
+      destination
+    );
+
+    showToast(
+      "❤️ Added to favorites."
+    );
+
+  } else {
+
+    list.splice(
+      index,
+      1
+    );
+
+    showToast(
+      "Removed from favorites."
+    );
+
+  }
+
+
+  favorites[session.id] =
+    list;
+
+
+  saveFavorites(
+    favorites
+  );
+
+
+  updateFavoriteButtons();
+
+
+  if (
+    window.location.hash ===
+    "#dashboard"
+  ) {
+
+    renderDashboard();
+
+  }
+
+}
+
+
+document
+  .querySelectorAll(
+    ".favorite-btn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        toggleFavorite(
+          button.dataset
+            .destination
+        );
+
+      }
+    );
+
+  });
+
+
+function updateFavoriteButtons() {
+
+  const session =
+    getSession();
+
+
+  const favorites =
+    session
+      ? getUserFavorites(
+        session.id
+      )
+      : [];
+
+
+  document
+    .querySelectorAll(
+      ".favorite-btn"
+    )
+    .forEach(button => {
+
+      const destination =
+        button.dataset
+          .destination;
+
+
+      const active =
+        favorites.includes(
+          destination
+        );
+
+
+      button.classList.toggle(
+        "active",
+        active
+      );
+
+
+      button.textContent =
+        active
+          ? "♥"
+          : "♡";
+
+    });
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function renderDashboard() {
+
+  const session =
+    getSession();
+
+
+  if (!session) {
+    return;
+  }
+
+
+  document
+    .getElementById(
+      "dashboardName"
+    )
+    .textContent =
+    session.name;
+
+
+  document
+    .getElementById(
+      "profileName"
+    )
+    .textContent =
+    session.name;
+
+
+  document
+    .getElementById(
+      "profileEmail"
+    )
+    .textContent =
+    session.email;
+
+
+  document
+    .getElementById(
+      "profilePhone"
+    )
+    .textContent =
+    session.phone;
+
+
+  document
+    .getElementById(
+      "profileInitial"
+    )
+    .textContent =
+    session.name
+      .charAt(0)
+      .toUpperCase();
+
+
+  const bookings =
+    getBookings().filter(
+      booking =>
+        Number(
+          booking.userId
+        ) ===
+        Number(
+          session.id
+        )
+    );
+
+
+  const favorites =
+    getUserFavorites(
+      session.id
+    );
+
+
+  document
+    .getElementById(
+      "totalBookings"
+    )
+    .textContent =
+    bookings.length;
+
+
+  document
+    .getElementById(
+      "totalFavorites"
+    )
+    .textContent =
+    favorites.length;
+
+
+  renderBookings(
+    bookings
+  );
+
+
+  renderFavorites(
+    favorites
+  );
+
+}
+
+
+function renderBookings(bookings) {
+
+  const list =
+    document.getElementById(
+      "bookingList"
+    );
+
+
+  if (!bookings.length) {
+
+    list.innerHTML = `
+
+            <p
+                style="
+                    color:var(--text-soft);
+                    font-size:13px;
+                "
+            >
+                No bookings yet.
+                Start planning your next trip.
+            </p>
+
+        `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    bookings
+      .slice()
+      .reverse()
+      .map(
+        booking => `
+
+                    <div
+                        class="booking-item"
+                    >
+
+                        <div>
+
+                            <strong>
+                                ${escapeHtml(
+          booking.destination
+        )}
+                            </strong>
+
+                            <small>
+                                📅
+                                ${escapeHtml(
+          booking.date
+        )}
+                            </small>
+
+                            <br>
+
+                            <small>
+                                👥
+                                ${escapeHtml(
+          booking.travelers
+        )}
+                                traveler(s)
+                            </small>
+
+                            <br>
+
+                            <small>
+                                ID:
+                                ${escapeHtml(
+          booking.id
+        )}
+                            </small>
+
+                        </div>
+
+
+                        <span class="status">
+                            ${escapeHtml(
+          booking.status
+        )}
+                        </span>
+
+                    </div>
+
+                `
+      )
+      .join("");
+
+}
+
+
+function renderFavorites(favorites) {
+
+  const list =
+    document.getElementById(
+      "favoriteList"
+    );
+
+
+  if (!favorites.length) {
+
+    list.innerHTML = `
+
+            <span
+                style="
+                    color:var(--text-soft);
+                    font-size:13px;
+                "
+            >
+                No favorite destinations yet.
+            </span>
+
+        `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    favorites
+      .map(
+        destination => `
+
+                    <span
+                        class="favorite-chip"
+                    >
+                        ❤️
+                        ${escapeHtml(
+          destination
+        )}
+                    </span>
+
+                `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   DASHBOARD BUTTONS
+========================================================= */
+
+document
+  .getElementById(
+    "dashboardLogout"
+  )
+  .addEventListener(
+    "click",
+    logout
+  );
+
+
+document
+  .getElementById(
+    "newBookingBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      goTo(
+        "#booking"
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchDestinations() {
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  let count =
+    0;
+
+
+  destinationCards.forEach(card => {
+
+    const name =
+      card.dataset.name
+        .toLowerCase();
+
+
+    if (
+      !query ||
+      name.includes(query)
+    ) {
+
+      card.style.display =
+        "";
+
+      count++;
+
+    } else {
+
+      card.style.display =
+        "none";
+
+    }
+
+  });
+
+
+  emptyState.style.display =
+    count === 0
+      ? "block"
+      : "none";
+
+
+  goTo("#destinations");
 
 }
 
 
 searchBtn.addEventListener(
-    "click",
-    filterDestinations
+  "click",
+  searchDestinations
 );
 
 
-searchInput.addEventListener("keydown", event => {
+searchInput.addEventListener(
+  "keydown",
+  event => {
 
-    if (event.key === "Enter") {
+    if (
+      event.key ===
+      "Enter"
+    ) {
 
-        filterDestinations();
-
-    }
-
-});
-
-
-/* =========================================
-   DATE - DISABLE PAST DATES
-========================================= */
-
-const travelDate =
-    document.getElementById("travelDate");
-
-const today =
-    new Date().toISOString().split("T")[0];
-
-travelDate.min = today;
-
-
-/* =========================================
-   HERO SEARCH
-========================================= */
-
-searchBtn.addEventListener("click", () => {
-
-    const destination =
-        searchInput.value.trim();
-
-    const travelers =
-        document.getElementById(
-            "travelers"
-        ).value;
-
-    if (!destination) {
-
-        showToast(
-            "📍 Please enter a destination."
-        );
-
-        return;
+      searchDestinations();
 
     }
 
-    showToast(
-        `Searching trips to ${destination} for ${travelers} traveler(s)...`
-    );
-
-});
-
-
-/* =========================================
-   BOOKING FORM
-========================================= */
-
-bookingForm.addEventListener(
-    "submit",
-    event => {
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById("name").value.trim();
-
-        const email =
-            document.getElementById("email").value.trim();
-
-        const destination =
-            document.getElementById("destination").value;
-
-        const travelers =
-            document.getElementById("bookingTravelers").value;
-
-
-        showToast(
-            `✅ Thanks ${name}! Your ${destination} booking request for ${travelers} traveler(s) has been received.`
-        );
-
-
-        bookingForm.reset();
-
-        document.getElementById(
-            "bookingTravelers"
-        ).value = 2;
-
-    }
+  }
 );
 
 
-/* =========================================
+/* =========================================================
    CONTACT FORM
-========================================= */
+========================================================= */
 
-contactForm.addEventListener(
+document
+  .getElementById(
+    "contactForm"
+  )
+  .addEventListener(
     "submit",
     event => {
 
-        event.preventDefault();
+      event.preventDefault();
 
-        showToast(
-            "✅ Your message has been sent successfully!"
-        );
+      showToast(
+        "✅ Message sent successfully!"
+      );
 
-        contactForm.reset();
+      event.target.reset();
 
     }
-);
+  );
 
 
-/* =========================================
-   TOAST
-========================================= */
+/* =========================================================
+   THEME
+========================================================= */
 
-let toastTimer;
-
-
-function showToast(message) {
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
+const savedTheme =
+  localStorage.getItem(
+    THEME_KEY
+  );
 
 
-    clearTimeout(toastTimer);
+if (
+  savedTheme ===
+  "dark"
+) {
 
+  document.body.classList.add(
+    "dark"
+  );
 
-    toastTimer =
-        setTimeout(() => {
+  themeBtn.textContent =
+    "☀️";
 
-            toast.classList.remove("show");
+} else {
 
-        }, 3200);
+  themeBtn.textContent =
+    "🌙";
 
 }
 
 
-/* =========================================
-   NAVBAR SHADOW
-========================================= */
+themeBtn.addEventListener(
+  "click",
+  () => {
 
-window.addEventListener("scroll", () => {
-
-    const navbar =
-        document.getElementById("navbar");
-
-
-    if (window.scrollY > 30) {
-
-        navbar.style.boxShadow =
-            "0 8px 25px rgba(0,0,0,0.08)";
-
-    } else {
-
-        navbar.style.boxShadow =
-            "none";
-
-    }
-
-});
-
-
-/* =========================================
-   ACTIVE NAV LINK
-========================================= */
-
-const sections =
-    document.querySelectorAll("section[id]");
-
-
-const navAnchors =
-    document.querySelectorAll(
-        ".nav-links a"
+    document.body.classList.toggle(
+      "dark"
     );
 
 
-window.addEventListener("scroll", () => {
-
-    const scrollPosition =
-        window.scrollY + 150;
-
-
-    sections.forEach(section => {
-
-        const top =
-            section.offsetTop;
-
-        const height =
-            section.offsetHeight;
-
-        const id =
-            section.getAttribute("id");
+    const isDark =
+      document.body.classList.contains(
+        "dark"
+      );
 
 
-        if (
-            scrollPosition >= top &&
-            scrollPosition < top + height
-        ) {
-
-            navAnchors.forEach(anchor => {
-
-                anchor.classList.remove(
-                    "active"
-                );
+    localStorage.setItem(
+      THEME_KEY,
+      isDark
+        ? "dark"
+        : "light"
+    );
 
 
-                if (
-                    anchor.getAttribute("href") ===
-                    `#${id}`
-                ) {
+    themeBtn.textContent =
+      isDark
+        ? "☀️"
+        : "🌙";
 
-                    anchor.classList.add(
-                        "active"
-                    );
-
-                }
-
-            });
-
-        }
-
-    });
-
-});
-
-/* =========================================
-   HERO CAROUSEL
-========================================= */
-
-const heroSlides =
-    document.querySelectorAll(".hero-slide");
-
-const heroDots =
-    document.querySelectorAll(".carousel-dot");
-
-const prevButton =
-    document.getElementById("carouselPrev");
-
-const nextButton =
-    document.getElementById("carouselNext");
+  }
+);
 
 
-let currentSlide = 0;
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-let carouselTimer;
+menuBtn.addEventListener(
+  "click",
+  () => {
+
+    navLinks.classList.toggle(
+      "show"
+    );
+
+  }
+);
 
 
-/* =========================================
-   SHOW SLIDE
-========================================= */
+/* =========================================================
+   DATE
+========================================================= */
+
+const today =
+  new Date()
+    .toISOString()
+    .split("T")[0];
+
+
+document.getElementById(
+  "travelDate"
+).min =
+  today;
+
+
+document.getElementById(
+  "bookingDate"
+).min =
+  today;
+
+
+/* =========================================================
+   CAROUSEL
+========================================================= */
+
+const slides =
+  document.querySelectorAll(
+    ".hero-slide"
+  );
+
+
+const dots =
+  document.querySelectorAll(
+    ".carousel-dot"
+  );
+
+
+const prevBtn =
+  document.getElementById(
+    "carouselPrev"
+  );
+
+
+const nextBtn =
+  document.getElementById(
+    "carouselNext"
+  );
+
 
 function showSlide(index) {
 
-    if (index >= heroSlides.length) {
+  if (!slides.length) {
+    return;
+  }
 
-        currentSlide = 0;
+
+  if (
+    index >=
+    slides.length
+  ) {
+
+    index =
+      0;
+
+  }
+
+
+  if (
+    index < 0
+  ) {
+
+    index =
+      slides.length -
+      1;
+
+  }
+
+
+  currentSlide =
+    index;
+
+
+  slides.forEach(
+    (slide, i) => {
+
+      slide.classList.toggle(
+        "active",
+        i === currentSlide
+      );
 
     }
+  );
 
-    else if (index < 0) {
 
-        currentSlide =
-            heroSlides.length - 1;
+  dots.forEach(
+    (dot, i) => {
+
+      dot.classList.toggle(
+        "active",
+        i === currentSlide
+      );
 
     }
-
-    else {
-
-        currentSlide = index;
-
-    }
-
-
-    heroSlides.forEach((slide, i) => {
-
-        slide.classList.toggle(
-            "active",
-            i === currentSlide
-        );
-
-    });
-
-
-    heroDots.forEach((dot, i) => {
-
-        dot.classList.toggle(
-            "active",
-            i === currentSlide
-        );
-
-    });
+  );
 
 }
 
-
-/* =========================================
-   NEXT SLIDE
-========================================= */
-
-function nextSlide() {
-
-    showSlide(currentSlide + 1);
-
-    resetCarousel();
-
-}
-
-
-/* =========================================
-   PREVIOUS SLIDE
-========================================= */
-
-function previousSlide() {
-
-    showSlide(currentSlide - 1);
-
-    resetCarousel();
-
-}
-
-
-/* =========================================
-   BUTTON EVENTS
-========================================= */
-
-nextButton.addEventListener(
-    "click",
-    nextSlide
-);
-
-
-prevButton.addEventListener(
-    "click",
-    previousSlide
-);
-
-
-/* =========================================
-   DOT EVENTS
-========================================= */
-
-heroDots.forEach((dot, index) => {
-
-    dot.addEventListener("click", () => {
-
-        showSlide(index);
-
-        resetCarousel();
-
-    });
-
-});
-
-
-/* =========================================
-   AUTO PLAY
-========================================= */
 
 function startCarousel() {
 
-    carouselTimer =
-        setInterval(() => {
+  clearInterval(
+    carouselTimer
+  );
 
-            showSlide(currentSlide + 1);
 
-        }, 5000);
+  carouselTimer =
+    setInterval(
+      () => {
+
+        showSlide(
+          currentSlide + 1
+        );
+
+      },
+      5000
+    );
 
 }
 
 
 function resetCarousel() {
 
-    clearInterval(carouselTimer);
-
-    startCarousel();
+  startCarousel();
 
 }
 
 
-/* =========================================
-   PAUSE ON HOVER
-========================================= */
+nextBtn.addEventListener(
+  "click",
+  () => {
 
-const heroSection =
-    document.querySelector(".hero");
+    showSlide(
+      currentSlide + 1
+    );
+
+    resetCarousel();
+
+  }
+);
 
 
-heroSection.addEventListener(
+prevBtn.addEventListener(
+  "click",
+  () => {
+
+    showSlide(
+      currentSlide - 1
+    );
+
+    resetCarousel();
+
+  }
+);
+
+
+dots.forEach(
+  (dot, index) => {
+
+    dot.addEventListener(
+      "click",
+      () => {
+
+        showSlide(index);
+
+        resetCarousel();
+
+      }
+    );
+
+  }
+);
+
+
+const hero =
+  document.querySelector(
+    ".hero"
+  );
+
+
+if (hero) {
+
+  hero.addEventListener(
     "mouseenter",
     () => {
 
-        clearInterval(carouselTimer);
+      clearInterval(
+        carouselTimer
+      );
 
     }
-);
+  );
 
 
-heroSection.addEventListener(
+  hero.addEventListener(
     "mouseleave",
     () => {
 
-        startCarousel();
+      startCarousel();
 
     }
-);
+  );
 
+}
 
-/* =========================================
-   START
-========================================= */
 
 showSlide(0);
 
 startCarousel();
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      closeAuth();
+
+      const dropdown =
+        document.getElementById(
+          "profileDropdown"
+        );
+
+
+      if (dropdown) {
+
+        dropdown.classList.remove(
+          "show"
+        );
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+updateUserUI();
+
+updateBookingFields();
+
+updateFavoriteButtons();
+
+updateNavActiveState();
+
+renderRoute();

@@ -1,1747 +1,1686 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
 
-    <title>Wanderlust - Explore The World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Wanderlust Travel</title>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+  <!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-    <header class="navbar" id="navbar">
+  <header class="navbar">
 
-        <div class="nav-container">
+    <div class="nav-container">
 
-            <a href="#home" class="logo">
-                <span>✈️</span>
-                Wander<span>lust</span>
-            </a>
-
-            <nav class="nav-links" id="navLinks">
-
-                <a href="#home" class="active">Home</a>
-
-                <a href="#destinations">Destinations</a>
-
-                <a href="#packages">Packages</a>
-
-                <a href="#about">About</a>
-
-                <a href="#reviews">Reviews</a>
-
-                <a href="#contact">Contact</a>
-
-            </nav>
-
-            <div class="nav-actions">
-
-                <button
-                    class="theme-btn"
-                    id="themeBtn"
-                    title="Toggle Theme"
-                >
-                    🌙
-                </button>
-
-                <a href="#booking" class="nav-book-btn">
-                    Book Now
-                </a>
-
-                <button
-                    class="menu-btn"
-                    id="menuBtn"
-                    aria-label="Menu"
-                >
-                    ☰
-                </button>
-
-            </div>
-
-        </div>
-
-    </header>
+      <a href="#home" class="logo">
+        ✈️ Wander<span>lust</span>
+      </a>
 
 
-    <!-- =========================
+      <nav class="nav-links" id="navLinks">
+
+        <a href="#home">
+          Home
+        </a>
+
+        <a href="#destinations">
+          Destinations
+        </a>
+
+        <a href="#packages">
+          Packages
+        </a>
+
+        <a href="#about">
+          About
+        </a>
+
+        <a href="#reviews">
+          Reviews
+        </a>
+
+        <a href="#contact">
+          Contact
+        </a>
+
+      </nav>
+
+
+      <div class="nav-actions">
+
+        <button class="theme-btn" id="themeBtn" type="button" title="Theme">
+          🌙
+        </button>
+
+
+        <div id="userNav" class="user-nav"></div>
+
+
+        <button class="menu-btn" id="menuBtn" type="button">
+          ☰
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+     LANDING PAGE
+===================================================== -->
+
+  <div id="landingPage">
+
+
+    <!-- =================================================
          HERO
-    ========================== -->
+    ================================================= -->
 
-    <main>
+    <section class="hero" id="home">
 
-       <section class="hero" id="home">
-
-    <!-- =========================
-         CAROUSEL
-    ========================== -->
-
-    <div class="hero-carousel" id="heroCarousel">
+      <div class="hero-carousel">
 
         <!-- Slide 1 -->
+
         <div class="hero-slide active">
 
-            <div class="hero-slide-bg"
-                style="background-image: url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2000&q=85');">
-            </div>
+          <div class="hero-slide-bg" style="
+                        background-image:
+                        url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2000&q=85');
+                    "></div>
 
-            <div class="hero-overlay"></div>
+          <div class="hero-overlay"></div>
 
-            <div class="hero-content">
+          <div class="hero-content">
 
-                <span class="hero-tag">
-                    🌄 Discover Nature
-                </span>
+            <span class="hero-tag">
+              🌄 Discover Nature
+            </span>
 
-                <h1>
-                    Explore
-                    <span>Sajek Valley</span>
-                    Like Never Before.
-                </h1>
+            <h1>
+              Explore
+              <span>Sajek Valley</span>
+              Like Never Before.
+            </h1>
 
-                <p>
-                    Wake up above the clouds and experience
-                    the peaceful beauty of Bangladesh's hills.
-                </p>
+            <p>
+              Wake up above the clouds and explore
+              the peaceful beauty of Bangladesh.
+            </p>
 
-                <div class="hero-buttons">
+            <div class="hero-buttons">
 
-                    <a
-                        href="#destinations"
-                        class="primary-btn"
-                    >
-                        Explore Sajek →
-                    </a>
+              <a href="#destinations" class="primary-btn">
+                Explore Sajek →
+              </a>
 
-                    <a
-                        href="#packages"
-                        class="secondary-btn"
-                    >
-                        View Packages
-                    </a>
-
-                </div>
+              <a href="#packages" class="secondary-btn">
+                View Packages
+              </a>
 
             </div>
+
+          </div>
 
         </div>
 
 
         <!-- Slide 2 -->
+
         <div class="hero-slide">
 
-            <div class="hero-slide-bg"
-                style="background-image: url('https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=2000&q=85');">
-            </div>
+          <div class="hero-slide-bg" style="
+                        background-image:
+                        url('https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=2000&q=85');
+                    "></div>
 
-            <div class="hero-overlay"></div>
+          <div class="hero-overlay"></div>
 
-            <div class="hero-content">
+          <div class="hero-content">
 
-                <span class="hero-tag">
-                    🏖️ Beach Adventure
-                </span>
+            <span class="hero-tag">
+              🏖️ Beach Adventure
+            </span>
 
-                <h1>
-                    Escape To
-                    <span>Cox's Bazar</span>
-                    This Summer.
-                </h1>
+            <h1>
+              Escape To
+              <span>Cox's Bazar</span>
+              This Summer.
+            </h1>
 
-                <p>
-                    Walk along the world's longest natural
-                    sea beach and enjoy unforgettable sunsets.
-                </p>
+            <p>
+              Enjoy beautiful beaches, sunsets,
+              seafood and unforgettable memories.
+            </p>
 
-                <div class="hero-buttons">
+            <div class="hero-buttons">
 
-                    <a
-                        href="#destinations"
-                        class="primary-btn"
-                    >
-                        Discover Cox's Bazar →
-                    </a>
+              <a href="#destinations" class="primary-btn">
+                Explore Cox's Bazar →
+              </a>
 
-                    <a
-                        href="#booking"
-                        class="secondary-btn"
-                    >
-                        Book Your Trip
-                    </a>
-
-                </div>
+              <a href="#booking" class="secondary-btn">
+                Book Trip
+              </a>
 
             </div>
+
+          </div>
 
         </div>
 
 
         <!-- Slide 3 -->
+
         <div class="hero-slide">
 
-            <div class="hero-slide-bg"
-                style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=85');">
-            </div>
+          <div class="hero-slide-bg" style="
+                        background-image:
+                        url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=85');
+                    "></div>
 
-            <div class="hero-overlay"></div>
+          <div class="hero-overlay"></div>
 
-            <div class="hero-content">
+          <div class="hero-content">
 
-                <span class="hero-tag">
-                    🌴 Tropical Escape
-                </span>
+            <span class="hero-tag">
+              🌴 Tropical Escape
+            </span>
 
-                <h1>
-                    Experience
-                    <span>Bali</span>
-                    In A New Way.
-                </h1>
+            <h1>
+              Experience
+              <span>Bali</span>
+              In A New Way.
+            </h1>
 
-                <p>
-                    Discover tropical beaches, ancient temples,
-                    amazing food and unforgettable adventures.
-                </p>
+            <p>
+              Discover tropical beaches, temples,
+              food and unforgettable adventures.
+            </p>
 
-                <div class="hero-buttons">
+            <div class="hero-buttons">
 
-                    <a
-                        href="#destinations"
-                        class="primary-btn"
-                    >
-                        Explore Bali →
-                    </a>
+              <a href="#destinations" class="primary-btn">
+                Explore Bali →
+              </a>
 
-                    <a
-                        href="#packages"
-                        class="secondary-btn"
-                    >
-                        View Bali Packages
-                    </a>
-
-                </div>
+              <a href="#booking" class="secondary-btn">
+                Plan My Trip
+              </a>
 
             </div>
+
+          </div>
 
         </div>
 
 
         <!-- Slide 4 -->
+
         <div class="hero-slide">
 
-            <div class="hero-slide-bg"
-                style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=85');">
-            </div>
+          <div class="hero-slide-bg" style="
+                        background-image:
+                        url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=85');
+                    "></div>
 
-            <div class="hero-overlay"></div>
+          <div class="hero-overlay"></div>
 
-            <div class="hero-content">
+          <div class="hero-content">
 
-                <span class="hero-tag">
-                    🏙️ Luxury Travel
-                </span>
+            <span class="hero-tag">
+              🏙️ Luxury Travel
+            </span>
 
-                <h1>
-                    Discover
-                    <span>Dubai</span>
-                    Beyond Imagination.
-                </h1>
+            <h1>
+              Discover
+              <span>Dubai</span>
+              Beyond Imagination.
+            </h1>
 
-                <p>
-                    Experience luxury, adventure, world-class
-                    architecture and unforgettable city life.
-                </p>
+            <p>
+              Experience luxury, architecture,
+              shopping and desert adventures.
+            </p>
 
-                <div class="hero-buttons">
+            <div class="hero-buttons">
 
-                    <a
-                        href="#destinations"
-                        class="primary-btn"
-                    >
-                        Explore Dubai →
-                    </a>
+              <a href="#destinations" class="primary-btn">
+                Explore Dubai →
+              </a>
 
-                    <a
-                        href="#booking"
-                        class="secondary-btn"
-                    >
-                        Plan My Trip
-                    </a>
-
-                </div>
+              <a href="#booking" class="secondary-btn">
+                Plan My Trip
+              </a>
 
             </div>
+
+          </div>
 
         </div>
 
-    </div>
+      </div>
 
 
-    <!-- Previous Button -->
-
-    <button
-        class="carousel-arrow carousel-prev"
-        id="carouselPrev"
-        aria-label="Previous Slide"
-    >
+      <button class="carousel-arrow carousel-prev" id="carouselPrev" type="button">
         ❮
-    </button>
+      </button>
 
 
-    <!-- Next Button -->
-
-    <button
-        class="carousel-arrow carousel-next"
-        id="carouselNext"
-        aria-label="Next Slide"
-    >
+      <button class="carousel-arrow carousel-next" id="carouselNext" type="button">
         ❯
-    </button>
+      </button>
 
 
-    <!-- Dots -->
+      <div class="carousel-dots" id="carouselDots">
 
-    <div
-        class="carousel-dots"
-        id="carouselDots"
-    >
+        <button class="carousel-dot active" type="button" data-slide="0"></button>
 
-        <button
-            class="carousel-dot active"
-            data-slide="0"
-        ></button>
+        <button class="carousel-dot" type="button" data-slide="1"></button>
 
-        <button
-            class="carousel-dot"
-            data-slide="1"
-        ></button>
+        <button class="carousel-dot" type="button" data-slide="2"></button>
 
-        <button
-            class="carousel-dot"
-            data-slide="2"
-        ></button>
+        <button class="carousel-dot" type="button" data-slide="3"></button>
 
-        <button
-            class="carousel-dot"
-            data-slide="3"
-        ></button>
-
-    </div>
+      </div>
 
 
-    <!-- =========================
-         SEARCH BOX
-    ========================== -->
+      <!-- Search -->
 
-    <div class="search-card">
+      <div class="search-card">
 
         <div class="search-item">
 
-            <span class="search-icon">
-                📍
-            </span>
+          <span>
+            📍
+          </span>
 
-            <div>
+          <div>
 
-                <small>
-                    Where to?
-                </small>
+            <small>
+              Where to?
+            </small>
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search destination..."
-                >
+            <input type="text" id="searchInput" placeholder="Search destination...">
 
-            </div>
+          </div>
 
         </div>
 
 
         <div class="search-item">
 
-            <span class="search-icon">
-                📅
-            </span>
+          <span>
+            📅
+          </span>
 
-            <div>
+          <div>
 
-                <small>
-                    Travel Date
-                </small>
+            <small>
+              Travel Date
+            </small>
 
-                <input
-                    type="date"
-                    id="travelDate"
-                >
+            <input type="date" id="travelDate">
 
-            </div>
+          </div>
 
         </div>
 
 
         <div class="search-item">
 
-            <span class="search-icon">
-                👥
-            </span>
+          <span>
+            👥
+          </span>
 
-            <div>
+          <div>
 
-                <small>
-                    Travelers
-                </small>
+            <small>
+              Travelers
+            </small>
 
-                <select id="travelers">
+            <select id="travelers">
 
-                    <option value="1">
-                        1 Traveler
-                    </option>
+              <option value="1">
+                1 Traveler
+              </option>
 
-                    <option value="2">
-                        2 Travelers
-                    </option>
+              <option value="2">
+                2 Travelers
+              </option>
 
-                    <option value="3">
-                        3 Travelers
-                    </option>
+              <option value="3">
+                3 Travelers
+              </option>
 
-                    <option value="4">
-                        4 Travelers
-                    </option>
+              <option value="4">
+                4 Travelers
+              </option>
 
-                    <option value="5">
-                        5+ Travelers
-                    </option>
+              <option value="5">
+                5+ Travelers
+              </option>
 
-                </select>
+            </select>
 
-            </div>
+          </div>
 
         </div>
 
 
-        <button
-            class="search-btn"
-            id="searchBtn"
-        >
-            🔍 Search
+        <button class="search-btn" id="searchBtn" type="button">
+          🔍 Search
         </button>
 
-    </div>
+      </div>
 
-</section>
+    </section>
 
 
-        <!-- =========================
+    <!-- =================================================
+         MAIN
+    ================================================= -->
+
+    <main>
+
+
+      <!-- =============================================
              DESTINATIONS
-        ========================== -->
+        ============================================== -->
 
-        <section class="section" id="destinations">
+      <section class="section" id="destinations">
 
-            <div class="section-heading">
+        <div class="section-heading">
 
-                <div>
-                    <span class="section-label">
-                        EXPLORE
-                    </span>
+          <div>
 
-                    <h2>
-                        Popular Destinations
-                    </h2>
-                </div>
+            <span class="section-label">
+              EXPLORE
+            </span>
 
-                <p>
-                    Discover some of the world's most beautiful
-                    places and create memories that last forever.
-                </p>
+            <h2>
+              Popular Destinations
+            </h2>
+
+          </div>
+
+          <p>
+            Discover amazing places and create
+            unforgettable travel memories.
+          </p>
+
+        </div>
+
+
+        <div class="destination-grid" id="destinationGrid">
+
+
+          <!-- Card 1 -->
+
+          <article class="destination-card" data-name="Cox's Bazar">
+
+            <div class="card-image">
+
+              <img src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1000&q=80"
+                alt="Cox's Bazar">
+
+              <button class="favorite-btn" type="button" data-destination="Cox's Bazar">
+                ♡
+              </button>
+
+              <span class="image-tag">
+                Bangladesh
+              </span>
 
             </div>
 
 
-            <div
-                class="destination-grid"
-                id="destinationGrid"
-            >
-
-                <!-- Destination 1 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Cox's Bazar Bangladesh"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1000&q=80"
-                            alt="Beach"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            Bangladesh
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Cox's Bazar, Bangladesh
-                        </div>
-
-                        <h3>
-                            Cox's Bazar
-                        </h3>
-
-                        <p>
-                            Enjoy the world's longest natural
-                            sea beach and beautiful sunsets.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳4,999</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Destination 2 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Sajek Valley Bangladesh"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
-                            alt="Mountain"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            Bangladesh
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Sajek, Bangladesh
-                        </div>
-
-                        <h3>
-                            Sajek Valley
-                        </h3>
-
-                        <p>
-                            Wake up above the clouds and enjoy
-                            peaceful mountain views.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳5,499</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Destination 3 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Sylhet Bangladesh"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=80"
-                            alt="Nature"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            Bangladesh
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Sylhet, Bangladesh
-                        </div>
-
-                        <h3>
-                            Sylhet
-                        </h3>
-
-                        <p>
-                            Explore tea gardens, waterfalls,
-                            rivers and amazing green landscapes.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳3,999</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Destination 4 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Bali Indonesia"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80"
-                            alt="Bali"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            International
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Bali, Indonesia
-                        </div>
-
-                        <h3>
-                            Bali
-                        </h3>
-
-                        <p>
-                            Experience tropical beaches, culture,
-                            temples and unforgettable sunsets.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳39,999</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Destination 5 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Dubai UAE"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
-                            alt="Dubai"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            International
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Dubai, UAE
-                        </div>
-
-                        <h3>
-                            Dubai
-                        </h3>
-
-                        <p>
-                            Experience luxury, architecture,
-                            shopping and desert adventures.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳54,999</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Destination 6 -->
-
-                <article
-                    class="destination-card"
-                    data-name="Maldives"
-                >
-
-                    <div class="card-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1000&q=80"
-                            alt="Maldives"
-                        >
-
-                        <button class="favorite-btn">
-                            ♡
-                        </button>
-
-                        <span class="image-tag">
-                            International
-                        </span>
-
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="card-location">
-                            📍 Maldives
-                        </div>
-
-                        <h3>
-                            Maldives
-                        </h3>
-
-                        <p>
-                            Relax on beautiful islands with crystal
-                            clear water and luxury resorts.
-                        </p>
-
-                        <div class="card-bottom">
-
-                            <span class="price">
-                                From <strong>৳59,999</strong>
-                            </span>
-
-                            <a href="#booking" class="text-link">
-                                Explore →
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <div
-                class="empty-state"
-                id="emptyState"
-            >
-                😔 No destination found.
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             FEATURES
-        ========================== -->
-
-        <section class="features-section">
-
-            <div class="features-container">
-
-                <div class="feature">
-
-                    <div class="feature-icon">
-                        🌎
-                    </div>
-
-                    <div>
-                        <h3>
-                            100+ Destinations
-                        </h3>
-
-                        <p>
-                            Explore amazing places around the world.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <div class="feature-icon">
-                        💰
-                    </div>
-
-                    <div>
-                        <h3>
-                            Best Price Guarantee
-                        </h3>
-
-                        <p>
-                            Get great trips at competitive prices.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <div class="feature-icon">
-                        🛡️
-                    </div>
-
-                    <div>
-                        <h3>
-                            Safe & Secure
-                        </h3>
-
-                        <p>
-                            Your travel experience is our priority.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <div class="feature-icon">
-                        24/7
-                    </div>
-
-                    <div>
-                        <h3>
-                            Support
-                        </h3>
-
-                        <p>
-                            We're here whenever you need us.
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             PACKAGES
-        ========================== -->
-
-        <section
-            class="section packages-section"
-            id="packages"
-        >
-
-            <div class="section-heading center">
-
-                <div>
-                    <span class="section-label">
-                        TRAVEL DEALS
-                    </span>
-
-                    <h2>
-                        Popular Tour Packages
-                    </h2>
-                </div>
-
-                <p>
-                    Pick a package and start planning your
-                    next unforgettable adventure.
-                </p>
-
-            </div>
-
-
-            <div class="package-grid">
-
-                <article class="package-card">
-
-                    <div class="package-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1559825481-12a05cc00344?auto=format&fit=crop&w=1000&q=80"
-                            alt="Cox's Bazar"
-                        >
-
-                        <span>
-                            3 Days
-                        </span>
-
-                    </div>
-
-                    <div class="package-content">
-
-                        <div class="package-rating">
-                            ⭐ 4.9 (128 reviews)
-                        </div>
-
-                        <h3>
-                            Cox's Bazar Beach Escape
-                        </h3>
-
-                        <p>
-                            Relax at the beach, enjoy seafood,
-                            sunset views and local attractions.
-                        </p>
-
-                        <div class="package-footer">
-
-                            <div>
-                                <small>
-                                    Starting from
-                                </small>
-
-                                <strong>
-                                    ৳7,999
-                                </strong>
-                            </div>
-
-                            <a
-                                href="#booking"
-                                class="small-btn"
-                            >
-                                Book
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="package-card">
-
-                    <div class="package-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80"
-                            alt="Mountain Tour"
-                        >
-
-                        <span>
-                            4 Days
-                        </span>
-
-                    </div>
-
-                    <div class="package-content">
-
-                        <div class="package-rating">
-                            ⭐ 4.8 (96 reviews)
-                        </div>
-
-                        <h3>
-                            Sajek Mountain Adventure
-                        </h3>
-
-                        <p>
-                            Experience clouds, hills, sunrise
-                            and peaceful mountain roads.
-                        </p>
-
-                        <div class="package-footer">
-
-                            <div>
-                                <small>
-                                    Starting from
-                                </small>
-
-                                <strong>
-                                    ৳9,999
-                                </strong>
-                            </div>
-
-                            <a
-                                href="#booking"
-                                class="small-btn"
-                            >
-                                Book
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="package-card">
-
-                    <div class="package-image">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&w=1000&q=80"
-                            alt="Bali Tour"
-                        >
-
-                        <span>
-                            6 Days
-                        </span>
-
-                    </div>
-
-                    <div class="package-content">
-
-                        <div class="package-rating">
-                            ⭐ 4.9 (212 reviews)
-                        </div>
-
-                        <h3>
-                            Bali Tropical Escape
-                        </h3>
-
-                        <p>
-                            Beaches, temples, adventures and
-                            luxury experiences in Bali.
-                        </p>
-
-                        <div class="package-footer">
-
-                            <div>
-                                <small>
-                                    Starting from
-                                </small>
-
-                                <strong>
-                                    ৳54,999
-                                </strong>
-                            </div>
-
-                            <a
-                                href="#booking"
-                                class="small-btn"
-                            >
-                                Book
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             ABOUT
-        ========================== -->
-
-        <section
-            class="about-section section"
-            id="about"
-        >
-
-            <div class="about-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1200&q=80"
-                    alt="Travel"
-                >
-
-                <div class="experience-card">
-
-                    <strong>
-                        10+
-                    </strong>
-
-                    <span>
-                        Years of<br>
-                        Experience
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="about-content">
-
-                <span class="section-label">
-                    ABOUT US
+            <div class="card-content">
+
+              <div class="card-location">
+                📍 Cox's Bazar, Bangladesh
+              </div>
+
+              <h3>
+                Cox's Bazar
+              </h3>
+
+              <p>
+                Enjoy beaches, sunsets and seafood.
+              </p>
+
+              <div class="card-bottom">
+
+                <span class="price">
+                  From
+                  <strong>
+                    ৳4,999
+                  </strong>
                 </span>
 
-                <h2>
-                    We Make Your
-                    <span>Travel Dreams</span>
-                    Come True.
-                </h2>
-
-                <p>
-                    Wanderlust is a travel platform focused on
-                    creating memorable experiences for travelers.
-                    From local adventures to international escapes,
-                    we help you discover the right destination.
-                </p>
-
-                <div class="about-stats">
-
-                    <div>
-                        <strong>
-                            10K+
-                        </strong>
-
-                        <span>
-                            Happy Travelers
-                        </span>
-                    </div>
-
-                    <div>
-                        <strong>
-                            100+
-                        </strong>
-
-                        <span>
-                            Destinations
-                        </span>
-                    </div>
-
-                    <div>
-                        <strong>
-                            50+
-                        </strong>
-
-                        <span>
-                            Tour Packages
-                        </span>
-                    </div>
-
-                </div>
-
-                <a
-                    href="#contact"
-                    class="primary-btn"
-                >
-                    Learn More →
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             REVIEWS
-        ========================== -->
-
-        <section
-            class="section reviews-section"
-            id="reviews"
-        >
-
-            <div class="section-heading center">
-
-                <div>
-                    <span class="section-label">
-                        TESTIMONIALS
-                    </span>
-
-                    <h2>
-                        What Travelers Say
-                    </h2>
-                </div>
-
-                <p>
-                    Thousands of travelers have trusted us
-                    for their adventures.
-                </p>
-
-            </div>
-
-
-            <div class="review-grid">
-
-                <article class="review-card">
-
-                    <div class="stars">
-                        ⭐⭐⭐⭐⭐
-                    </div>
-
-                    <p>
-                        "Our Cox's Bazar trip was amazing.
-                        Everything was well organized and the
-                        support team was very helpful."
-                    </p>
-
-                    <div class="review-user">
-
-                        <div class="avatar">
-                            RA
-                        </div>
-
-                        <div>
-                            <strong>
-                                Rahim Ahmed
-                            </strong>
-
-                            <span>
-                                Dhaka, Bangladesh
-                            </span>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="review-card">
-
-                    <div class="stars">
-                        ⭐⭐⭐⭐⭐
-                    </div>
-
-                    <p>
-                        "The Bali package was absolutely beautiful.
-                        The hotel, transport and itinerary were
-                        all excellent."
-                    </p>
-
-                    <div class="review-user">
-
-                        <div class="avatar">
-                            NS
-                        </div>
-
-                        <div>
-                            <strong>
-                                Nusrat Sultana
-                            </strong>
-
-                            <span>
-                                Chattogram, Bangladesh
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="review-card">
-
-                    <div class="stars">
-                        ⭐⭐⭐⭐⭐
-                    </div>
-
-                    <p>
-                        "Very easy to book and the prices were
-                        reasonable. I'll definitely travel with
-                        Wanderlust again."
-                    </p>
-
-                    <div class="review-user">
-
-                        <div class="avatar">
-                            FA
-                        </div>
-
-                        <div>
-                            <strong>
-                                Farhan Ahmed
-                            </strong>
-
-                            <span>
-                                Sylhet, Bangladesh
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             BOOKING
-        ========================== -->
-
-        <section
-            class="booking-section"
-            id="booking"
-        >
-
-            <div class="booking-content">
-
-                <span class="section-label">
-                    START YOUR JOURNEY
-                </span>
-
-                <h2>
-                    Ready To Explore
-                    The World?
-                </h2>
-
-                <p>
-                    Fill out the form and our travel experts
-                    will contact you with the best options.
-                </p>
-
-            </div>
-
-
-            <form
-                class="booking-form"
-                id="bookingForm"
-            >
-
-                <div class="form-group">
-
-                    <label>
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="Your name"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="you@example.com"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Destination
-                    </label>
-
-                    <select
-                        id="destination"
-                        required
-                    >
-
-                        <option value="">
-                            Select destination
-                        </option>
-
-                        <option>
-                            Cox's Bazar
-                        </option>
-
-                        <option>
-                            Sajek Valley
-                        </option>
-
-                        <option>
-                            Sylhet
-                        </option>
-
-                        <option>
-                            Bali
-                        </option>
-
-                        <option>
-                            Dubai
-                        </option>
-
-                        <option>
-                            Maldives
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Travelers
-                    </label>
-
-                    <input
-                        type="number"
-                        id="bookingTravelers"
-                        min="1"
-                        max="20"
-                        value="2"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Message
-                    </label>
-
-                    <textarea
-                        id="message"
-                        rows="4"
-                        placeholder="Tell us about your trip..."
-                    ></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="primary-btn full"
-                >
-                    Send Booking Request ✈️
+                <button class="book-destination-btn" type="button" data-destination="Cox's Bazar">
+                  Book →
                 </button>
 
-            </form>
+              </div>
 
-        </section>
+            </div>
+
+          </article>
 
 
-        <!-- =========================
-             CONTACT
-        ========================== -->
+          <!-- Card 2 -->
 
-        <section
-            class="section contact-section"
-            id="contact"
-        >
+          <article class="destination-card" data-name="Sajek Valley">
 
-            <div class="contact-info">
+            <div class="card-image">
 
-                <span class="section-label">
-                    CONTACT
+              <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
+                alt="Sajek Valley">
+
+              <button class="favorite-btn" type="button" data-destination="Sajek Valley">
+                ♡
+              </button>
+
+              <span class="image-tag">
+                Bangladesh
+              </span>
+
+            </div>
+
+
+            <div class="card-content">
+
+              <div class="card-location">
+                📍 Sajek, Bangladesh
+              </div>
+
+              <h3>
+                Sajek Valley
+              </h3>
+
+              <p>
+                Enjoy clouds, hills and beautiful sunrise.
+              </p>
+
+              <div class="card-bottom">
+
+                <span class="price">
+                  From
+                  <strong>
+                    ৳5,499
+                  </strong>
                 </span>
 
-                <h2>
-                    Let's Plan Your
-                    Next Adventure.
-                </h2>
+                <button class="book-destination-btn" type="button" data-destination="Sajek Valley">
+                  Book →
+                </button>
 
-                <p>
-                    Have questions? Get in touch with our team.
-                </p>
+              </div>
 
-                <div class="contact-item">
+            </div>
 
-                    <span>📍</span>
-
-                    <div>
-                        <strong>
-                            Address
-                        </strong>
-
-                        <p>
-                            Dhaka, Bangladesh
-                        </p>
-                    </div>
-
-                </div>
+          </article>
 
 
-                <div class="contact-item">
+          <!-- Card 3 -->
 
-                    <span>📧</span>
+          <article class="destination-card" data-name="Sylhet">
 
-                    <div>
-                        <strong>
-                            Email
-                        </strong>
+            <div class="card-image">
 
-                        <p>
-                            hello@wanderlust.com
-                        </p>
-                    </div>
+              <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=80"
+                alt="Sylhet">
 
-                </div>
+              <button class="favorite-btn" type="button" data-destination="Sylhet">
+                ♡
+              </button>
 
-
-                <div class="contact-item">
-
-                    <span>📞</span>
-
-                    <div>
-                        <strong>
-                            Phone
-                        </strong>
-
-                        <p>
-                            +880 1234-567890
-                        </p>
-                    </div>
-
-                </div>
+              <span class="image-tag">
+                Bangladesh
+              </span>
 
             </div>
 
 
-            <div class="contact-card">
+            <div class="card-content">
 
-                <h3>
-                    Quick Message
-                </h3>
+              <div class="card-location">
+                📍 Sylhet, Bangladesh
+              </div>
 
-                <p>
-                    We'll get back to you as soon as possible.
-                </p>
+              <h3>
+                Sylhet
+              </h3>
 
-                <form id="contactForm">
+              <p>
+                Explore tea gardens and waterfalls.
+              </p>
 
-                    <input
-                        type="text"
-                        placeholder="Your Name"
-                        required
-                    >
+              <div class="card-bottom">
 
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        required
-                    >
+                <span class="price">
+                  From
+                  <strong>
+                    ৳3,999
+                  </strong>
+                </span>
 
-                    <textarea
-                        rows="5"
-                        placeholder="Your Message"
-                        required
-                    ></textarea>
+                <button class="book-destination-btn" type="button" data-destination="Sylhet">
+                  Book →
+                </button>
 
-                    <button
-                        type="submit"
-                        class="primary-btn"
-                    >
-                        Send Message
-                    </button>
-
-                </form>
+              </div>
 
             </div>
 
-        </section>
+          </article>
+
+
+          <!-- Card 4 -->
+
+          <article class="destination-card" data-name="Bali">
+
+            <div class="card-image">
+
+              <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80"
+                alt="Bali">
+
+              <button class="favorite-btn" type="button" data-destination="Bali">
+                ♡
+              </button>
+
+              <span class="image-tag">
+                International
+              </span>
+
+            </div>
+
+
+            <div class="card-content">
+
+              <div class="card-location">
+                📍 Bali, Indonesia
+              </div>
+
+              <h3>
+                Bali
+              </h3>
+
+              <p>
+                Beaches, temples and tropical adventures.
+              </p>
+
+              <div class="card-bottom">
+
+                <span class="price">
+                  From
+                  <strong>
+                    ৳39,999
+                  </strong>
+                </span>
+
+                <button class="book-destination-btn" type="button" data-destination="Bali">
+                  Book →
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Card 5 -->
+
+          <article class="destination-card" data-name="Dubai">
+
+            <div class="card-image">
+
+              <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
+                alt="Dubai">
+
+              <button class="favorite-btn" type="button" data-destination="Dubai">
+                ♡
+              </button>
+
+              <span class="image-tag">
+                International
+              </span>
+
+            </div>
+
+
+            <div class="card-content">
+
+              <div class="card-location">
+                📍 Dubai, UAE
+              </div>
+
+              <h3>
+                Dubai
+              </h3>
+
+              <p>
+                Luxury, shopping and desert adventures.
+              </p>
+
+              <div class="card-bottom">
+
+                <span class="price">
+                  From
+                  <strong>
+                    ৳54,999
+                  </strong>
+                </span>
+
+                <button class="book-destination-btn" type="button" data-destination="Dubai">
+                  Book →
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- Card 6 -->
+
+          <article class="destination-card" data-name="Maldives">
+
+            <div class="card-image">
+
+              <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1000&q=80"
+                alt="Maldives">
+
+              <button class="favorite-btn" type="button" data-destination="Maldives">
+                ♡
+              </button>
+
+              <span class="image-tag">
+                International
+              </span>
+
+            </div>
+
+
+            <div class="card-content">
+
+              <div class="card-location">
+                📍 Maldives
+              </div>
+
+              <h3>
+                Maldives
+              </h3>
+
+              <p>
+                Relax on beautiful islands and beaches.
+              </p>
+
+              <div class="card-bottom">
+
+                <span class="price">
+                  From
+                  <strong>
+                    ৳59,999
+                  </strong>
+                </span>
+
+                <button class="book-destination-btn" type="button" data-destination="Maldives">
+                  Book →
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <div class="empty-state" id="emptyState">
+          😔 Destination not found.
+        </div>
+
+      </section>
+
+
+      <!-- =============================================
+             PACKAGES
+        ============================================== -->
+
+      <section class="section" id="packages">
+
+        <div class="section-heading center">
+
+          <span class="section-label">
+            TRAVEL DEALS
+          </span>
+
+          <h2>
+            Popular Tour Packages
+          </h2>
+
+          <p>
+            Choose a package and start planning
+            your next adventure.
+          </p>
+
+        </div>
+
+
+        <div class="package-grid">
+
+
+          <article class="package-card">
+
+            <div class="package-image">
+
+              <img src="https://images.unsplash.com/photo-1559825481-12a05cc00344?auto=format&fit=crop&w=1000&q=80"
+                alt="Cox's Bazar">
+
+              <span>
+                3 Days
+              </span>
+
+            </div>
+
+
+            <div class="package-content">
+
+              <div class="package-rating">
+                ⭐ 4.9
+              </div>
+
+              <h3>
+                Cox's Bazar Beach Escape
+              </h3>
+
+              <p>
+                Beach, sunset, seafood and local attractions.
+              </p>
+
+              <div class="package-footer">
+
+                <strong>
+                  ৳7,999
+                </strong>
+
+                <button class="package-book-btn" type="button" data-destination="Cox's Bazar">
+                  Book Now
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="package-card">
+
+            <div class="package-image">
+
+              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80"
+                alt="Sajek">
+
+              <span>
+                4 Days
+              </span>
+
+            </div>
+
+
+            <div class="package-content">
+
+              <div class="package-rating">
+                ⭐ 4.8
+              </div>
+
+              <h3>
+                Sajek Mountain Adventure
+              </h3>
+
+              <p>
+                Hills, clouds, sunrise and fresh mountain air.
+              </p>
+
+              <div class="package-footer">
+
+                <strong>
+                  ৳9,999
+                </strong>
+
+                <button class="package-book-btn" type="button" data-destination="Sajek Valley">
+                  Book Now
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="package-card">
+
+            <div class="package-image">
+
+              <img src="https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&w=1000&q=80"
+                alt="Bali">
+
+              <span>
+                6 Days
+              </span>
+
+            </div>
+
+
+            <div class="package-content">
+
+              <div class="package-rating">
+                ⭐ 4.9
+              </div>
+
+              <h3>
+                Bali Tropical Escape
+              </h3>
+
+              <p>
+                Beaches, temples, adventure and luxury.
+              </p>
+
+              <div class="package-footer">
+
+                <strong>
+                  ৳54,999
+                </strong>
+
+                <button class="package-book-btn" type="button" data-destination="Bali">
+                  Book Now
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =============================================
+             ABOUT
+        ============================================== -->
+
+      <section class="section about-section" id="about">
+
+        <div class="about-image">
+
+          <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1200&q=80"
+            alt="Travel">
+
+        </div>
+
+
+        <div class="about-content">
+
+          <span class="section-label">
+            ABOUT US
+          </span>
+
+          <h2>
+            We Make Your
+            <span>Travel Dreams</span>
+            Come True.
+          </h2>
+
+          <p>
+            Wanderlust helps travelers discover
+            destinations and organize memorable trips.
+          </p>
+
+          <div class="about-stats">
+
+            <div>
+
+              <strong>
+                10K+
+              </strong>
+
+              <span>
+                Happy Travelers
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <strong>
+                100+
+              </strong>
+
+              <span>
+                Destinations
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <strong>
+                50+
+              </strong>
+
+              <span>
+                Packages
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =============================================
+             REVIEWS
+        ============================================== -->
+
+      <section class="section" id="reviews">
+
+        <div class="section-heading center">
+
+          <span class="section-label">
+            TESTIMONIALS
+          </span>
+
+          <h2>
+            What Travelers Say
+          </h2>
+
+        </div>
+
+
+        <div class="review-grid">
+
+          <article class="review-card">
+
+            <div class="stars">
+              ⭐⭐⭐⭐⭐
+            </div>
+
+            <p>
+              Amazing service and easy booking process.
+            </p>
+
+            <strong>
+              Rahim Ahmed
+            </strong>
+
+          </article>
+
+
+          <article class="review-card">
+
+            <div class="stars">
+              ⭐⭐⭐⭐⭐
+            </div>
+
+            <p>
+              The Bali package was excellent.
+            </p>
+
+            <strong>
+              Nusrat Sultana
+            </strong>
+
+          </article>
+
+
+          <article class="review-card">
+
+            <div class="stars">
+              ⭐⭐⭐⭐⭐
+            </div>
+
+            <p>
+              Great destinations and helpful support.
+            </p>
+
+            <strong>
+              Farhan Ahmed
+            </strong>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =============================================
+             BOOKING
+        ============================================== -->
+
+      <section class="booking-section" id="booking">
+
+        <div class="booking-content">
+
+          <span class="section-label">
+            BOOK YOUR TRIP
+          </span>
+
+          <h2>
+            Ready To Explore
+            The World?
+          </h2>
+
+          <p>
+            Login or register before booking.
+            Your account details will be used
+            for the booking.
+          </p>
+
+          <div class="login-required-note" id="loginRequiredNote">
+            🔐 Please login before booking.
+          </div>
+
+        </div>
+
+
+        <form class="booking-form" id="bookingForm">
+
+          <div class="form-group">
+
+            <label>
+              Full Name
+            </label>
+
+            <input type="text" id="bookingName" readonly placeholder="Login required">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Email
+            </label>
+
+            <input type="email" id="bookingEmail" readonly placeholder="Login required">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Phone
+            </label>
+
+            <input type="tel" id="bookingPhone" readonly placeholder="Login required">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Destination
+            </label>
+
+            <select id="bookingDestination" required>
+
+              <option value="">
+                Select destination
+              </option>
+
+              <option>
+                Cox's Bazar
+              </option>
+
+              <option>
+                Sajek Valley
+              </option>
+
+              <option>
+                Sylhet
+              </option>
+
+              <option>
+                Bali
+              </option>
+
+              <option>
+                Dubai
+              </option>
+
+              <option>
+                Maldives
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Travel Date
+            </label>
+
+            <input type="date" id="bookingDate" required>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Travelers
+            </label>
+
+            <input type="number" id="bookingTravelers" min="1" max="20" value="2" required>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Special Request
+            </label>
+
+            <textarea id="bookingMessage" rows="4" placeholder="Tell us about your trip..."></textarea>
+
+          </div>
+
+
+          <button type="submit" class="primary-btn full" id="bookingSubmitBtn">
+            Login To Book 🔐
+          </button>
+
+        </form>
+
+      </section>
+
+
+      <!-- =============================================
+             CONTACT
+        ============================================== -->
+
+      <section class="section contact-section" id="contact">
+
+        <div>
+
+          <span class="section-label">
+            CONTACT
+          </span>
+
+          <h2>
+            Let's Plan Your
+            Next Adventure.
+          </h2>
+
+          <p>
+            📧 hello@wanderlust.com
+          </p>
+
+          <p>
+            📞 +880 1234-567890
+          </p>
+
+          <p>
+            📍 Dhaka, Bangladesh
+          </p>
+
+        </div>
+
+
+        <form class="contact-card" id="contactForm">
+
+          <input type="text" placeholder="Your Name" required>
+
+          <input type="email" placeholder="Your Email" required>
+
+          <textarea rows="5" placeholder="Your Message" required></textarea>
+
+          <button type="submit" class="primary-btn">
+            Send Message
+          </button>
+
+        </form>
+
+      </section>
 
     </main>
 
 
-    <!-- =========================
+    <!-- =================================================
          FOOTER
-    ========================== -->
+    ================================================= -->
 
     <footer>
 
-        <div class="footer-container">
+      <div class="footer-container">
 
-            <div class="footer-brand">
+        <div>
 
-                <a href="#home" class="logo">
-                    <span>✈️</span>
-                    Wander<span>lust</span>
-                </a>
+          <a href="#home" class="logo">
+            ✈️ Wander<span>lust</span>
+          </a>
 
-                <p>
-                    Discover the world. Create memories.
-                    Live the adventure.
-                </p>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <h4>
-                    Explore
-                </h4>
-
-                <a href="#destinations">
-                    Destinations
-                </a>
-
-                <a href="#packages">
-                    Packages
-                </a>
-
-                <a href="#about">
-                    About Us
-                </a>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <h4>
-                    Support
-                </h4>
-
-                <a href="#contact">
-                    Contact
-                </a>
-
-                <a href="#">
-                    FAQ
-                </a>
-
-                <a href="#">
-                    Privacy Policy
-                </a>
-
-            </div>
-
-
-            <div class="footer-links">
-
-                <h4>
-                    Follow Us
-                </h4>
-
-                <div class="socials">
-
-                    <a href="#">
-                        Facebook
-                    </a>
-
-                    <a href="#">
-                        Instagram
-                    </a>
-
-                    <a href="#">
-                        YouTube
-                    </a>
-
-                </div>
-
-            </div>
+          <p>
+            Discover the world. Create memories.
+            Live the adventure.
+          </p>
 
         </div>
 
 
-        <div class="footer-bottom">
+        <div>
 
-            <p>
-                © <span id="year"></span>
-                Wanderlust. All rights reserved.
-            </p>
+          <h4>
+            Explore
+          </h4>
 
-            <p>
-                Made with ❤️ for travelers.
-            </p>
+          <a href="#destinations">
+            Destinations
+          </a>
+
+          <a href="#packages">
+            Packages
+          </a>
+
+          <a href="#about">
+            About
+          </a>
 
         </div>
+
+
+        <div>
+
+          <h4>
+            Support
+          </h4>
+
+          <a href="#contact">
+            Contact
+          </a>
+
+          <a href="#booking">
+            Booking
+          </a>
+
+          <a href="#home">
+            Home
+          </a>
+
+        </div>
+
+
+        <div>
+
+          <h4>
+            Follow
+          </h4>
+
+          <a href="#">
+            Facebook
+          </a>
+
+          <a href="#">
+            Instagram
+          </a>
+
+          <a href="#">
+            YouTube
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+
+        © <span id="year"></span>
+        Wanderlust. All rights reserved.
+
+      </div>
 
     </footer>
 
-
-    <!-- Toast -->
-
-    <div
-        class="toast"
-        id="toast"
-    ></div>
+  </div>
 
 
-    <script src="script.js"></script>
+  <!-- =====================================================
+     DASHBOARD ROUTE
+===================================================== -->
+
+  <section id="dashboard" class="dashboard-page hidden">
+
+    <div class="dashboard-container">
+
+      <div class="dashboard-header">
+
+        <div>
+
+          <span class="section-label">
+            MY ACCOUNT
+          </span>
+
+          <h1>
+            Welcome,
+            <span id="dashboardName">
+              User
+            </span>
+          </h1>
+
+          <p>
+            Manage your profile, bookings
+            and favorite destinations.
+          </p>
+
+        </div>
+
+
+        <button type="button" class="logout-btn" id="dashboardLogout">
+          🚪 Logout
+        </button>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+
+        <!-- Profile -->
+
+        <div class="dashboard-card profile-card">
+
+          <div class="profile-avatar">
+            <span id="profileInitial">
+              U
+            </span>
+          </div>
+
+          <h3 id="profileName">
+            User
+          </h3>
+
+          <p id="profileEmail">
+            user@example.com
+          </p>
+
+          <p id="profilePhone">
+            +880
+          </p>
+
+        </div>
+
+
+        <!-- Account Summary -->
+
+        <div class="dashboard-card">
+
+          <h3>
+            Account Overview
+          </h3>
+
+          <div class="dashboard-stats">
+
+            <div>
+
+              <strong id="totalBookings">
+                0
+              </strong>
+
+              <span>
+                Bookings
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <strong id="totalFavorites">
+                0
+              </strong>
+
+              <span>
+                Favorites
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Bookings -->
+
+        <div class="dashboard-card wide">
+
+          <div class="card-title-row">
+
+            <h3>
+              ✈️ My Bookings
+            </h3>
+
+            <button type="button" class="small-primary-btn" id="newBookingBtn">
+              + New Booking
+            </button>
+
+          </div>
+
+
+          <div class="booking-list" id="bookingList"></div>
+
+        </div>
+
+
+        <!-- Favorites -->
+
+        <div class="dashboard-card wide">
+
+          <h3>
+            ❤️ My Favorite Destinations
+          </h3>
+
+          <div class="favorite-list" id="favoriteList"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+     AUTH MODAL
+===================================================== -->
+
+  <div class="modal" id="authModal">
+
+    <div class="auth-card">
+
+      <button type="button" class="modal-close" id="authClose">
+        ×
+      </button>
+
+
+      <!-- LOGIN -->
+
+      <form id="loginForm" class="auth-form">
+
+        <div class="auth-icon">
+          👤
+        </div>
+
+        <h2>
+          Welcome Back
+        </h2>
+
+        <p>
+          Login to continue your journey.
+        </p>
+
+
+        <label>
+          Email
+        </label>
+
+        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+
+
+        <label>
+          Password
+        </label>
+
+        <input type="password" id="loginPassword" placeholder="Your password" required>
+
+
+        <button type="submit" class="primary-btn full">
+          Login
+        </button>
+
+
+        <div class="auth-switch">
+
+          <span>
+            New to Wanderlust?
+          </span>
+
+          <button type="button" id="showRegisterBtn">
+            Create Account
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <!-- REGISTER -->
+
+      <form id="registerForm" class="auth-form hidden">
+
+        <div class="auth-icon">
+          ✨
+        </div>
+
+        <h2>
+          Create Your Account
+        </h2>
+
+        <p>
+          Register once and book your trips easily.
+        </p>
+
+
+        <label>
+          Full Name
+        </label>
+
+        <input type="text" id="registerName" placeholder="Your full name" required>
+
+
+        <label>
+          Email
+        </label>
+
+        <input type="email" id="registerEmail" placeholder="you@example.com" required>
+
+
+        <label>
+          Phone
+        </label>
+
+        <input type="tel" id="registerPhone" placeholder="+880..." required>
+
+
+        <label>
+          Password
+        </label>
+
+        <input type="password" id="registerPassword" minlength="6" placeholder="Minimum 6 characters" required>
+
+
+        <label>
+          Confirm Password
+        </label>
+
+        <input type="password" id="registerConfirmPassword" placeholder="Confirm password" required>
+
+
+        <button type="submit" class="primary-btn full">
+          Create Account
+        </button>
+
+
+        <div class="auth-switch">
+
+          <span>
+            Already have an account?
+          </span>
+
+          <button type="button" id="showLoginBtn">
+            Login
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+     TOAST
+===================================================== -->
+
+  <div class="toast" id="toast"></div>
+
+
+  <script src="script.js"></script>
 
 </body>
+
 </html>
