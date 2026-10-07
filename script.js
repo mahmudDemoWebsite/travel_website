@@ -1,842 +1,1172 @@
 /* =========================================================
-   WANDERLUST - CLEAN FINAL SCRIPT
-========================================================= */
+   WANDERLUST TRAVEL WEBSITE
+   FULL SCRIPT.JS
+   ========================================================= */
 
 
 /* =========================================================
    STORAGE KEYS
-========================================================= */
+   ========================================================= */
 
-const USERS_KEY = "wanderlust_users";
-const SESSION_KEY = "wanderlust_session";
-const BOOKINGS_KEY = "wanderlust_bookings";
-const FAVORITES_KEY = "wanderlust_favorites";
-const THEME_KEY = "wanderlust_theme";
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const landingPage =
-  document.getElementById("landingPage");
-
-const dashboardPage =
-  document.getElementById("dashboard");
-
-const userNav =
-  document.getElementById("userNav");
-
-const authModal =
-  document.getElementById("authModal");
-
-const authClose =
-  document.getElementById("authClose");
-
-const loginForm =
-  document.getElementById("loginForm");
-
-const registerForm =
-  document.getElementById("registerForm");
-
-const showRegisterBtn =
-  document.getElementById("showRegisterBtn");
-
-const showLoginBtn =
-  document.getElementById("showLoginBtn");
-
-const bookingForm =
-  document.getElementById("bookingForm");
-
-const themeBtn =
-  document.getElementById("themeBtn");
-
-const navLinks =
-  document.getElementById("navLinks");
-
-const menuBtn =
-  document.getElementById("menuBtn");
-
-const searchInput =
-  document.getElementById("searchInput");
-
-const searchBtn =
-  document.getElementById("searchBtn");
-
-const destinationCards =
-  document.querySelectorAll(".destination-card");
-
-const emptyState =
-  document.getElementById("emptyState");
-
-const toast =
-  document.getElementById("toast");
+const STORAGE = {
+    USERS: "wanderlust_users",
+    SESSION: "wanderlust_session",
+    BOOKINGS: "wanderlust_bookings",
+    FAVORITES: "wanderlust_favorites",
+    THEME: "wanderlust_theme",
+    PENDING: "wanderlust_pending_action"
+};
 
 
 /* =========================================================
-   STATE
-========================================================= */
+   GLOBAL STATE
+   ========================================================= */
 
 let pendingAction = null;
 
-let currentSlide = 0;
+let destinationState = {
+    all: [],
+    filtered: [],
+    currentPage: 1,
+    perPage: 6
+};
 
+let currentSlide = 0;
 let carouselTimer = null;
 
 
 /* =========================================================
-   STORAGE FUNCTIONS
-========================================================= */
+   DOM REFERENCES
+   ========================================================= */
+
+const root = document.documentElement;
+
+const siteHeader =
+    document.getElementById("siteHeader");
+
+const navMenu =
+    document.getElementById("navMenu");
+
+const menuToggle =
+    document.getElementById("menuToggle");
+
+const themeToggle =
+    document.getElementById("themeToggle");
+
+const userNav =
+    document.getElementById("userNav");
+
+const landingPage =
+    document.getElementById("landingPage");
+
+const dashboardPage =
+    document.getElementById("dashboard");
+
+const adminPage =
+    document.getElementById("admin");
+
+const authModal =
+    document.getElementById("authModal");
+
+const closeAuthModal =
+    document.getElementById("closeAuthModal");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const registerForm =
+    document.getElementById("registerForm");
+
+const showRegisterBtn =
+    document.getElementById("showRegisterBtn");
+
+const showLoginBtn =
+    document.getElementById("showLoginBtn");
+
+const bookingForm =
+    document.getElementById("bookingForm");
+
+const contactForm =
+    document.getElementById("contactForm");
+
+const newsletterForm =
+    document.getElementById("newsletterForm");
+
+const toast =
+    document.getElementById("toast");
+
+const toastMessage =
+    document.getElementById("toastMessage");
+
+const backToTop =
+    document.getElementById("backToTop");
+
+
+/* =========================================================
+   SAFE STORAGE HELPERS
+   ========================================================= */
+
+function readStorage(key, fallback) {
+    try {
+        const value = localStorage.getItem(key);
+
+        if (value === null) {
+            return fallback;
+        }
+
+        return JSON.parse(value);
+
+    } catch (error) {
+        console.error(`Storage read error: ${key}`, error);
+        return fallback;
+    }
+}
+
+
+function writeStorage(key, value) {
+    try {
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error(`Storage write error: ${key}`, error);
+
+        return false;
+    }
+}
+
+
+/* =========================================================
+   USERS
+   ========================================================= */
 
 function getUsers() {
+    const users =
+        readStorage(
+            STORAGE.USERS,
+            []
+        );
 
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(USERS_KEY) || "[]"
-    );
-
-  } catch {
-
-    return [];
-
-  }
+    return Array.isArray(users)
+        ? users
+        : [];
 }
 
 
 function saveUsers(users) {
-
-  localStorage.setItem(
-    USERS_KEY,
-    JSON.stringify(users)
-  );
-
-}
-
-
-function getSession() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(SESSION_KEY) || "null"
+    writeStorage(
+        STORAGE.USERS,
+        users
     );
-
-  } catch {
-
-    return null;
-
-  }
 }
 
 
-function setSession(user) {
-
-  localStorage.setItem(
-    SESSION_KEY,
-    JSON.stringify(user)
-  );
-
-}
-
-
-function clearSession() {
-
-  localStorage.removeItem(
-    SESSION_KEY
-  );
-
-}
-
+/* =========================================================
+   BOOKINGS
+   ========================================================= */
 
 function getBookings() {
+    const bookings =
+        readStorage(
+            STORAGE.BOOKINGS,
+            []
+        );
 
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(BOOKINGS_KEY) || "[]"
-    );
-
-  } catch {
-
-    return [];
-
-  }
+    return Array.isArray(bookings)
+        ? bookings
+        : [];
 }
 
 
 function saveBookings(bookings) {
-
-  localStorage.setItem(
-    BOOKINGS_KEY,
-    JSON.stringify(bookings)
-  );
-
-}
-
-
-function getFavorites() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(FAVORITES_KEY) || "{}"
+    writeStorage(
+        STORAGE.BOOKINGS,
+        bookings
     );
-
-  } catch {
-
-    return {};
-
-  }
-}
-
-
-function saveFavorites(favorites) {
-
-  localStorage.setItem(
-    FAVORITES_KEY,
-    JSON.stringify(favorites)
-  );
-
 }
 
 
 /* =========================================================
-   UTILITY
-========================================================= */
+   SESSION
+   ========================================================= */
 
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-function showToast(message) {
-
-  if (!toast) return;
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-  clearTimeout(
-    showToast.timer
-  );
-
-  showToast.timer =
-    setTimeout(() => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    }, 3000);
-
-}
-
-
-/* =========================================================
-   ROUTING
-========================================================= */
-
-function goTo(route) {
-
-  if (!route.startsWith("#")) {
-
-    route =
-      "#" + route;
-
-  }
-
-
-  if (
-    window.location.hash ===
-    route
-  ) {
-
-    renderRoute();
-
-  } else {
-
-    window.location.hash =
-      route;
-
-  }
-
-}
-
-
-function renderRoute() {
-
-  const route =
-    window.location.hash || "#home";
-
-
-  /* -------------------------
-     DASHBOARD ROUTE
-  ------------------------- */
-
-  if (
-    route === "#dashboard"
-  ) {
-
+function getSession() {
     const session =
-      getSession();
+        readStorage(
+            STORAGE.SESSION,
+            null
+        );
+
+    return session;
+}
 
 
-    if (!session) {
-
-      pendingAction = {
-        type: "dashboard"
-      };
-
-
-      /*
-          Change route back to home
-          while login modal is shown.
-      */
-
-      window.history.replaceState(
-        {},
-        "",
-        "#home"
-      );
+function saveSession(session) {
+    writeStorage(
+        STORAGE.SESSION,
+        session
+    );
+}
 
 
-      showLanding();
+function clearSession() {
+    localStorage.removeItem(
+        STORAGE.SESSION
+    );
+}
 
-      openLogin();
 
-      return;
+/* =========================================================
+   PENDING ACTION
+   ========================================================= */
 
+function setPendingAction(action) {
+    pendingAction = action || null;
+
+    if (pendingAction) {
+        writeStorage(
+            STORAGE.PENDING,
+            pendingAction
+        );
+    } else {
+        localStorage.removeItem(
+            STORAGE.PENDING
+        );
+    }
+}
+
+
+function loadPendingAction() {
+    if (pendingAction) {
+        return pendingAction;
     }
 
+    pendingAction =
+        readStorage(
+            STORAGE.PENDING,
+            null
+        );
 
-    showDashboard();
-
-    return;
-
-  }
-
-
-  /* -------------------------
-     ALL OTHER ROUTES
-  ------------------------- */
-
-  showLanding();
+    return pendingAction;
+}
 
 
-  const target =
-    route.replace(
-      "#",
-      ""
+function clearPendingAction() {
+    pendingAction = null;
+
+    localStorage.removeItem(
+        STORAGE.PENDING
     );
+}
 
 
-  if (
-    target &&
-    target !== "home"
-  ) {
+/* =========================================================
+   DEMO ADMIN
+   ========================================================= */
 
-    setTimeout(() => {
+function ensureDemoAdmin() {
 
-      const section =
-        document.getElementById(
-          target
+    const users =
+        getUsers();
+
+    const adminEmail =
+        "admin@wanderlust.com";
+
+    let admin =
+        users.find(
+            user =>
+                String(user.email || "")
+                    .toLowerCase()
+                    === adminEmail
         );
 
 
-      if (section) {
+    if (!admin) {
 
-        section.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
+        users.push({
+            id: "admin-demo",
+
+            name: "Wanderlust Admin",
+
+            email: adminEmail,
+
+            phone: "+8801000000000",
+
+            password: "Admin123",
+
+            role: "admin",
+
+            createdAt:
+                new Date().toISOString()
         });
 
-      }
+        saveUsers(users);
 
-    }, 60);
+        return;
+    }
 
-  } else {
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    let changed = false;
 
-  }
 
+    if (admin.role !== "admin") {
+        admin.role = "admin";
+        changed = true;
+    }
+
+
+    if (!admin.name) {
+        admin.name =
+            "Wanderlust Admin";
+
+        changed = true;
+    }
+
+
+    if (!admin.phone) {
+        admin.phone =
+            "+8801000000000";
+
+        changed = true;
+    }
+
+
+    if (!admin.password) {
+        admin.password =
+            "Admin123";
+
+        changed = true;
+    }
+
+
+    if (changed) {
+        saveUsers(users);
+    }
+}
+
+
+/* =========================================================
+   ROLE
+   ========================================================= */
+
+function normalizeUser(user) {
+
+    if (!user) {
+        return null;
+    }
+
+    return {
+        ...user,
+
+        role:
+            user.role === "admin"
+                ? "admin"
+                : "user"
+    };
+}
+
+
+/* =========================================================
+   NAVIGATION / ROUTES
+   ========================================================= */
+
+function goTo(route) {
+
+    if (!route) {
+        route = "#home";
+    }
+
+    if (!route.startsWith("#")) {
+        route = "#" + route;
+    }
+
+
+    if (window.location.hash === route) {
+        renderRoute();
+    } else {
+        window.location.hash = route;
+    }
+
+
+    if (navMenu) {
+        navMenu.classList.remove("open");
+    }
+
+
+    menuToggle?.setAttribute(
+        "aria-expanded",
+        "false"
+    );
 }
 
 
 function showLanding() {
 
-  if (landingPage) {
+    landingPage?.classList.remove("hidden");
 
-    landingPage.classList.remove(
-      "hidden"
-    );
+    dashboardPage?.classList.add("hidden");
 
-  }
-
-
-  if (dashboardPage) {
-
-    dashboardPage.classList.add(
-      "hidden"
-    );
-
-  }
-
-
-  updateNavActiveState();
-
+    adminPage?.classList.add("hidden");
 }
 
 
 function showDashboard() {
 
-  if (landingPage) {
+    landingPage?.classList.add("hidden");
 
-    landingPage.classList.add(
-      "hidden"
-    );
+    dashboardPage?.classList.remove("hidden");
 
-  }
+    adminPage?.classList.add("hidden");
 
-
-  if (dashboardPage) {
-
-    dashboardPage.classList.remove(
-      "hidden"
-    );
-
-  }
-
-
-  renderDashboard();
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
+    renderUserDashboard();
 }
 
 
-function navigateHome() {
+function showAdminDashboard() {
 
-  goTo("#home");
+    landingPage?.classList.add("hidden");
 
+    dashboardPage?.classList.add("hidden");
+
+    adminPage?.classList.remove("hidden");
+
+    renderAdminDashboard();
 }
 
 
-/* Browser Back / Forward */
+function renderRoute() {
 
-window.addEventListener(
-  "hashchange",
-  renderRoute
-);
+    const route =
+        window.location.hash || "#home";
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+    /* USER DASHBOARD */
 
-navLinks
-  .querySelectorAll("a")
-  .forEach(link => {
+    if (route === "#dashboard") {
 
-    link.addEventListener(
-      "click",
-      event => {
+        const session =
+            getSession();
 
-        event.preventDefault();
+        if (!session) {
 
-        const href =
-          link.getAttribute(
-            "href"
-          );
+            setPendingAction({
+                type: "dashboard"
+            });
+
+            window.history.replaceState(
+                {},
+                "",
+                "#home"
+            );
+
+            showLanding();
+
+            openLogin();
+
+            return;
+        }
 
 
-        navLinks.classList.remove(
-          "show"
-        );
+        if (session.role === "admin") {
+
+            goTo("#admin");
+
+            return;
+        }
 
 
-        goTo(href);
+        showDashboard();
 
-      }
-    );
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
 
-  });
+        updateNavActive("dashboard");
+
+        return;
+    }
+
+
+    /* ADMIN DASHBOARD */
+
+    if (route === "#admin") {
+
+        const session =
+            getSession();
+
+
+        if (!session) {
+
+            setPendingAction({
+                type: "admin"
+            });
+
+            window.history.replaceState(
+                {},
+                "",
+                "#home"
+            );
+
+            showLanding();
+
+            openLogin();
+
+            return;
+        }
+
+
+        if (session.role !== "admin") {
+
+            showToast(
+                "⛔ Admin access required."
+            );
+
+            goTo("#dashboard");
+
+            return;
+        }
+
+
+        showAdminDashboard();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        return;
+    }
+
+
+    /* NORMAL LANDING */
+
+    showLanding();
+
+
+    const target =
+        route.replace("#", "");
+
+
+    if (
+        target &&
+        target !== "home"
+    ) {
+
+        setTimeout(() => {
+
+            const section =
+                document.getElementById(target);
+
+
+            if (section) {
+
+                section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+
+        }, 80);
+
+    } else {
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    updateNavActive(target);
+}
 
 
 /* =========================================================
    ACTIVE NAV
-========================================================= */
+   ========================================================= */
 
-function updateNavActiveState() {
+function updateNavActive(current) {
 
-  const route =
-    window.location.hash || "#home";
+    document
+        .querySelectorAll(".nav-link")
+        .forEach(link => {
 
+            const route =
+                link.dataset.route;
 
-  navLinks
-    .querySelectorAll("a")
-    .forEach(link => {
-
-      link.classList.toggle(
-        "active",
-        link.getAttribute(
-          "href"
-        ) === route
-      );
-
-    });
-
+            link.classList.toggle(
+                "active",
+                route === current
+            );
+        });
 }
 
 
-window.addEventListener(
-  "scroll",
-  updateNavActiveState
-);
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(message) {
+
+    if (!toast || !toastMessage) {
+        return;
+    }
+
+
+    toastMessage.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 3000);
+}
 
 
 /* =========================================================
    AUTH MODAL
-========================================================= */
+   ========================================================= */
 
-function openLogin(action = null) {
+function openAuthModal() {
 
-  pendingAction =
-    action;
+    authModal?.classList.remove(
+        "hidden"
+    );
 
-
-  loginForm.classList.remove(
-    "hidden"
-  );
-
-
-  registerForm.classList.add(
-    "hidden"
-  );
+    document.body.classList.add(
+        "modal-open"
+    );
+}
 
 
-  authModal.classList.add(
-    "show"
-  );
+function closeAuthModalBox() {
+
+    authModal?.classList.add(
+        "hidden"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+}
 
 
-  document.body.classList.add(
-    "modal-open"
-  );
+function setLoginMode() {
+
+    const title =
+        document.getElementById(
+            "authModalTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "authModalSubtitle"
+        );
 
 
-  setTimeout(() => {
+    loginForm?.classList.remove(
+        "hidden"
+    );
 
-    const email =
-      document.getElementById(
-        "loginEmail"
-      );
+    registerForm?.classList.add(
+        "hidden"
+    );
 
-    if (email) {
 
-      email.focus();
-
+    if (title) {
+        title.textContent =
+            "Welcome Back";
     }
 
-  }, 100);
 
+    if (subtitle) {
+        subtitle.textContent =
+            "Login to continue your journey.";
+    }
+}
+
+
+function setRegisterMode() {
+
+    const title =
+        document.getElementById(
+            "authModalTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "authModalSubtitle"
+        );
+
+
+    loginForm?.classList.add(
+        "hidden"
+    );
+
+    registerForm?.classList.remove(
+        "hidden"
+    );
+
+
+    if (title) {
+        title.textContent =
+            "Create Your Account";
+    }
+
+
+    if (subtitle) {
+        subtitle.textContent =
+            "Register now and start planning your next trip.";
+    }
+}
+
+
+function openLogin() {
+    setLoginMode();
+    openAuthModal();
 }
 
 
 function openRegister(prefillEmail = "") {
 
-  loginForm.classList.add(
-    "hidden"
-  );
+    setRegisterMode();
+
+    openAuthModal();
 
 
-  registerForm.classList.remove(
-    "hidden"
-  );
+    const emailInput =
+        document.getElementById(
+            "registerEmail"
+        );
 
-
-  authModal.classList.add(
-    "show"
-  );
-
-
-  document.body.classList.add(
-    "modal-open"
-  );
-
-
-  if (prefillEmail) {
-
-    document.getElementById(
-      "registerEmail"
-    ).value =
-      prefillEmail;
-
-  }
-
-}
-
-
-function closeAuth() {
-
-  authModal.classList.remove(
-    "show"
-  );
-
-
-  document.body.classList.remove(
-    "modal-open"
-  );
-
-}
-
-
-authClose.addEventListener(
-  "click",
-  closeAuth
-);
-
-
-authModal.addEventListener(
-  "click",
-  event => {
 
     if (
-      event.target ===
-      authModal
+        emailInput &&
+        prefillEmail
     ) {
 
-      closeAuth();
+        emailInput.value =
+            prefillEmail;
+    }
+}
 
+
+/* =========================================================
+   CONTINUE PENDING ACTION
+   ========================================================= */
+
+function continuePendingAction() {
+
+    const action =
+        loadPendingAction();
+
+
+    clearPendingAction();
+
+
+    if (!action) {
+
+        goTo("#home");
+
+        return;
     }
 
-  }
-);
+
+    if (
+        action.type === "dashboard"
+    ) {
+
+        goTo("#dashboard");
+
+        return;
+    }
 
 
-showRegisterBtn.addEventListener(
-  "click",
-  () => {
+    if (
+        action.type === "admin"
+    ) {
+
+        goTo("#admin");
+
+        return;
+    }
+
+
+    if (
+        action.type === "booking"
+    ) {
+
+        goTo("#booking");
+
+
+        setTimeout(() => {
+
+            selectBookingDestination(
+                action.destination
+            );
+
+        }, 250);
+
+        return;
+    }
+
+
+    if (
+        action.type === "favorite"
+    ) {
+
+        if (action.destination) {
+
+            toggleFavorite(
+                action.destination
+            );
+        }
+
+        goTo("#destinations");
+
+        return;
+    }
+
+
+    goTo("#home");
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+function handleLogin(event) {
+
+    event.preventDefault();
+
 
     const email =
-      document.getElementById(
-        "loginEmail"
-      ).value.trim();
+        document
+            .getElementById("loginEmail")
+            ?.value
+            .trim()
+            .toLowerCase();
 
 
-    openRegister(
-      email
+    const password =
+        document
+            .getElementById("loginPassword")
+            ?.value;
+
+
+    if (!email || !password) {
+
+        showToast(
+            "⚠️ Please enter email and password."
+        );
+
+        return;
+    }
+
+
+    const users =
+        getUsers();
+
+
+    const user =
+        users.find(
+            item =>
+                String(item.email || "")
+                    .toLowerCase()
+                    === email
+                &&
+                String(item.password || "")
+                    === password
+        );
+
+
+    /* USER NOT FOUND */
+
+    if (!user) {
+
+        const existingEmail =
+            users.find(
+                item =>
+                    String(item.email || "")
+                        .toLowerCase()
+                        === email
+            );
+
+
+        if (!existingEmail) {
+
+            showToast(
+                "ℹ️ Account not found. Please create an account."
+            );
+
+            openRegister(email);
+
+            return;
+        }
+
+
+        showToast(
+            "❌ Incorrect password."
+        );
+
+        return;
+    }
+
+
+    const normalizedUser =
+        normalizeUser(user);
+
+
+    const session = {
+        id: normalizedUser.id,
+
+        name: normalizedUser.name,
+
+        email: normalizedUser.email,
+
+        phone: normalizedUser.phone || "",
+
+        role: normalizedUser.role
+    };
+
+
+    saveSession(session);
+
+    updateUserUI();
+
+    updateBookingFields();
+
+    updateFavoriteButtons();
+
+    closeAuthModalBox();
+
+    loginForm?.reset();
+
+
+    showToast(
+        `✅ Welcome back, ${session.name}!`
     );
 
-  }
-);
+
+    const action =
+        loadPendingAction();
 
 
-showLoginBtn.addEventListener(
-  "click",
-  () => {
+    if (
+        session.role === "admin" &&
+        (!action || action.type === "admin")
+    ) {
 
-    loginForm.classList.remove(
-      "hidden"
-    );
+        continuePendingAction();
 
-    registerForm.classList.add(
-      "hidden"
-    );
+        if (!action) {
+            goTo("#admin");
+        }
 
-  }
-);
+        return;
+    }
+
+
+    if (
+        action
+    ) {
+
+        continuePendingAction();
+
+        return;
+    }
+
+
+    goTo("#home");
+}
 
 
 /* =========================================================
    REGISTER
-========================================================= */
+   ========================================================= */
 
-registerForm.addEventListener(
-  "submit",
-  event => {
+function handleRegister(event) {
 
     event.preventDefault();
 
 
     const name =
-      document.getElementById(
-        "registerName"
-      ).value.trim();
+        document
+            .getElementById("registerName")
+            ?.value
+            .trim();
 
 
     const email =
-      document.getElementById(
-        "registerEmail"
-      ).value.trim().toLowerCase();
+        document
+            .getElementById("registerEmail")
+            ?.value
+            .trim()
+            .toLowerCase();
 
 
     const phone =
-      document.getElementById(
-        "registerPhone"
-      ).value.trim();
+        document
+            .getElementById("registerPhone")
+            ?.value
+            .trim();
 
 
     const password =
-      document.getElementById(
-        "registerPassword"
-      ).value;
+        document
+            .getElementById("registerPassword")
+            ?.value;
 
 
     const confirmPassword =
-      document.getElementById(
-        "registerConfirmPassword"
-      ).value;
+        document
+            .getElementById(
+                "registerConfirmPassword"
+            )
+            ?.value;
 
 
     if (
-      !name ||
-      !email ||
-      !phone ||
-      !password ||
-      !confirmPassword
+        !name ||
+        !email ||
+        !phone ||
+        !password ||
+        !confirmPassword
     ) {
 
-      showToast(
-        "❌ Please fill in all fields."
-      );
+        showToast(
+            "⚠️ Please complete all required fields."
+        );
 
-      return;
+        return;
+    }
 
+
+    if (password.length < 6) {
+
+        showToast(
+            "⚠️ Password must be at least 6 characters."
+        );
+
+        return;
     }
 
 
     if (
-      password.length < 6
+        password !==
+        confirmPassword
     ) {
 
-      showToast(
-        "❌ Password must be at least 6 characters."
-      );
+        showToast(
+            "❌ Passwords do not match."
+        );
 
-      return;
-
-    }
-
-
-    if (
-      password !==
-      confirmPassword
-    ) {
-
-      showToast(
-        "❌ Passwords do not match."
-      );
-
-      return;
-
+        return;
     }
 
 
     const users =
-      getUsers();
+        getUsers();
 
 
-    const exists =
-      users.some(
-        user =>
-          user.email === email
-      );
+    const existingUser =
+        users.find(
+            user =>
+                String(user.email || "")
+                    .toLowerCase()
+                    === email
+        );
 
 
-    if (exists) {
+    if (existingUser) {
 
-      showToast(
-        "⚠️ Account already exists. Please login."
-      );
+        showToast(
+            "⚠️ An account with this email already exists."
+        );
 
+        setLoginMode();
 
-      openLogin(
-        pendingAction
-      );
+        const loginEmail =
+            document.getElementById(
+                "loginEmail"
+            );
 
+        if (loginEmail) {
+            loginEmail.value =
+                email;
+        }
 
-      document.getElementById(
-        "loginEmail"
-      ).value =
-        email;
-
-
-      return;
-
+        return;
     }
 
 
     const newUser = {
 
-      id:
-        Date.now(),
+        id:
+            "user-" +
+            Date.now() +
+            "-" +
+            Math.random()
+                .toString(36)
+                .slice(2, 8),
 
-      name,
+        name,
 
-      email,
+        email,
 
-      phone,
+        phone,
 
-      password
+        password,
 
+        role: "user",
+
+        createdAt:
+            new Date().toISOString()
     };
 
 
     users.push(
-      newUser
+        newUser
     );
 
-
-    saveUsers(
-      users
-    );
+    saveUsers(users);
 
 
-    /*
-        AUTO LOGIN
-    */
+    const session = {
 
-    setSession({
+        id: newUser.id,
 
-      id:
-        newUser.id,
+        name: newUser.name,
 
-      name:
-        newUser.name,
+        email: newUser.email,
 
-      email:
-        newUser.email,
+        phone: newUser.phone,
 
-      phone:
-        newUser.phone
-
-    });
+        role: "user"
+    };
 
 
-    registerForm.reset();
-
-    closeAuth();
+    saveSession(session);
 
 
     updateUserUI();
@@ -845,1947 +1175,3173 @@ registerForm.addEventListener(
 
     updateFavoriteButtons();
 
+    closeAuthModalBox();
 
-    showToast(
-      `✅ Welcome to Wanderlust, ${newUser.name}!`
-    );
-
-
-    setTimeout(() => {
-
-      continuePendingAction();
-
-    }, 250);
-
-  }
-);
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-loginForm.addEventListener(
-  "submit",
-  event => {
-
-    event.preventDefault();
-
-
-    const email =
-      document.getElementById(
-        "loginEmail"
-      ).value.trim().toLowerCase();
-
-
-    const password =
-      document.getElementById(
-        "loginPassword"
-      ).value;
-
-
-    if (
-      !email ||
-      !password
-    ) {
-
-      showToast(
-        "❌ Enter email and password."
-      );
-
-      return;
-
-    }
-
-
-    const users =
-      getUsers();
-
-
-    const user =
-      users.find(
-        item =>
-          item.email ===
-          email
-      );
-
-
-    /*
-        No account
-        → Register
-    */
-
-    if (!user) {
-
-      showToast(
-        "⚠️ Account not found. Create an account first."
-      );
-
-
-      setTimeout(() => {
-
-        openRegister(
-          email
-        );
-
-      }, 450);
-
-
-      return;
-
-    }
-
-
-    /*
-        Wrong password
-    */
-
-    if (
-      user.password !==
-      password
-    ) {
-
-      showToast(
-        "❌ Incorrect password."
-      );
-
-      return;
-
-    }
-
-
-    /*
-        SAVE SESSION
-    */
-
-    setSession({
-
-      id:
-        user.id,
-
-      name:
-        user.name,
-
-      email:
-        user.email,
-
-      phone:
-        user.phone
-
-    });
-
-
-    loginForm.reset();
-
-    closeAuth();
-
-
-    updateUserUI();
-
-    updateBookingFields();
-
-    updateFavoriteButtons();
+    registerForm?.reset();
 
 
     showToast(
-      `✅ Welcome back, ${user.name}!`
+        `🎉 Account created successfully, ${name}!`
     );
 
 
-    setTimeout(() => {
+    /* AUTO LOGIN + CONTINUE */
 
-      continuePendingAction();
-
-    }, 250);
-
-  }
-);
-
-
-/* =========================================================
-   CONTINUE AFTER AUTH
-========================================================= */
-
-function continuePendingAction() {
-
-  const action =
-    pendingAction;
-
-
-  pendingAction =
-    null;
-
-
-  /*
-      Nothing pending
-      → just stay on current page
-  */
-
-  if (!action) {
-
-    updateBookingFields();
-
-    return;
-
-  }
-
-
-  /* -------------------------
-     BOOKING
-  ------------------------- */
-
-  if (
-    action.type ===
-    "booking"
-  ) {
-
-    const select =
-      document.getElementById(
-        "bookingDestination"
-      );
-
-
-    if (
-      select &&
-      action.destination
-    ) {
-
-      select.value =
-        action.destination;
-
-    }
-
-
-    goTo("#booking");
-
-    return;
-
-  }
-
-
-  /* -------------------------
-     DASHBOARD
-  ------------------------- */
-
-  if (
-    action.type ===
-    "dashboard"
-  ) {
-
-    goTo("#dashboard");
-
-    return;
-
-  }
-
-
-  /* -------------------------
-     FAVORITE
-  ------------------------- */
-
-  if (
-    action.type ===
-    "favorite"
-  ) {
-
-    saveFavorite(
-      action.destination
-    );
-
-  }
-
+    continuePendingAction();
 }
 
 
 /* =========================================================
-   NAVBAR USER UI
-========================================================= */
+   LOGOUT
+   ========================================================= */
 
-function updateUserUI() {
+function logout() {
 
-  const session =
-    getSession();
+    clearSession();
 
+    clearPendingAction();
 
-  /*
-      LOGGED OUT
-  */
-
-  if (!session) {
-
-    userNav.innerHTML = `
-
-            <button
-                type="button"
-                class="login-nav-btn"
-                id="loginNavButton"
-            >
-                Login
-            </button>
-
-        `;
-
-
-    document
-      .getElementById(
-        "loginNavButton"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          openLogin();
-
-        }
-      );
-
+    updateUserUI();
 
     updateBookingFields();
 
-    return;
+    updateFavoriteButtons();
 
-  }
+    showToast(
+        "✅ You have been logged out successfully."
+    );
 
-
-  /*
-      LOGGED IN
-  */
-
-  const initial =
-    session.name
-      .trim()
-      .charAt(0)
-      .toUpperCase();
+    goTo("#home");
+}
 
 
-  userNav.innerHTML = `
+/* =========================================================
+   UPDATE USER NAV
+   ========================================================= */
 
-        <div class="user-profile">
+function updateUserUI() {
+
+    if (!userNav) {
+        return;
+    }
+
+
+    const session =
+        getSession();
+
+
+    if (!session) {
+
+        userNav.innerHTML = `
+            <button
+                type="button"
+                class="login-nav-btn"
+                id="loginNavBtn"
+            >
+                <i class="fa-solid fa-user"></i>
+                Login
+            </button>
+        `;
+
+
+        document
+            .getElementById("loginNavBtn")
+            ?.addEventListener(
+                "click",
+                () => {
+                    openLogin();
+                }
+            );
+
+
+        return;
+    }
+
+
+    const initial =
+        String(session.name || "U")
+            .charAt(0)
+            .toUpperCase();
+
+
+    const admin =
+        session.role === "admin";
+
+
+    userNav.innerHTML = `
+        <div class="profile-nav">
 
             <button
                 type="button"
                 class="profile-btn"
-                id="profileBtn"
+                aria-label="Open profile menu"
             >
 
-                <span class="profile-avatar-small">
-                    ${escapeHtml(initial)}
+                <span class="profile-avatar">
+                    ${escapeHTML(initial)}
                 </span>
 
-                <span>
-                    ${escapeHtml(
-    session.name.split(" ")[0]
-  )}
+                <span class="profile-name">
+                    ${escapeHTML(
+                        admin
+                            ? "Admin"
+                            : session.name
+                    )}
                 </span>
 
-                <span class="profile-arrow">
-                    ▾
+                <span class="profile-chevron">
+                    <i class="fa-solid fa-chevron-down"></i>
                 </span>
 
             </button>
 
 
-            <div
-                class="profile-dropdown"
-                id="profileDropdown"
-            >
+            <div class="profile-dropdown">
 
-                <div
-                    class="profile-dropdown-header"
-                >
+                ${
+                    admin
+                        ? `
+                            <a href="#admin">
+                                <i class="fa-solid fa-gauge-high"></i>
+                                Admin Dashboard
+                            </a>
+                        `
+                        : `
+                            <a href="#dashboard">
+                                <i class="fa-solid fa-user"></i>
+                                My Dashboard
+                            </a>
 
-                    <strong>
-                        ${escapeHtml(
-    session.name
-  )}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(
-    session.email
-  )}
-                    </span>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="dashboardMenuBtn"
-                >
-                    📊 My Dashboard
-                </button>
+                            <a href="#booking">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                My Booking
+                            </a>
+                        `
+                }
 
 
                 <button
                     type="button"
-                    id="bookingMenuBtn"
+                    class="logout-item"
+                    id="logoutNavBtn"
                 >
-                    ✈️ My Booking
-                </button>
-
-
-                <button
-                    type="button"
-                    id="logoutMenuBtn"
-                >
-                    🚪 Logout
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
                 </button>
 
             </div>
 
         </div>
-
     `;
 
+const profileNav =
+    userNav.querySelector(".profile-nav");
 
-  const profileBtn =
-    document.getElementById(
-      "profileBtn"
+const profileBtn =
+    userNav.querySelector(".profile-btn");
+
+if (profileNav && profileBtn) {
+
+    profileBtn.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+            profileNav.classList.toggle("open");
+
+        }
     );
-
-
-  const profileDropdown =
-    document.getElementById(
-      "profileDropdown"
-    );
-
-
-  profileBtn.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      profileDropdown.classList.toggle(
-        "show"
-      );
-
-    }
-  );
-
-
-  document
-    .getElementById(
-      "dashboardMenuBtn"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        profileDropdown.classList.remove(
-          "show"
-        );
-
-        goTo("#dashboard");
-
-      }
-    );
-
-
-  document
-    .getElementById(
-      "bookingMenuBtn"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        profileDropdown.classList.remove(
-          "show"
-        );
-
-        goTo("#booking");
-
-      }
-    );
-
-
-  document
-    .getElementById(
-      "logoutMenuBtn"
-    )
-    .addEventListener(
-      "click",
-      event => {
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        logout();
-
-      }
-    );
-
-
-  updateBookingFields();
-
 }
 
-
-document.addEventListener(
-  "click",
-  event => {
-
-    const dropdown =
-      document.getElementById(
-        "profileDropdown"
-      );
-
-
-    if (
-      dropdown &&
-      !event.target.closest(
-        ".user-profile"
-      )
-    ) {
-
-      dropdown.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-function logout() {
-
-  /*
-      Remove session
-  */
-
-  clearSession();
-
-
-  /*
-      Clear pending action
-  */
-
-  pendingAction =
-    null;
-
-
-  /*
-      Update UI
-  */
-
-  updateUserUI();
-
-  updateBookingFields();
-
-  updateFavoriteButtons();
-
-
-  /*
-      Return to home
-  */
-
-  goTo("#home");
-
-
-  showToast(
-    "✅ You have been logged out successfully."
-  );
-
+    document
+        .getElementById("logoutNavBtn")
+        ?.addEventListener(
+            "click",
+            logout
+        );
 }
 
 
 /* =========================================================
-   BOOKING USER DETAILS
-========================================================= */
+   BOOKING FIELD AUTO FILL
+   ========================================================= */
 
 function updateBookingFields() {
 
-  const session =
-    getSession();
+    const session =
+        getSession();
 
 
-  const nameInput =
-    document.getElementById(
-      "bookingName"
-    );
+    const nameInput =
+        document.getElementById(
+            "bookingName"
+        );
+
+    const emailInput =
+        document.getElementById(
+            "bookingEmail"
+        );
+
+    const phoneInput =
+        document.getElementById(
+            "bookingPhone"
+        );
 
 
-  const emailInput =
-    document.getElementById(
-      "bookingEmail"
-    );
+    if (!session) {
+
+        if (nameInput) {
+            nameInput.value = "";
+        }
+
+        if (emailInput) {
+            emailInput.value = "";
+        }
+
+        if (phoneInput) {
+            phoneInput.value = "";
+        }
+
+        return;
+    }
 
 
-  const phoneInput =
-    document.getElementById(
-      "bookingPhone"
-    );
+    if (nameInput) {
+        nameInput.value =
+            session.name || "";
+    }
 
+    if (emailInput) {
+        emailInput.value =
+            session.email || "";
+    }
 
-  const submitButton =
-    document.getElementById(
-      "bookingSubmitBtn"
-    );
-
-
-  const note =
-    document.getElementById(
-      "loginRequiredNote"
-    );
-
-
-  if (
-    !nameInput ||
-    !emailInput ||
-    !phoneInput ||
-    !submitButton ||
-    !note
-  ) {
-
-    return;
-
-  }
-
-
-  if (!session) {
-
-    nameInput.value =
-      "";
-
-    emailInput.value =
-      "";
-
-    phoneInput.value =
-      "";
-
-    nameInput.placeholder =
-      "Login required";
-
-    emailInput.placeholder =
-      "Login required";
-
-    phoneInput.placeholder =
-      "Login required";
-
-    submitButton.textContent =
-      "Login To Book 🔐";
-
-    note.style.display =
-      "block";
-
-    return;
-
-  }
-
-
-  nameInput.value =
-    session.name;
-
-  emailInput.value =
-    session.email;
-
-  phoneInput.value =
-    session.phone;
-
-  submitButton.textContent =
-    "Confirm Booking ✈️";
-
-  note.style.display =
-    "none";
-
+    if (phoneInput) {
+        phoneInput.value =
+            session.phone || "";
+    }
 }
 
 
 /* =========================================================
-   BOOKING SUBMIT
-========================================================= */
+   BOOKING
+   ========================================================= */
 
-bookingForm.addEventListener(
-  "submit",
-  event => {
+function handleBookingSubmit(event) {
 
     event.preventDefault();
 
 
     const session =
-      getSession();
+        getSession();
 
-
-    /*
-        USER NOT LOGGED IN
-    */
 
     if (!session) {
 
-      const selectedDestination =
-        document
-          .getElementById(
-            "bookingDestination"
-          )
-          .value;
+        setPendingAction({
+            type: "booking"
+        });
 
+        openLogin();
 
-      pendingAction = {
-
-        type:
-          "booking",
-
-        destination:
-          selectedDestination
-
-      };
-
-
-      openLogin();
-
-      return;
-
+        return;
     }
 
 
-    const destination =
-      document
-        .getElementById(
-          "bookingDestination"
-        )
-        .value;
+    if (session.role === "admin") {
 
+        showToast(
+            "ℹ️ Admin accounts should manage bookings from the Admin Dashboard."
+        );
 
-    const date =
-      document
-        .getElementById(
-          "bookingDate"
-        )
-        .value;
-
-
-    const travelers =
-      document
-        .getElementById(
-          "bookingTravelers"
-        )
-        .value;
-
-
-    const message =
-      document
-        .getElementById(
-          "bookingMessage"
-        )
-        .value
-        .trim();
-
-
-    if (!destination) {
-
-      showToast(
-        "📍 Please select a destination."
-      );
-
-      return;
-
+        return;
     }
 
 
-    if (!date) {
-
-      showToast(
-        "📅 Please select travel date."
-      );
-
-      return;
-
-    }
+    const formData =
+        new FormData(
+            bookingForm
+        );
 
 
     const booking = {
 
-      id:
-        "WL-" +
-        Date.now(),
+        id:
+            "booking-" +
+            Date.now() +
+            "-" +
+            Math.random()
+                .toString(36)
+                .slice(2, 7),
 
-      userId:
-        session.id,
+        userId:
+            session.id,
 
-      name:
-        session.name,
+        name:
+            String(
+                formData.get("name") || ""
+            ).trim(),
 
-      email:
-        session.email,
+        email:
+            String(
+                formData.get("email") || ""
+            ).trim(),
 
-      phone:
-        session.phone,
+        phone:
+            String(
+                formData.get("phone") || ""
+            ).trim(),
 
-      destination,
+        destination:
+            String(
+                formData.get("destination") || ""
+            ).trim(),
 
-      date,
+        date:
+            String(
+                formData.get("date") || ""
+            ).trim(),
 
-      travelers,
+        travelers:
+            String(
+                formData.get("travelers") || ""
+            ).trim(),
 
-      message,
+        message:
+            String(
+                formData.get("message") || ""
+            ).trim(),
 
-      status:
-        "Pending",
+        status: "Pending",
 
-      createdAt:
-        new Date().toISOString()
-
+        createdAt:
+            new Date().toISOString()
     };
 
 
+    if (
+        !booking.destination ||
+        !booking.date ||
+        !booking.travelers
+    ) {
+
+        showToast(
+            "⚠️ Please complete the booking form."
+        );
+
+        return;
+    }
+
+
     const bookings =
-      getBookings();
+        getBookings();
 
 
-    bookings.push(
-      booking
+    bookings.unshift(
+        booking
     );
 
 
     saveBookings(
-      bookings
+        bookings
     );
 
 
-    /*
-        Reset
-    */
+    bookingForm.reset();
 
-    document
-      .getElementById(
-        "bookingDestination"
-      )
-      .value =
-      "";
+    updateBookingFields();
 
+    renderUserDashboard();
 
-    document
-      .getElementById(
-        "bookingDate"
-      )
-      .value =
-      "";
-
-
-    document
-      .getElementById(
-        "bookingTravelers"
-      )
-      .value =
-      "2";
-
-
-    document
-      .getElementById(
-        "bookingMessage"
-      )
-      .value =
-      "";
+    renderAdminDashboard();
 
 
     showToast(
-      "✅ Booking submitted successfully!"
+        "🎉 Booking submitted successfully! Status: Pending."
     );
 
 
-    /*
-        Dashboard
-    */
-
-    setTimeout(
-      () => {
-
-        goTo(
-          "#dashboard"
-        );
-
-      },
-      500
-    );
-
-  }
-);
+    setTimeout(() => {
+        goTo("#dashboard");
+    }, 400);
+}
 
 
 /* =========================================================
-   DESTINATION BOOK BUTTONS
-========================================================= */
+   BOOK DESTINATION
+   ========================================================= */
 
-document
-  .querySelectorAll(
-    ".book-destination-btn"
-  )
-  .forEach(button => {
+function bookDestination(destination) {
 
-    button.addEventListener(
-      "click",
-      () => {
-
-        const destination =
-          button.dataset
-            .destination;
+    const session =
+        getSession();
 
 
-        const session =
-          getSession();
+    if (!session) {
 
-
-        if (!session) {
-
-          pendingAction = {
-
-            type:
-              "booking",
-
+        setPendingAction({
+            type: "booking",
             destination
+        });
 
-          };
+        openLogin();
 
-
-          openLogin();
-
-          return;
-
-        }
-
-
-        document
-          .getElementById(
-            "bookingDestination"
-          )
-          .value =
-          destination;
-
-
-        goTo("#booking");
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   PACKAGE BOOK BUTTONS
-========================================================= */
-
-document
-  .querySelectorAll(
-    ".package-book-btn"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const destination =
-          button.dataset
-            .destination;
-
-
-        const session =
-          getSession();
-
-
-        if (!session) {
-
-          pendingAction = {
-
-            type:
-              "booking",
-
-            destination
-
-          };
-
-
-          openLogin();
-
-          return;
-
-        }
-
-
-        document
-          .getElementById(
-            "bookingDestination"
-          )
-          .value =
-          destination;
-
-
-        goTo("#booking");
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   FAVORITES
-========================================================= */
-
-function getUserFavorites(userId) {
-
-  const all =
-    getFavorites();
-
-
-  return all[userId] || [];
-
-}
-
-
-function saveFavorite(destination) {
-
-  const session =
-    getSession();
-
-
-  if (!session) {
-
-    pendingAction = {
-
-      type:
-        "favorite",
-
-      destination
-
-    };
-
-
-    openLogin();
-
-    return;
-
-  }
-
-
-  const favorites =
-    getFavorites();
-
-
-  const list =
-    favorites[session.id] ||
-    [];
-
-
-  if (
-    list.includes(
-      destination
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  list.push(
-    destination
-  );
-
-
-  favorites[session.id] =
-    list;
-
-
-  saveFavorites(
-    favorites
-  );
-
-
-  updateFavoriteButtons();
-
-  showToast(
-    "❤️ Added to favorites."
-  );
-
-}
-
-
-function toggleFavorite(destination) {
-
-  const session =
-    getSession();
-
-
-  if (!session) {
-
-    pendingAction = {
-
-      type:
-        "favorite",
-
-      destination
-
-    };
-
-
-    openLogin();
-
-    return;
-
-  }
-
-
-  const favorites =
-    getFavorites();
-
-
-  const list =
-    favorites[session.id] ||
-    [];
-
-
-  const index =
-    list.indexOf(
-      destination
-    );
-
-
-  if (index === -1) {
-
-    list.push(
-      destination
-    );
-
-    showToast(
-      "❤️ Added to favorites."
-    );
-
-  } else {
-
-    list.splice(
-      index,
-      1
-    );
-
-    showToast(
-      "Removed from favorites."
-    );
-
-  }
-
-
-  favorites[session.id] =
-    list;
-
-
-  saveFavorites(
-    favorites
-  );
-
-
-  updateFavoriteButtons();
-
-
-  if (
-    window.location.hash ===
-    "#dashboard"
-  ) {
-
-    renderDashboard();
-
-  }
-
-}
-
-
-document
-  .querySelectorAll(
-    ".favorite-btn"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      event => {
-
-        event.stopPropagation();
-
-        toggleFavorite(
-          button.dataset
-            .destination
-        );
-
-      }
-    );
-
-  });
-
-
-function updateFavoriteButtons() {
-
-  const session =
-    getSession();
-
-
-  const favorites =
-    session
-      ? getUserFavorites(
-        session.id
-      )
-      : [];
-
-
-  document
-    .querySelectorAll(
-      ".favorite-btn"
-    )
-    .forEach(button => {
-
-      const destination =
-        button.dataset
-          .destination;
-
-
-      const active =
-        favorites.includes(
-          destination
-        );
-
-
-      button.classList.toggle(
-        "active",
-        active
-      );
-
-
-      button.textContent =
-        active
-          ? "♥"
-          : "♡";
-
-    });
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-function renderDashboard() {
-
-  const session =
-    getSession();
-
-
-  if (!session) {
-    return;
-  }
-
-
-  document
-    .getElementById(
-      "dashboardName"
-    )
-    .textContent =
-    session.name;
-
-
-  document
-    .getElementById(
-      "profileName"
-    )
-    .textContent =
-    session.name;
-
-
-  document
-    .getElementById(
-      "profileEmail"
-    )
-    .textContent =
-    session.email;
-
-
-  document
-    .getElementById(
-      "profilePhone"
-    )
-    .textContent =
-    session.phone;
-
-
-  document
-    .getElementById(
-      "profileInitial"
-    )
-    .textContent =
-    session.name
-      .charAt(0)
-      .toUpperCase();
-
-
-  const bookings =
-    getBookings().filter(
-      booking =>
-        Number(
-          booking.userId
-        ) ===
-        Number(
-          session.id
-        )
-    );
-
-
-  const favorites =
-    getUserFavorites(
-      session.id
-    );
-
-
-  document
-    .getElementById(
-      "totalBookings"
-    )
-    .textContent =
-    bookings.length;
-
-
-  document
-    .getElementById(
-      "totalFavorites"
-    )
-    .textContent =
-    favorites.length;
-
-
-  renderBookings(
-    bookings
-  );
-
-
-  renderFavorites(
-    favorites
-  );
-
-}
-
-
-function renderBookings(bookings) {
-
-  const list =
-    document.getElementById(
-      "bookingList"
-    );
-
-
-  if (!bookings.length) {
-
-    list.innerHTML = `
-
-            <p
-                style="
-                    color:var(--text-soft);
-                    font-size:13px;
-                "
-            >
-                No bookings yet.
-                Start planning your next trip.
-            </p>
-
-        `;
-
-    return;
-
-  }
-
-
-  list.innerHTML =
-    bookings
-      .slice()
-      .reverse()
-      .map(
-        booking => `
-
-                    <div
-                        class="booking-item"
-                    >
-
-                        <div>
-
-                            <strong>
-                                ${escapeHtml(
-          booking.destination
-        )}
-                            </strong>
-
-                            <small>
-                                📅
-                                ${escapeHtml(
-          booking.date
-        )}
-                            </small>
-
-                            <br>
-
-                            <small>
-                                👥
-                                ${escapeHtml(
-          booking.travelers
-        )}
-                                traveler(s)
-                            </small>
-
-                            <br>
-
-                            <small>
-                                ID:
-                                ${escapeHtml(
-          booking.id
-        )}
-                            </small>
-
-                        </div>
-
-
-                        <span class="status">
-                            ${escapeHtml(
-          booking.status
-        )}
-                        </span>
-
-                    </div>
-
-                `
-      )
-      .join("");
-
-}
-
-
-function renderFavorites(favorites) {
-
-  const list =
-    document.getElementById(
-      "favoriteList"
-    );
-
-
-  if (!favorites.length) {
-
-    list.innerHTML = `
-
-            <span
-                style="
-                    color:var(--text-soft);
-                    font-size:13px;
-                "
-            >
-                No favorite destinations yet.
-            </span>
-
-        `;
-
-    return;
-
-  }
-
-
-  list.innerHTML =
-    favorites
-      .map(
-        destination => `
-
-                    <span
-                        class="favorite-chip"
-                    >
-                        ❤️
-                        ${escapeHtml(
-          destination
-        )}
-                    </span>
-
-                `
-      )
-      .join("");
-
-}
-
-
-/* =========================================================
-   DASHBOARD BUTTONS
-========================================================= */
-
-document
-  .getElementById(
-    "dashboardLogout"
-  )
-  .addEventListener(
-    "click",
-    logout
-  );
-
-
-document
-  .getElementById(
-    "newBookingBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      goTo(
-        "#booking"
-      );
-
+        return;
     }
-  );
+
+
+    if (session.role === "admin") {
+
+        showToast(
+            "ℹ️ Admin cannot create a customer booking."
+        );
+
+        return;
+    }
+
+
+    goTo("#booking");
+
+
+    setTimeout(() => {
+
+        selectBookingDestination(
+            destination
+        );
+
+    }, 250);
+}
 
 
 /* =========================================================
-   SEARCH
-========================================================= */
+   SELECT BOOKING DESTINATION
+   ========================================================= */
 
-function searchDestinations() {
+function selectBookingDestination(
+    destination
+) {
 
-  const query =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
-
-  let count =
-    0;
+    const select =
+        document.getElementById(
+            "bookingDestination"
+        );
 
 
-  destinationCards.forEach(card => {
-
-    const name =
-      card.dataset.name
-        .toLowerCase();
+    if (!select || !destination) {
+        return;
+    }
 
 
-    if (
-      !query ||
-      name.includes(query)
-    ) {
+    const target =
+        String(destination)
+            .trim()
+            .toLowerCase();
 
-      card.style.display =
-        "";
 
-      count++;
+    let option =
+        [...select.options].find(
+            item =>
+                item.value
+                    .trim()
+                    .toLowerCase()
+                    === target
+                ||
+                item.text
+                    .trim()
+                    .toLowerCase()
+                    === target
+        );
+
+
+    if (!option) {
+
+        option =
+            [...select.options].find(
+                item =>
+                    item.value
+                        .trim()
+                        .toLowerCase()
+                        .includes(target)
+                    ||
+                    item.text
+                        .trim()
+                        .toLowerCase()
+                        .includes(target)
+                    ||
+                    target.includes(
+                        item.value
+                            .trim()
+                            .toLowerCase()
+                    )
+            );
+    }
+
+
+    if (option) {
+
+        select.value =
+            option.value;
 
     } else {
 
-      card.style.display =
-        "none";
+        const newOption =
+            document.createElement(
+                "option"
+            );
 
+        newOption.value =
+            destination;
+
+        newOption.textContent =
+            destination;
+
+        select.appendChild(
+            newOption
+        );
+
+        select.value =
+            destination;
     }
 
-  });
 
-
-  emptyState.style.display =
-    count === 0
-      ? "block"
-      : "none";
-
-
-  goTo("#destinations");
-
+    select.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
 }
 
 
-searchBtn.addEventListener(
-  "click",
-  searchDestinations
-);
+/* =========================================================
+   FAVORITES STORAGE
+   ========================================================= */
 
+function getFavoritesStore() {
 
-searchInput.addEventListener(
-  "keydown",
-  event => {
+    const data =
+        readStorage(
+            STORAGE.FAVORITES,
+            {}
+        );
+
 
     if (
-      event.key ===
-      "Enter"
+        Array.isArray(data)
     ) {
-
-      searchDestinations();
-
+        return {};
     }
 
-  }
-);
+
+    return (
+        data &&
+        typeof data === "object"
+    )
+        ? data
+        : {};
+}
+
+
+function saveFavoritesStore(
+    store
+) {
+    writeStorage(
+        STORAGE.FAVORITES,
+        store
+    );
+}
+
+
+function getUserFavorites(
+    email
+) {
+
+    if (!email) {
+        return [];
+    }
+
+
+    const store =
+        getFavoritesStore();
+
+
+    const favorites =
+        store[email] || [];
+
+
+    return Array.isArray(favorites)
+        ? favorites
+        : [];
+}
 
 
 /* =========================================================
-   CONTACT FORM
-========================================================= */
+   FAVORITE CHECK
+   ========================================================= */
 
-document
-  .getElementById(
-    "contactForm"
-  )
-  .addEventListener(
-    "submit",
-    event => {
+function isFavorite(
+    destination
+) {
 
-      event.preventDefault();
+    const session =
+        getSession();
 
-      showToast(
-        "✅ Message sent successfully!"
-      );
 
-      event.target.reset();
-
+    if (!session) {
+        return false;
     }
-  );
+
+
+    return getUserFavorites(
+        session.email
+    ).includes(
+        destination
+    );
+}
+
+
+/* =========================================================
+   TOGGLE FAVORITE
+   ========================================================= */
+
+function toggleFavorite(
+    destination
+) {
+
+    const session =
+        getSession();
+
+
+    if (!session) {
+
+        setPendingAction({
+            type: "favorite",
+            destination
+        });
+
+        openLogin();
+
+        return;
+    }
+
+
+    if (session.role === "admin") {
+
+        showToast(
+            "ℹ️ Admin accounts do not use customer favorites."
+        );
+
+        return;
+    }
+
+
+    const store =
+        getFavoritesStore();
+
+
+    if (!Array.isArray(
+        store[session.email]
+    )) {
+
+        store[session.email] =
+            [];
+    }
+
+
+    const favorites =
+        store[session.email];
+
+
+    const index =
+        favorites.indexOf(
+            destination
+        );
+
+
+    if (index === -1) {
+
+        favorites.push(
+            destination
+        );
+
+        showToast(
+            `❤️ ${destination} added to favorites.`
+        );
+
+    } else {
+
+        favorites.splice(
+            index,
+            1
+        );
+
+        showToast(
+            `♡ ${destination} removed from favorites.`
+        );
+    }
+
+
+    saveFavoritesStore(
+        store
+    );
+
+
+    updateFavoriteButtons();
+
+    renderDestinations();
+
+    renderUserDashboard();
+}
+
+
+/* =========================================================
+   UPDATE FAVORITE BUTTONS
+   ========================================================= */
+
+function updateFavoriteButtons() {
+
+    document
+        .querySelectorAll(
+            ".favorite-btn"
+        )
+        .forEach(button => {
+
+            const name =
+                button.dataset.destination;
+
+
+            const active =
+                isFavorite(name);
+
+
+            button.classList.toggle(
+                "active",
+                active
+            );
+
+
+            button.textContent =
+                active
+                    ? "♥"
+                    : "♡";
+        });
+}
+
+
+/* =========================================================
+   DESTINATION JSON
+   ========================================================= */
+
+async function loadDestinations() {
+
+    const grid =
+        document.getElementById(
+            "destinationGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    grid.innerHTML = `
+        <div class="destination-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>Loading destinations...</span>
+        </div>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "destinations.json"
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                "destinations.json could not be loaded."
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!Array.isArray(data)) {
+            throw new Error(
+                "Destination JSON is not an array."
+            );
+        }
+
+
+        destinationState.all =
+            data;
+
+
+        destinationState.filtered =
+            [...data];
+
+
+        destinationState.currentPage =
+            1;
+
+
+        renderDestinations();
+
+
+    } catch (error) {
+
+        console.error(
+            "Destination loading error:",
+            error
+        );
+
+
+        grid.innerHTML = `
+            <div class="destination-error">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <h3>
+                    Unable to load destinations
+                </h3>
+
+                <p>
+                    Make sure <strong>destinations.json</strong>
+                    is in the same folder as index.html.
+                </p>
+
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   RENDER DESTINATIONS
+   ========================================================= */
+
+function renderDestinations() {
+
+    const grid =
+        document.getElementById(
+            "destinationGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    const start =
+        (
+            destinationState.currentPage
+            - 1
+        )
+        *
+        destinationState.perPage;
+
+
+    const end =
+        start +
+        destinationState.perPage;
+
+
+    const pageItems =
+        destinationState.filtered.slice(
+            start,
+            end
+        );
+
+
+    if (
+        pageItems.length === 0
+    ) {
+
+        grid.innerHTML = `
+            <div class="destination-empty">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <h3>
+                    No destinations found
+                </h3>
+
+                <p>
+                    Try another destination name.
+                </p>
+
+            </div>
+        `;
+
+
+        renderDestinationPagination();
+
+        return;
+    }
+
+
+    grid.innerHTML =
+        pageItems
+            .map(
+                destination =>
+                    createDestinationCard(
+                        destination
+                    )
+            )
+            .join("");
+
+
+    renderDestinationPagination();
+
+    updateFavoriteButtons();
+}
+
+
+/* =========================================================
+   CREATE DESTINATION CARD
+   ========================================================= */
+
+function createDestinationCard(
+    destination
+) {
+
+    const favorite =
+        isFavorite(
+            destination.name
+        );
+
+
+    return `
+        <article
+            class="destination-card"
+            data-name="${escapeHTML(
+                destination.name
+            )}"
+        >
+
+            <div class="card-image">
+
+                <img
+                    src="${escapeAttribute(
+                        destination.image
+                    )}"
+                    alt="${escapeHTML(
+                        destination.name
+                    )}"
+                    loading="lazy"
+                >
+
+
+                <button
+                    type="button"
+                    class="favorite-btn ${
+                        favorite
+                            ? "active"
+                            : ""
+                    }"
+                    data-destination="${escapeAttribute(
+                        destination.name
+                    )}"
+                    aria-label="${
+                        favorite
+                            ? "Remove"
+                            : "Add"
+                    } ${
+                        escapeAttribute(
+                            destination.name
+                        )
+                    } favorite"
+                >
+                    ${
+                        favorite
+                            ? "♥"
+                            : "♡"
+                    }
+                </button>
+
+
+                <span class="image-tag">
+                    ${escapeHTML(
+                        destination.tag ||
+                        "Destination"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="card-content">
+
+                <div class="card-location">
+                    <i class="fa-solid fa-location-dot"></i>
+                    ${escapeHTML(
+                        destination.location
+                    )}
+                </div>
+
+
+                <h3>
+                    ${escapeHTML(
+                        destination.name
+                    )}
+                </h3>
+
+
+                <p>
+                    ${escapeHTML(
+                        destination.description
+                    )}
+                </p>
+
+
+                <div class="card-bottom">
+
+                    <span class="price">
+
+                        From
+
+                        <strong>
+                            ৳${Number(
+                                destination.price || 0
+                            ).toLocaleString(
+                                "en-BD"
+                            )}
+                        </strong>
+
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="book-destination-btn"
+                        data-destination="${escapeAttribute(
+                            destination.name
+                        )}"
+                    >
+                        Book →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+    `;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+function renderDestinationPagination() {
+
+    const pagination =
+        document.getElementById(
+            "destinationPagination"
+        );
+
+
+    if (!pagination) {
+        return;
+    }
+
+
+    const totalPages =
+        Math.ceil(
+            destinationState.filtered.length /
+            destinationState.perPage
+        );
+
+
+    if (totalPages <= 1) {
+
+        pagination.innerHTML = "";
+
+        return;
+    }
+
+
+    let html = "";
+
+
+    html += `
+        <button
+            type="button"
+            class="pagination-btn prev-btn"
+            onclick="changeDestinationPage(${
+                destinationState.currentPage - 1
+            })"
+            ${
+                destinationState.currentPage === 1
+                    ? "disabled"
+                    : ""
+            }
+        >
+            ← Prev
+        </button>
+    `;
+
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+        html += `
+            <button
+                type="button"
+                class="pagination-btn page-number ${
+                    page ===
+                    destinationState.currentPage
+                        ? "active"
+                        : ""
+                }"
+                onclick="changeDestinationPage(${page})"
+            >
+                ${page}
+            </button>
+        `;
+    }
+
+
+    html += `
+        <button
+            type="button"
+            class="pagination-btn next-btn"
+            onclick="changeDestinationPage(${
+                destinationState.currentPage + 1
+            })"
+            ${
+                destinationState.currentPage === totalPages
+                    ? "disabled"
+                    : ""
+            }
+        >
+            Next →
+        </button>
+    `;
+
+
+    pagination.innerHTML =
+        html;
+}
+
+
+/* =========================================================
+   CHANGE DESTINATION PAGE
+   ========================================================= */
+
+function changeDestinationPage(
+    page
+) {
+
+    const totalPages =
+        Math.ceil(
+            destinationState.filtered.length /
+            destinationState.perPage
+        );
+
+
+    if (
+        page < 1 ||
+        page > totalPages
+    ) {
+        return;
+    }
+
+
+    destinationState.currentPage =
+        page;
+
+
+    renderDestinations();
+
+
+    const section =
+        document.getElementById(
+            "destinations"
+        );
+
+
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+/* =========================================================
+   DESTINATION SEARCH
+   ========================================================= */
+
+function filterDestinations(
+    keyword
+) {
+
+    const query =
+        String(keyword || "")
+            .trim()
+            .toLowerCase();
+
+
+    destinationState.filtered =
+        destinationState.all.filter(
+            destination => {
+
+                const name =
+                    String(
+                        destination.name || ""
+                    ).toLowerCase();
+
+                const location =
+                    String(
+                        destination.location || ""
+                    ).toLowerCase();
+
+                const tag =
+                    String(
+                        destination.tag || ""
+                    ).toLowerCase();
+
+                const description =
+                    String(
+                        destination.description || ""
+                    ).toLowerCase();
+
+
+                return (
+                    name.includes(query) ||
+                    location.includes(query) ||
+                    tag.includes(query) ||
+                    description.includes(query)
+                );
+            }
+        );
+
+
+    destinationState.currentPage =
+        1;
+
+
+    renderDestinations();
+}
+
+
+function setupDestinationSearch() {
+
+    const inputs = [
+        document.getElementById(
+            "destinationSearch"
+        ),
+
+        document.getElementById(
+            "searchDestination"
+        )
+    ].filter(Boolean);
+
+
+    if (!inputs.length) {
+        return;
+    }
+
+
+    inputs.forEach(input => {
+
+        input.addEventListener(
+            "input",
+            event => {
+
+                const value =
+                    event.target.value;
+
+
+                inputs.forEach(other => {
+
+                    if (
+                        other !==
+                        event.target
+                    ) {
+                        other.value =
+                            value;
+                    }
+
+                });
+
+
+                filterDestinations(
+                    value
+                );
+            }
+        );
+
+
+        input.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    goTo("#destinations");
+                }
+            }
+        );
+    });
+}
+
+
+/* =========================================================
+   DESTINATION ACTIONS
+   ========================================================= */
+
+function setupDestinationActions() {
+
+    const grid =
+        document.getElementById(
+            "destinationGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    grid.addEventListener(
+        "click",
+        event => {
+
+            const favoriteButton =
+                event.target.closest(
+                    ".favorite-btn"
+                );
+
+
+            if (favoriteButton) {
+
+                event.preventDefault();
+
+                toggleFavorite(
+                    favoriteButton.dataset
+                        .destination
+                );
+
+                return;
+            }
+
+
+            const bookButton =
+                event.target.closest(
+                    ".book-destination-btn"
+                );
+
+
+            if (bookButton) {
+
+                event.preventDefault();
+
+                bookDestination(
+                    bookButton.dataset
+                        .destination
+                );
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   PACKAGE ACTIONS
+   ========================================================= */
+
+function setupPackageActions() {
+
+    document
+        .querySelectorAll(
+            ".package-book-btn"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const destination =
+                        button.dataset
+                            .destination;
+
+
+                    bookDestination(
+                        destination
+                    );
+                }
+            );
+        });
+}
+
+
+/* =========================================================
+   USER DASHBOARD
+   ========================================================= */
+
+function renderUserDashboard() {
+
+    const session =
+        getSession();
+
+
+    if (!session) {
+        return;
+    }
+
+
+    if (
+        session.role === "admin"
+    ) {
+        return;
+    }
+
+
+    const bookings =
+        getBookings();
+
+
+    const userBookings =
+        bookings.filter(
+            booking =>
+                booking.userId ===
+                    session.id
+                ||
+                (
+                    booking.email &&
+                    booking.email
+                        .toLowerCase()
+                        ===
+                    session.email
+                        .toLowerCase()
+                )
+        );
+
+
+    const favorites =
+        getUserFavorites(
+            session.email
+        );
+
+
+    /* Header Name */
+
+    const dashboardUserName =
+        document.getElementById(
+            "dashboardUserName"
+        );
+
+    if (dashboardUserName) {
+        dashboardUserName.textContent =
+            session.name;
+    }
+
+
+    /* Profile */
+
+    const profileName =
+        document.getElementById(
+            "dashboardProfileName"
+        );
+
+    const profileEmail =
+        document.getElementById(
+            "dashboardProfileEmail"
+        );
+
+    const profilePhone =
+        document.getElementById(
+            "dashboardProfilePhone"
+        );
+
+    const avatar =
+        document.getElementById(
+            "dashboardAvatar"
+        );
+
+
+    if (profileName) {
+        profileName.textContent =
+            session.name;
+    }
+
+    if (profileEmail) {
+        profileEmail.textContent =
+            session.email;
+    }
+
+    if (profilePhone) {
+        profilePhone.textContent =
+            session.phone || "Phone not added";
+    }
+
+    if (avatar) {
+        avatar.textContent =
+            String(
+                session.name || "U"
+            )
+            .charAt(0)
+            .toUpperCase();
+    }
+
+
+    /* Booking Count */
+
+    const bookingCount =
+        document.getElementById(
+            "dashboardBookingCount"
+        );
+
+    if (bookingCount) {
+        bookingCount.textContent =
+            userBookings.length;
+    }
+
+
+    /* Favorite Count */
+
+    const favoriteCount =
+        document.getElementById(
+            "dashboardFavoriteCount"
+        );
+
+    if (favoriteCount) {
+        favoriteCount.textContent =
+            favorites.length;
+    }
+
+
+    /* Pending */
+
+    const pendingCount =
+        userBookings.filter(
+            booking =>
+                String(
+                    booking.status
+                ).toLowerCase()
+                === "pending"
+        ).length;
+
+
+    const pendingElement =
+        document.getElementById(
+            "dashboardPendingCount"
+        );
+
+    if (pendingElement) {
+        pendingElement.textContent =
+            pendingCount;
+    }
+
+
+    /* Confirmed */
+
+    const confirmedCount =
+        userBookings.filter(
+            booking =>
+                String(
+                    booking.status
+                ).toLowerCase()
+                === "confirmed"
+        ).length;
+
+
+    const confirmedElement =
+        document.getElementById(
+            "dashboardConfirmedCount"
+        );
+
+    if (confirmedElement) {
+        confirmedElement.textContent =
+            confirmedCount;
+    }
+
+
+    renderDashboardBookings(
+        userBookings
+    );
+
+
+    renderDashboardFavorites(
+        favorites
+    );
+}
+
+
+/* =========================================================
+   DASHBOARD BOOKINGS
+   ========================================================= */
+
+function renderDashboardBookings(
+    bookings
+) {
+
+    const container =
+        document.getElementById(
+            "dashboardBookingsList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!bookings.length) {
+
+        container.innerHTML = `
+            <div class="destination-empty">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <h3>
+                    No bookings yet
+                </h3>
+
+                <p>
+                    Start planning your next adventure.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        bookings
+            .slice(0, 10)
+            .map(
+                booking => {
+
+                    const status =
+                        normalizeStatus(
+                            booking.status
+                        );
+
+
+                    return `
+                        <div
+                            class="dashboard-booking-item"
+                        >
+
+                            <div>
+
+                                <h4>
+                                    ${escapeHTML(
+                                        booking.destination ||
+                                        "Travel"
+                                    )}
+                                </h4>
+
+                                <p>
+                                    Date:
+                                    ${escapeHTML(
+                                        formatDate(
+                                            booking.date
+                                        )
+                                    )}
+                                </p>
+
+                                <p>
+                                    Travelers:
+                                    ${escapeHTML(
+                                        booking.travelers
+                                    )}
+                                </p>
+
+                            </div>
+
+
+                            <span
+                                class="booking-status ${status.className}"
+                            >
+                                ${escapeHTML(
+                                    booking.status ||
+                                    "Pending"
+                                )}
+                            </span>
+
+                        </div>
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =========================================================
+   DASHBOARD FAVORITES
+   ========================================================= */
+
+function renderDashboardFavorites(
+    favorites
+) {
+
+    const container =
+        document.getElementById(
+            "dashboardFavoritesList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!favorites.length) {
+
+        container.innerHTML = `
+            <div class="destination-empty">
+
+                <i class="fa-regular fa-heart"></i>
+
+                <h3>
+                    No favorite destinations
+                </h3>
+
+                <p>
+                    Save destinations you would like to visit.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const favoriteDestinations =
+        favorites.map(
+            name =>
+                destinationState.all.find(
+                    destination =>
+                        destination.name
+                            .toLowerCase()
+                            ===
+                        name.toLowerCase()
+                )
+        ).filter(Boolean);
+
+
+    if (!favoriteDestinations.length) {
+
+        container.innerHTML = `
+            <div class="destination-empty">
+
+                <i class="fa-regular fa-heart"></i>
+
+                <h3>
+                    No saved destinations found
+                </h3>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        favoriteDestinations
+            .map(
+                destination => `
+                    <div
+                        class="dashboard-favorite-item"
+                    >
+
+                        <img
+                            src="${escapeAttribute(
+                                destination.image
+                            )}"
+                            alt="${escapeHTML(
+                                destination.name
+                            )}"
+                            loading="lazy"
+                        >
+
+                        <div class="dashboard-favorite-overlay">
+
+                            <strong>
+                                ${escapeHTML(
+                                    destination.name
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+                `
+            )
+            .join("");
+}
+
+
+/* =========================================================
+   ADMIN DASHBOARD
+   ========================================================= */
+
+function renderAdminDashboard() {
+
+    const session =
+        getSession();
+
+
+    if (
+        !session ||
+        session.role !== "admin"
+    ) {
+        return;
+    }
+
+
+    const users =
+        getUsers();
+
+
+    const bookings =
+        getBookings();
+
+
+    /* Stats */
+
+    const totalUsers =
+        document.getElementById(
+            "adminTotalUsers"
+        );
+
+    const totalBookings =
+        document.getElementById(
+            "adminTotalBookings"
+        );
+
+    const pendingBookings =
+        document.getElementById(
+            "adminPendingBookings"
+        );
+
+    const confirmedBookings =
+        document.getElementById(
+            "adminConfirmedBookings"
+        );
+
+
+    if (totalUsers) {
+        totalUsers.textContent =
+            users.filter(
+                user =>
+                    user.role !== "admin"
+            ).length;
+    }
+
+
+    if (totalBookings) {
+        totalBookings.textContent =
+            bookings.length;
+    }
+
+
+    if (pendingBookings) {
+
+        pendingBookings.textContent =
+            bookings.filter(
+                booking =>
+                    normalizeStatus(
+                        booking.status
+                    ).className
+                    === "pending"
+            ).length;
+    }
+
+
+    if (confirmedBookings) {
+
+        confirmedBookings.textContent =
+            bookings.filter(
+                booking =>
+                    normalizeStatus(
+                        booking.status
+                    ).className
+                    === "confirmed"
+            ).length;
+    }
+
+
+    renderAdminBookings(
+        bookings
+    );
+
+
+    renderAdminUsers(
+        users
+    );
+}
+
+
+/* =========================================================
+   ADMIN BOOKING TABLE
+   ========================================================= */
+
+function renderAdminBookings(
+    bookings
+) {
+
+    const table =
+        document.getElementById(
+            "adminBookingsTable"
+        );
+
+
+    if (!table) {
+        return;
+    }
+
+
+    if (!bookings.length) {
+
+        table.innerHTML = `
+            <tr>
+
+                <td
+                    colspan="6"
+                    style="text-align:center;padding:35px;"
+                >
+                    No bookings found.
+                </td>
+
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML =
+        bookings
+            .map(
+                booking => {
+
+                    const status =
+                        normalizeStatus(
+                            booking.status
+                        );
+
+
+                    return `
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        booking.name ||
+                                        "Customer"
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    ${escapeHTML(
+                                        booking.email ||
+                                        ""
+                                    )}
+                                </small>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.destination ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    formatDate(
+                                        booking.date
+                                    )
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.travelers ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="booking-status ${status.className}"
+                                >
+                                    ${escapeHTML(
+                                        booking.status ||
+                                        "Pending"
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <select
+                                    class="admin-status-select"
+                                    onchange="updateBookingStatus('${escapeAttribute(
+                                        booking.id
+                                    )}', this.value)"
+                                >
+
+                                    <option
+                                        value="Pending"
+                                        ${
+                                            booking.status ===
+                                            "Pending"
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        Pending
+                                    </option>
+
+                                    <option
+                                        value="Confirmed"
+                                        ${
+                                            booking.status ===
+                                            "Confirmed"
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        Confirmed
+                                    </option>
+
+                                    <option
+                                        value="Cancelled"
+                                        ${
+                                            booking.status ===
+                                            "Cancelled"
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =========================================================
+   UPDATE BOOKING STATUS
+   ========================================================= */
+
+function updateBookingStatus(
+    bookingId,
+    newStatus
+) {
+
+    const session =
+        getSession();
+
+
+    if (
+        !session ||
+        session.role !== "admin"
+    ) {
+
+        showToast(
+            "⛔ Admin access required."
+        );
+
+        return;
+    }
+
+
+    const bookings =
+        getBookings();
+
+
+    const booking =
+        bookings.find(
+            item =>
+                String(item.id)
+                    ===
+                String(bookingId)
+        );
+
+
+    if (!booking) {
+
+        showToast(
+            "❌ Booking not found."
+        );
+
+        return;
+    }
+
+
+    booking.status =
+        newStatus;
+
+
+    booking.updatedAt =
+        new Date().toISOString();
+
+
+    saveBookings(
+        bookings
+    );
+
+
+    renderAdminDashboard();
+
+
+    showToast(
+        `✅ Booking status changed to ${newStatus}.`
+    );
+}
+
+
+/* =========================================================
+   ADMIN USERS TABLE
+   ========================================================= */
+
+function renderAdminUsers(
+    users
+) {
+
+    const table =
+        document.getElementById(
+            "adminUsersTable"
+        );
+
+
+    if (!table) {
+        return;
+    }
+
+
+    if (!users.length) {
+
+        table.innerHTML = `
+            <tr>
+
+                <td
+                    colspan="4"
+                    style="text-align:center;padding:35px;"
+                >
+                    No users found.
+                </td>
+
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML =
+        users
+            .map(
+                user => {
+
+                    const isAdmin =
+                        user.role === "admin";
+
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${escapeHTML(
+                                    user.name ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    user.email ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    user.phone ||
+                                    "-"
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="admin-role ${
+                                        isAdmin
+                                            ? "admin"
+                                            : ""
+                                    }"
+                                >
+                                    ${
+                                        isAdmin
+                                            ? "Admin"
+                                            : "User"
+                                    }
+                                </span>
+
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =========================================================
+   STATUS HELPER
+   ========================================================= */
+
+function normalizeStatus(
+    status
+) {
+
+    const value =
+        String(
+            status || "Pending"
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if (value === "confirmed") {
+
+        return {
+            className: "confirmed",
+            label: "Confirmed"
+        };
+    }
+
+
+    if (
+        value === "cancelled" ||
+        value === "canceled"
+    ) {
+
+        return {
+            className: "cancelled",
+            label: "Cancelled"
+        };
+    }
+
+
+    return {
+        className: "pending",
+        label: "Pending"
+    };
+}
+
+
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+        return "-";
+    }
+
+
+    const date =
+        new Date(
+            value + (
+                /^\d{4}-\d{2}-\d{2}$/
+                    .test(value)
+                    ? "T00:00:00"
+                    : ""
+            )
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return value;
+    }
+
+
+    return date.toLocaleDateString(
+        "en-BD",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
 
 
 /* =========================================================
    THEME
-========================================================= */
+   ========================================================= */
 
-const savedTheme =
-  localStorage.getItem(
-    THEME_KEY
-  );
-
-
-if (
-  savedTheme ===
-  "dark"
+function applyTheme(
+    theme
 ) {
 
-  document.body.classList.add(
-    "dark"
-  );
-
-  themeBtn.textContent =
-    "☀️";
-
-} else {
-
-  themeBtn.textContent =
-    "🌙";
-
-}
+    const finalTheme =
+        theme === "light"
+            ? "light"
+            : "dark";
 
 
-themeBtn.addEventListener(
-  "click",
-  () => {
-
-    document.body.classList.toggle(
-      "dark"
-    );
-
-
-    const isDark =
-      document.body.classList.contains(
-        "dark"
-      );
+    root.dataset.theme =
+        finalTheme;
 
 
     localStorage.setItem(
-      THEME_KEY,
-      isDark
-        ? "dark"
-        : "light"
+        STORAGE.THEME,
+        finalTheme
     );
 
 
-    themeBtn.textContent =
-      isDark
-        ? "☀️"
-        : "🌙";
+    updateThemeIcon();
+}
 
-  }
-);
+
+function updateThemeIcon() {
+
+    if (!themeToggle) {
+        return;
+    }
+
+
+    const light =
+        root.dataset.theme ===
+        "light";
+
+
+    themeToggle.innerHTML =
+        light
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+
+
+    themeToggle.setAttribute(
+        "aria-label",
+        light
+            ? "Switch to dark theme"
+            : "Switch to light theme"
+    );
+}
+
+
+function setupTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            STORAGE.THEME
+        );
+
+
+    if (savedTheme) {
+
+        applyTheme(
+            savedTheme
+        );
+
+    } else {
+
+        applyTheme(
+            "light"
+        );
+    }
+
+
+    themeToggle?.addEventListener(
+        "click",
+        () => {
+
+            const current =
+                root.dataset.theme;
+
+
+            applyTheme(
+                current === "light"
+                    ? "dark"
+                    : "light"
+            );
+        }
+    );
+}
 
 
 /* =========================================================
    MOBILE MENU
-========================================================= */
+   ========================================================= */
 
-menuBtn.addEventListener(
-  "click",
-  () => {
+function setupMobileMenu() {
 
-    navLinks.classList.toggle(
-      "show"
+    menuToggle?.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                navMenu?.classList.toggle(
+                    "open"
+                );
+
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen
+                    ? "true"
+                    : "false"
+            );
+        }
     );
 
-  }
-);
+
+    document
+        .querySelectorAll(
+            ".nav-link"
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    navMenu?.classList.remove(
+                        "open"
+                    );
+
+                    menuToggle?.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            );
+        });
+}
 
 
 /* =========================================================
-   DATE
-========================================================= */
+   SCROLL EVENTS
+   ========================================================= */
 
-const today =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+function setupScrollEvents() {
 
+    window.addEventListener(
+        "scroll",
+        () => {
 
-document.getElementById(
-  "travelDate"
-).min =
-  today;
+            const scrollY =
+                window.scrollY;
 
 
-document.getElementById(
-  "bookingDate"
-).min =
-  today;
+            siteHeader?.classList.toggle(
+                "scrolled",
+                scrollY > 15
+            );
+
+
+            backToTop?.classList.toggle(
+                "show",
+                scrollY > 600
+            );
+
+
+            updateActiveSection();
+        },
+        {
+            passive: true
+        }
+    );
+}
 
 
 /* =========================================================
-   CAROUSEL
-========================================================= */
+   ACTIVE SECTION ON SCROLL
+   ========================================================= */
 
-const slides =
-  document.querySelectorAll(
-    ".hero-slide"
-  );
-
-
-const dots =
-  document.querySelectorAll(
-    ".carousel-dot"
-  );
-
-
-const prevBtn =
-  document.getElementById(
-    "carouselPrev"
-  );
-
-
-const nextBtn =
-  document.getElementById(
-    "carouselNext"
-  );
-
-
-function showSlide(index) {
-
-  if (!slides.length) {
-    return;
-  }
-
-
-  if (
-    index >=
-    slides.length
-  ) {
-
-    index =
-      0;
-
-  }
-
-
-  if (
-    index < 0
-  ) {
-
-    index =
-      slides.length -
-      1;
-
-  }
-
-
-  currentSlide =
-    index;
-
-
-  slides.forEach(
-    (slide, i) => {
-
-      slide.classList.toggle(
-        "active",
-        i === currentSlide
-      );
-
-    }
-  );
-
-
-  dots.forEach(
-    (dot, i) => {
-
-      dot.classList.toggle(
-        "active",
-        i === currentSlide
-      );
-
-    }
-  );
-
-}
-
-
-function startCarousel() {
-
-  clearInterval(
-    carouselTimer
-  );
-
-
-  carouselTimer =
-    setInterval(
-      () => {
-
-        showSlide(
-          currentSlide + 1
-        );
-
-      },
-      5000
-    );
-
-}
-
-
-function resetCarousel() {
-
-  startCarousel();
-
-}
-
-
-nextBtn.addEventListener(
-  "click",
-  () => {
-
-    showSlide(
-      currentSlide + 1
-    );
-
-    resetCarousel();
-
-  }
-);
-
-
-prevBtn.addEventListener(
-  "click",
-  () => {
-
-    showSlide(
-      currentSlide - 1
-    );
-
-    resetCarousel();
-
-  }
-);
-
-
-dots.forEach(
-  (dot, index) => {
-
-    dot.addEventListener(
-      "click",
-      () => {
-
-        showSlide(index);
-
-        resetCarousel();
-
-      }
-    );
-
-  }
-);
-
-
-const hero =
-  document.querySelector(
-    ".hero"
-  );
-
-
-if (hero) {
-
-  hero.addEventListener(
-    "mouseenter",
-    () => {
-
-      clearInterval(
-        carouselTimer
-      );
-
-    }
-  );
-
-
-  hero.addEventListener(
-    "mouseleave",
-    () => {
-
-      startCarousel();
-
-    }
-  );
-
-}
-
-
-showSlide(0);
-
-startCarousel();
-
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
+function updateActiveSection() {
 
     if (
-      event.key ===
-      "Escape"
+        !landingPage ||
+        landingPage.classList.contains(
+            "hidden"
+        )
     ) {
-
-      closeAuth();
-
-      const dropdown =
-        document.getElementById(
-          "profileDropdown"
-        );
-
-
-      if (dropdown) {
-
-        dropdown.classList.remove(
-          "show"
-        );
-
-      }
-
+        return;
     }
 
-  }
+
+    const sections =
+        [
+            ...document.querySelectorAll(
+                "#landingPage section[id]"
+            )
+        ];
+
+
+    let current =
+        "home";
+
+
+    for (
+        const section of sections
+    ) {
+
+        const rect =
+            section.getBoundingClientRect();
+
+
+        if (
+            rect.top <= 130 &&
+            rect.bottom >= 130
+        ) {
+
+            current =
+                section.id;
+
+            break;
+        }
+    }
+
+
+    updateNavActive(
+        current
+    );
+}
+
+
+/* =========================================================
+   BACK TO TOP
+   ========================================================= */
+
+function setupBackToTop() {
+
+    backToTop?.addEventListener(
+        "click",
+        () => {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    );
+}
+
+
+/* =========================================================
+   HERO CAROUSEL
+   ========================================================= */
+
+function setupCarousel() {
+
+    const slides =
+        document.querySelectorAll(
+            ".hero-slide"
+        );
+
+
+    const dots =
+        document.querySelectorAll(
+            ".carousel-dot"
+        );
+
+
+    const previous =
+        document.getElementById(
+            "carouselPrev"
+        );
+
+
+    const next =
+        document.getElementById(
+            "carouselNext"
+        );
+
+
+    if (
+        !slides.length
+    ) {
+        return;
+    }
+
+
+    function showSlide(
+        index
+    ) {
+
+        currentSlide =
+            (
+                index +
+                slides.length
+            )
+            %
+            slides.length;
+
+
+        slides.forEach(
+            (slide, i) => {
+
+                slide.classList.toggle(
+                    "active",
+                    i === currentSlide
+                );
+            }
+        );
+
+
+        dots.forEach(
+            (dot, i) => {
+
+                dot.classList.toggle(
+                    "active",
+                    i === currentSlide
+                );
+            }
+        );
+    }
+
+
+    function nextSlide() {
+        showSlide(
+            currentSlide + 1
+        );
+    }
+
+
+    function previousSlide() {
+        showSlide(
+            currentSlide - 1
+        );
+    }
+
+
+    function startCarousel() {
+
+        clearInterval(
+            carouselTimer
+        );
+
+
+        carouselTimer =
+            setInterval(
+                nextSlide,
+                5000
+            );
+    }
+
+
+    function stopCarousel() {
+
+        clearInterval(
+            carouselTimer
+        );
+    }
+
+
+    previous?.addEventListener(
+        "click",
+        () => {
+
+            previousSlide();
+
+            startCarousel();
+        }
+    );
+
+
+    next?.addEventListener(
+        "click",
+        () => {
+
+            nextSlide();
+
+            startCarousel();
+        }
+    );
+
+
+    dots.forEach(
+        dot => {
+
+            dot.addEventListener(
+                "click",
+                () => {
+
+                    showSlide(
+                        Number(
+                            dot.dataset.slide
+                        )
+                    );
+
+                    startCarousel();
+                }
+            );
+        }
+    );
+
+
+    const carousel =
+        document.getElementById(
+            "heroCarousel"
+        );
+
+
+    carousel?.addEventListener(
+        "mouseenter",
+        stopCarousel
+    );
+
+
+    carousel?.addEventListener(
+        "mouseleave",
+        startCarousel
+    );
+
+
+    showSlide(
+        0
+    );
+
+
+    startCarousel();
+}
+
+
+/* =========================================================
+   CONTACT FORM
+   ========================================================= */
+
+function setupContactForm() {
+
+    contactForm?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            showToast(
+                "✅ Thank you! Your message has been received."
+            );
+
+
+            contactForm.reset();
+        }
+    );
+}
+
+
+/* =========================================================
+   NEWSLETTER
+   ========================================================= */
+
+function setupNewsletter() {
+
+    newsletterForm?.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            showToast(
+                "🎉 Thanks for subscribing to Wanderlust!"
+            );
+
+
+            newsletterForm.reset();
+        }
+    );
+}
+
+
+/* =========================================================
+   AUTH EVENTS
+   ========================================================= */
+
+function setupAuthEvents() {
+
+    showRegisterBtn?.addEventListener(
+        "click",
+        () => {
+
+            const currentEmail =
+                document.getElementById(
+                    "loginEmail"
+                )?.value
+                ?.trim();
+
+
+            openRegister(
+                currentEmail || ""
+            );
+        }
+    );
+
+
+    showLoginBtn?.addEventListener(
+        "click",
+        () => {
+
+            setLoginMode();
+        }
+    );
+
+
+    closeAuthModal?.addEventListener(
+        "click",
+        () => {
+
+            closeAuthModalBox();
+        }
+    );
+
+
+    authModal?.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                authModal
+            ) {
+
+                closeAuthModalBox();
+            }
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeAuthModalBox();
+            }
+        }
+    );
+
+
+    loginForm?.addEventListener(
+        "submit",
+        handleLogin
+    );
+
+
+    registerForm?.addEventListener(
+        "submit",
+        handleRegister
+    );
+}
+
+
+/* =========================================================
+   BOOKING EVENTS
+   ========================================================= */
+
+function setupBooking() {
+
+    bookingForm?.addEventListener(
+        "submit",
+        handleBookingSubmit
+    );
+
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+    const dateInput =
+        document.getElementById(
+            "bookingDate"
+        );
+
+
+    if (dateInput) {
+
+        dateInput.min =
+            today;
+    }
+}
+
+
+/* =========================================================
+   DASHBOARD LOGOUT
+   ========================================================= */
+
+function setupDashboardActions() {
+
+    document
+        .getElementById(
+            "dashboardLogoutBtn"
+        )
+        ?.addEventListener(
+            "click",
+            logout
+        );
+
+
+    document
+        .getElementById(
+            "adminLogoutBtn"
+        )
+        ?.addEventListener(
+            "click",
+            logout
+        );
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+function escapeAttribute(
+    value
+) {
+
+    return escapeHTML(
+        value
+    );
+}
+
+
+/* =========================================================
+   HASHCHANGE
+   ========================================================= */
+
+window.addEventListener(
+    "hashchange",
+    renderRoute
 );
 
 
 /* =========================================================
-   INITIALIZE
-========================================================= */
+   GLOBAL FUNCTIONS
+   =========================================================
+   Inline HTML onclick / onchange functions
+   must remain globally accessible.
+   ========================================================= */
 
-updateUserUI();
+window.goTo =
+    goTo;
 
-updateBookingFields();
+window.changeDestinationPage =
+    changeDestinationPage;
 
-updateFavoriteButtons();
+window.updateBookingStatus =
+    updateBookingStatus;
 
-updateNavActiveState();
+window.bookDestination =
+    bookDestination;
 
-renderRoute();
+window.toggleFavorite =
+    toggleFavorite;
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        /* Demo Admin */
+        ensureDemoAdmin();
+
+
+        /* Theme */
+        setupTheme();
+
+
+        /* Mobile Navigation */
+        setupMobileMenu();
+
+
+        /* Scroll */
+        setupScrollEvents();
+
+
+        /* Back To Top */
+        setupBackToTop();
+
+
+        /* Auth */
+        setupAuthEvents();
+
+
+        /* Booking */
+        setupBooking();
+
+
+        /* Dashboard */
+        setupDashboardActions();
+
+
+        /* Contact */
+        setupContactForm();
+
+
+        /* Newsletter */
+        setupNewsletter();
+
+
+        /* Packages */
+        setupPackageActions();
+
+
+        /* Destination buttons */
+        setupDestinationActions();
+
+
+        /* Search */
+        setupDestinationSearch();
+
+
+        /* Load JSON */
+        await loadDestinations();
+
+
+        /* User UI */
+        updateUserUI();
+
+
+        /* Booking fields */
+        updateBookingFields();
+
+
+        /* Hero */
+        setupCarousel();
+
+
+        /* Route */
+        renderRoute();
+
+
+        /* Dashboard data */
+        renderUserDashboard();
+
+
+        /* Admin data */
+        renderAdminDashboard();
+
+
+        /* Update favorite state */
+        updateFavoriteButtons();
+
+    }
+);
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        document
+            .querySelectorAll(".profile-nav.open")
+            .forEach(profile => {
+
+                if (
+                    !profile.contains(event.target)
+                ) {
+                    profile.classList.remove("open");
+                }
+
+            });
+
+    }
+);

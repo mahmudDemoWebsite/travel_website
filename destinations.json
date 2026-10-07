@@ -1,0 +1,452 @@
+[
+    {
+        "id": 1,
+        "name": "Cox's Bazar",
+        "location": "Cox's Bazar, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Enjoy beaches, sunsets and seafood.",
+        "price": 4999,
+        "image": "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 2,
+        "name": "Sajek Valley",
+        "location": "Sajek, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Enjoy clouds, hills and beautiful sunrise.",
+        "price": 5499,
+        "image": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 3,
+        "name": "Sylhet",
+        "location": "Sylhet, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Explore tea gardens and waterfalls.",
+        "price": 3999,
+        "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 4,
+        "name": "Bandarban",
+        "location": "Bandarban, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Discover green mountains, clouds and tribal culture.",
+        "price": 5999,
+        "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 5,
+        "name": "Rangamati",
+        "location": "Rangamati, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Relax beside the lake and explore the hills.",
+        "price": 4499,
+        "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 6,
+        "name": "Kuakata",
+        "location": "Patuakhali, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Watch beautiful sunrise and sunset by the sea.",
+        "price": 4299,
+        "image": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 7,
+        "name": "Saint Martin's Island",
+        "location": "Teknaf, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Enjoy blue water, coral beaches and island life.",
+        "price": 7499,
+        "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 8,
+        "name": "Sundarbans",
+        "location": "Khulna, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Explore the world's largest mangrove forest.",
+        "price": 6999,
+        "image": "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 9,
+        "name": "Srimangal",
+        "location": "Moulvibazar, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Walk through endless tea gardens and green landscapes.",
+        "price": 3799,
+        "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 10,
+        "name": "Tanguar Haor",
+        "location": "Sunamganj, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Experience peaceful wetlands and natural beauty.",
+        "price": 4999,
+        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 11,
+        "name": "Bichanakandi",
+        "location": "Sylhet, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Enjoy crystal-clear streams surrounded by hills.",
+        "price": 3499,
+        "image": "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 12,
+        "name": "Jaflong",
+        "location": "Sylhet, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Discover stones, rivers and scenic mountain views.",
+        "price": 3299,
+        "image": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 13,
+        "name": "Ratargul Swamp Forest",
+        "location": "Sylhet, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Explore the magical freshwater swamp forest.",
+        "price": 3999,
+        "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 14,
+        "name": "Nilgiri",
+        "location": "Bandarban, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Wake up above the clouds in the hilltops.",
+        "price": 6499,
+        "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 15,
+        "name": "Nilachal",
+        "location": "Bandarban, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Enjoy panoramic mountain views and colorful sunsets.",
+        "price": 4999,
+        "image": "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 16,
+        "name": "Patenga Beach",
+        "location": "Chattogram, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "A relaxing seaside escape near the city.",
+        "price": 2999,
+        "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 17,
+        "name": "Sonargaon",
+        "location": "Narayanganj, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Explore historic architecture and Bengali heritage.",
+        "price": 2499,
+        "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 18,
+        "name": "Paharpur",
+        "location": "Naogaon, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Discover ancient Buddhist architecture and history.",
+        "price": 2999,
+        "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 19,
+        "name": "Mainamati",
+        "location": "Cumilla, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Visit ancient ruins and archaeological treasures.",
+        "price": 2799,
+        "image": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 20,
+        "name": "Lalbagh Fort",
+        "location": "Dhaka, Bangladesh",
+        "tag": "Bangladesh",
+        "description": "Experience Mughal history in the heart of Dhaka.",
+        "price": 1999,
+        "image": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 21,
+        "name": "Bali",
+        "location": "Bali, Indonesia",
+        "tag": "International",
+        "description": "Beaches, temples and tropical adventures.",
+        "price": 39999,
+        "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 22,
+        "name": "Dubai",
+        "location": "Dubai, UAE",
+        "tag": "International",
+        "description": "Luxury, shopping and desert adventures.",
+        "price": 54999,
+        "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 23,
+        "name": "Maldives",
+        "location": "Maldives",
+        "tag": "International",
+        "description": "Relax on beautiful islands and beaches.",
+        "price": 59999,
+        "image": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 24,
+        "name": "Bangkok",
+        "location": "Bangkok, Thailand",
+        "tag": "International",
+        "description": "Explore temples, markets and vibrant city life.",
+        "price": 29999,
+        "image": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 25,
+        "name": "Phuket",
+        "location": "Phuket, Thailand",
+        "tag": "International",
+        "description": "Enjoy island beaches, nightlife and ocean adventures.",
+        "price": 34999,
+        "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 26,
+        "name": "Singapore",
+        "location": "Singapore",
+        "tag": "International",
+        "description": "Discover modern attractions, gardens and city views.",
+        "price": 44999,
+        "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 27,
+        "name": "Kuala Lumpur",
+        "location": "Kuala Lumpur, Malaysia",
+        "tag": "International",
+        "description": "Explore skyscrapers, food streets and culture.",
+        "price": 27999,
+        "image": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 28,
+        "name": "Langkawi",
+        "location": "Langkawi, Malaysia",
+        "tag": "International",
+        "description": "Relax among beaches, islands and tropical forests.",
+        "price": 31999,
+        "image": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 29,
+        "name": "Kathmandu",
+        "location": "Kathmandu, Nepal",
+        "tag": "International",
+        "description": "Discover temples, culture and Himalayan landscapes.",
+        "price": 26999,
+        "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 30,
+        "name": "Pokhara",
+        "location": "Pokhara, Nepal",
+        "tag": "International",
+        "description": "Enjoy lakes, mountains and breathtaking views.",
+        "price": 28999,
+        "image": "https://images.unsplash.com/photo-1486911278844-a81c5267a32f?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 31,
+        "name": "Goa",
+        "location": "Goa, India",
+        "tag": "International",
+        "description": "Enjoy beaches, resorts, food and nightlife.",
+        "price": 24999,
+        "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 32,
+        "name": "Kashmir",
+        "location": "Kashmir, India",
+        "tag": "International",
+        "description": "Explore snow mountains, lakes and green valleys.",
+        "price": 32999,
+        "image": "https://images.unsplash.com/photo-1532664189809-02133fee698d?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 33,
+        "name": "New Delhi",
+        "location": "New Delhi, India",
+        "tag": "International",
+        "description": "Experience India's capital, history and culture.",
+        "price": 22999,
+        "image": "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 34,
+        "name": "Agra",
+        "location": "Agra, India",
+        "tag": "International",
+        "description": "Visit the iconic Taj Mahal and historic landmarks.",
+        "price": 21999,
+        "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 35,
+        "name": "Istanbul",
+        "location": "Istanbul, Türkiye",
+        "tag": "International",
+        "description": "Experience historic mosques, bazaars and Bosphorus views.",
+        "price": 64999,
+        "image": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 36,
+        "name": "Cappadocia",
+        "location": "Cappadocia, Türkiye",
+        "tag": "International",
+        "description": "See unique valleys and famous hot air balloons.",
+        "price": 69999,
+        "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 37,
+        "name": "Paris",
+        "location": "Paris, France",
+        "tag": "International",
+        "description": "Discover romance, fashion, art and iconic landmarks.",
+        "price": 89999,
+        "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 38,
+        "name": "London",
+        "location": "London, UK",
+        "tag": "International",
+        "description": "Explore royal landmarks, museums and modern city life.",
+        "price": 94999,
+        "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 39,
+        "name": "Rome",
+        "location": "Rome, Italy",
+        "tag": "International",
+        "description": "Walk through ancient ruins, art and Italian culture.",
+        "price": 89999,
+        "image": "https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 40,
+        "name": "Venice",
+        "location": "Venice, Italy",
+        "tag": "International",
+        "description": "Enjoy romantic canals, bridges and historic streets.",
+        "price": 92999,
+        "image": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 41,
+        "name": "Swiss Alps",
+        "location": "Switzerland",
+        "tag": "International",
+        "description": "Enjoy snowy mountains, lakes and charming villages.",
+        "price": 109999,
+        "image": "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 42,
+        "name": "Barcelona",
+        "location": "Barcelona, Spain",
+        "tag": "International",
+        "description": "Discover architecture, beaches, food and nightlife.",
+        "price": 91999,
+        "image": "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 43,
+        "name": "Tokyo",
+        "location": "Tokyo, Japan",
+        "tag": "International",
+        "description": "Experience technology, culture, food and city lights.",
+        "price": 99999,
+        "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 44,
+        "name": "Kyoto",
+        "location": "Kyoto, Japan",
+        "tag": "International",
+        "description": "Explore temples, gardens and traditional Japanese culture.",
+        "price": 97999,
+        "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 45,
+        "name": "Seoul",
+        "location": "Seoul, South Korea",
+        "tag": "International",
+        "description": "Enjoy K-culture, shopping, food and modern attractions.",
+        "price": 84999,
+        "image": "https://images.unsplash.com/photo-1538485399081-7c897a5f0b09?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 46,
+        "name": "Hong Kong",
+        "location": "Hong Kong",
+        "tag": "International",
+        "description": "Discover skyscrapers, markets, food and harbor views.",
+        "price": 79999,
+        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 47,
+        "name": "Sydney",
+        "location": "Sydney, Australia",
+        "tag": "International",
+        "description": "Explore beaches, the Opera House and beautiful harbor.",
+        "price": 119999,
+        "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d7?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 48,
+        "name": "Melbourne",
+        "location": "Melbourne, Australia",
+        "tag": "International",
+        "description": "Enjoy arts, cafes, shopping and coastal adventures.",
+        "price": 114999,
+        "image": "https://images.unsplash.com/photo-1514395462725-fb4566210144?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 49,
+        "name": "Cairo",
+        "location": "Cairo, Egypt",
+        "tag": "International",
+        "description": "Explore pyramids, museums and ancient Egyptian history.",
+        "price": 69999,
+        "image": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+        "id": 50,
+        "name": "Mauritius",
+        "location": "Mauritius",
+        "tag": "International",
+        "description": "Relax on tropical beaches with unforgettable ocean views.",
+        "price": 87999,
+        "image": "https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=1000&q=80"
+    }
+]
