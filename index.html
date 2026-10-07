@@ -4,48 +4,29 @@
 <head>
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="description"
-    content="Wanderlust Travel - Explore destinations, tour packages and book your next adventure."
-  >
+  <meta name="description"
+    content="Wanderlust Travel - Explore destinations, tour packages and book your next adventure.">
 
-  <meta
-    name="theme-color"
-    content="#0f172a"
-  >
+  <meta name="theme-color" content="#0f172a">
 
   <title>Wanderlust Travel</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+    rel="stylesheet">
 
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <!-- Main CSS -->
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <link rel="stylesheet" href="style.css">
 </head>
 
 
@@ -63,11 +44,7 @@
 
         <!-- Logo -->
 
-        <a
-          href="#home"
-          class="logo"
-          onclick="goTo('#home')"
-        >
+        <a href="#home" class="logo" onclick="goTo('#home')">
 
           <span class="logo-icon">
             <i class="fa-solid fa-plane-departure"></i>
@@ -82,56 +59,29 @@
 
         <!-- Desktop Navigation -->
 
-        <div
-          class="nav-menu"
-          id="navMenu"
-        >
+        <div class="nav-menu" id="navMenu">
 
-          <a
-            href="#home"
-            class="nav-link active"
-            data-route="home"
-          >
+          <a href="#home" class="nav-link active" data-route="home">
             Home
           </a>
 
-          <a
-            href="#destinations"
-            class="nav-link"
-            data-route="destinations"
-          >
+          <a href="#destinations" class="nav-link" data-route="destinations">
             Destinations
           </a>
 
-          <a
-            href="#packages"
-            class="nav-link"
-            data-route="packages"
-          >
+          <a href="#packages" class="nav-link" data-route="packages">
             Packages
           </a>
 
-          <a
-            href="#about"
-            class="nav-link"
-            data-route="about"
-          >
+          <a href="#about" class="nav-link" data-route="about">
             About
           </a>
 
-          <a
-            href="#reviews"
-            class="nav-link"
-            data-route="reviews"
-          >
+          <a href="#reviews" class="nav-link" data-route="reviews">
             Reviews
           </a>
 
-          <a
-            href="#contact"
-            class="nav-link"
-            data-route="contact"
-          >
+          <a href="#contact" class="nav-link" data-route="contact">
             Contact
           </a>
 
@@ -144,23 +94,15 @@
 
           <!-- Theme -->
 
-          <button
-            type="button"
-            class="theme-toggle icon-btn"
-            id="themeToggle"
-            aria-label="Toggle theme"
-            title="Toggle theme"
-          >
+          <button type="button" class="theme-toggle icon-btn" id="themeToggle" aria-label="Toggle theme"
+            title="Toggle theme">
             <i class="fa-solid fa-moon"></i>
           </button>
 
 
           <!-- User Navigation -->
 
-          <div
-            class="user-nav"
-            id="userNav"
-          >
+          <div class="user-nav" id="userNav">
 
             <!-- JS will generate login/profile UI -->
 
@@ -169,13 +111,7 @@
 
           <!-- Mobile Menu -->
 
-          <button
-            type="button"
-            class="menu-toggle"
-            id="menuToggle"
-            aria-label="Open menu"
-            aria-expanded="false"
-          >
+          <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
 
             <span></span>
             <span></span>
@@ -210,29 +146,18 @@
            HERO
       ================================================== -->
 
-      <section
-        class="hero"
-        id="home"
-      >
+      <section class="hero" id="home">
 
         <!-- Carousel Background -->
 
-        <div
-          class="hero-carousel"
-          id="heroCarousel"
-        >
+        <div class="hero-carousel" id="heroCarousel">
 
           <!-- Slide 1 -->
 
-          <div
-            class="hero-slide active"
-            data-slide="0"
-          >
+          <div class="hero-slide active" data-slide="0">
 
-            <img
-              src="https://images.unsplash.com/photo-1513581166391-887a96ddeafd?auto=format&fit=crop&w=1800&q=85"
-              alt="Sajek Valley"
-            >
+            <img src="https://images.unsplash.com/photo-1513581166391-887a96ddeafd?auto=format&fit=crop&w=1800&q=85"
+              alt="Sajek Valley">
 
             <div class="hero-overlay"></div>
 
@@ -255,20 +180,12 @@
 
               <div class="hero-actions">
 
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onclick="goTo('#destinations')"
-                >
+                <button type="button" class="btn btn-primary" onclick="goTo('#destinations')">
                   Explore Destinations
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  onclick="goTo('#packages')"
-                >
+                <button type="button" class="btn btn-outline" onclick="goTo('#packages')">
                   View Packages
                 </button>
 
@@ -281,15 +198,10 @@
 
           <!-- Slide 2 -->
 
-          <div
-            class="hero-slide"
-            data-slide="1"
-          >
+          <div class="hero-slide" data-slide="1">
 
-            <img
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=85"
-              alt="Cox's Bazar"
-            >
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=85"
+              alt="Cox's Bazar">
 
             <div class="hero-overlay"></div>
 
@@ -312,20 +224,12 @@
 
               <div class="hero-actions">
 
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onclick="goTo('#destinations')"
-                >
+                <button type="button" class="btn btn-primary" onclick="goTo('#destinations')">
                   Explore Now
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  onclick="goTo('#booking')"
-                >
+                <button type="button" class="btn btn-outline" onclick="goTo('#booking')">
                   Book Your Trip
                 </button>
 
@@ -338,15 +242,10 @@
 
           <!-- Slide 3 -->
 
-          <div
-            class="hero-slide"
-            data-slide="2"
-          >
+          <div class="hero-slide" data-slide="2">
 
-            <img
-              src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85"
-              alt="Bali"
-            >
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=85"
+              alt="Bali">
 
             <div class="hero-overlay"></div>
 
@@ -369,20 +268,12 @@
 
               <div class="hero-actions">
 
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onclick="goTo('#destinations')"
-                >
+                <button type="button" class="btn btn-primary" onclick="goTo('#destinations')">
                   Discover Bali
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  onclick="goTo('#booking')"
-                >
+                <button type="button" class="btn btn-outline" onclick="goTo('#booking')">
                   Book Now
                 </button>
 
@@ -395,15 +286,10 @@
 
           <!-- Slide 4 -->
 
-          <div
-            class="hero-slide"
-            data-slide="3"
-          >
+          <div class="hero-slide" data-slide="3">
 
-            <img
-              src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1800&q=85"
-              alt="Dubai"
-            >
+            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1800&q=85"
+              alt="Dubai">
 
             <div class="hero-overlay"></div>
 
@@ -426,20 +312,12 @@
 
               <div class="hero-actions">
 
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onclick="goTo('#destinations')"
-                >
+                <button type="button" class="btn btn-primary" onclick="goTo('#destinations')">
                   Explore Dubai
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
-                <button
-                  type="button"
-                  class="btn btn-outline"
-                  onclick="goTo('#booking')"
-                >
+                <button type="button" class="btn btn-outline" onclick="goTo('#booking')">
                   Plan Your Trip
                 </button>
 
@@ -454,60 +332,27 @@
 
         <!-- Carousel Controls -->
 
-        <button
-          type="button"
-          class="carousel-arrow carousel-prev"
-          id="carouselPrev"
-          aria-label="Previous slide"
-        >
+        <button type="button" class="carousel-arrow carousel-prev" id="carouselPrev" aria-label="Previous slide">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
 
 
-        <button
-          type="button"
-          class="carousel-arrow carousel-next"
-          id="carouselNext"
-          aria-label="Next slide"
-        >
+        <button type="button" class="carousel-arrow carousel-next" id="carouselNext" aria-label="Next slide">
           <i class="fa-solid fa-chevron-right"></i>
         </button>
 
 
         <!-- Carousel Dots -->
 
-        <div
-          class="carousel-dots"
-          id="carouselDots"
-        >
+        <div class="carousel-dots" id="carouselDots">
 
-          <button
-            type="button"
-            class="carousel-dot active"
-            data-slide="0"
-            aria-label="Slide 1"
-          ></button>
+          <button type="button" class="carousel-dot active" data-slide="0" aria-label="Slide 1"></button>
 
-          <button
-            type="button"
-            class="carousel-dot"
-            data-slide="1"
-            aria-label="Slide 2"
-          ></button>
+          <button type="button" class="carousel-dot" data-slide="1" aria-label="Slide 2"></button>
 
-          <button
-            type="button"
-            class="carousel-dot"
-            data-slide="2"
-            aria-label="Slide 3"
-          ></button>
+          <button type="button" class="carousel-dot" data-slide="2" aria-label="Slide 3"></button>
 
-          <button
-            type="button"
-            class="carousel-dot"
-            data-slide="3"
-            aria-label="Slide 4"
-          ></button>
+          <button type="button" class="carousel-dot" data-slide="3" aria-label="Slide 4"></button>
 
         </div>
 
@@ -539,18 +384,9 @@
 
           <div class="search-box">
 
-            <input
-              type="text"
-              id="destinationSearch"
-              placeholder="Search destination..."
-              autocomplete="off"
-            >
+            <input type="text" id="destinationSearch" placeholder="Search destination..." autocomplete="off">
 
-            <button
-              type="button"
-              class="search-btn"
-              onclick="goTo('#destinations')"
-            >
+            <button type="button" class="search-btn" onclick="goTo('#destinations')">
               Search
             </button>
 
@@ -565,10 +401,7 @@
            DESTINATIONS
       ================================================== -->
 
-      <section
-        class="section destinations-section"
-        id="destinations"
-      >
+      <section class="section destinations-section" id="destinations">
 
         <div class="container">
 
@@ -610,12 +443,7 @@
 
               <i class="fa-solid fa-search"></i>
 
-              <input
-                type="text"
-                id="searchDestination"
-                placeholder="Search destination..."
-                autocomplete="off"
-              >
+              <input type="text" id="searchDestination" placeholder="Search destination..." autocomplete="off">
 
             </div>
 
@@ -624,10 +452,7 @@
 
           <!-- Dynamic Grid -->
 
-          <div
-            class="destination-grid"
-            id="destinationGrid"
-          >
+          <div class="destination-grid" id="destinationGrid">
 
             <!--
               Destination cards will be loaded
@@ -639,10 +464,7 @@
 
           <!-- Pagination -->
 
-          <div
-            class="destination-pagination"
-            id="destinationPagination"
-          >
+          <div class="destination-pagination" id="destinationPagination">
 
             <!-- JS generated -->
 
@@ -657,10 +479,7 @@
            PACKAGES
       ================================================== -->
 
-      <section
-        class="section packages-section"
-        id="packages"
-      >
+      <section class="section packages-section" id="packages">
 
         <div class="container">
 
@@ -692,11 +511,8 @@
 
               <div class="package-image">
 
-                <img
-                  src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
-                  alt="Sajek Weekend Package"
-                  loading="lazy"
-                >
+                <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=80"
+                  alt="Sajek Weekend Package" loading="lazy">
 
                 <span class="package-badge">
                   Popular
@@ -743,11 +559,7 @@
 
                 </div>
 
-                <button
-                  type="button"
-                  class="btn btn-primary package-book-btn"
-                  data-destination="Sajek Valley"
-                >
+                <button type="button" class="btn btn-primary package-book-btn" data-destination="Sajek Valley">
                   Book Package
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -763,11 +575,8 @@
 
               <div class="package-image">
 
-                <img
-                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
-                  alt="Cox's Bazar Beach Package"
-                  loading="lazy"
-                >
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+                  alt="Cox's Bazar Beach Package" loading="lazy">
 
                 <span class="package-badge">
                   Best Seller
@@ -814,11 +623,7 @@
 
                 </div>
 
-                <button
-                  type="button"
-                  class="btn btn-primary package-book-btn"
-                  data-destination="Cox's Bazar"
-                >
+                <button type="button" class="btn btn-primary package-book-btn" data-destination="Cox's Bazar">
                   Book Package
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -834,11 +639,8 @@
 
               <div class="package-image">
 
-                <img
-                  src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80"
-                  alt="Bali Adventure Package"
-                  loading="lazy"
-                >
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80"
+                  alt="Bali Adventure Package" loading="lazy">
 
                 <span class="package-badge">
                   International
@@ -885,11 +687,7 @@
 
                 </div>
 
-                <button
-                  type="button"
-                  class="btn btn-primary package-book-btn"
-                  data-destination="Bali"
-                >
+                <button type="button" class="btn btn-primary package-book-btn" data-destination="Bali">
                   Book Package
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -905,11 +703,8 @@
 
               <div class="package-image">
 
-                <img
-                  src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
-                  alt="Dubai Luxury Package"
-                  loading="lazy"
-                >
+                <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
+                  alt="Dubai Luxury Package" loading="lazy">
 
                 <span class="package-badge">
                   Luxury
@@ -956,11 +751,7 @@
 
                 </div>
 
-                <button
-                  type="button"
-                  class="btn btn-primary package-book-btn"
-                  data-destination="Dubai"
-                >
+                <button type="button" class="btn btn-primary package-book-btn" data-destination="Dubai">
                   Book Package
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -980,10 +771,7 @@
            ABOUT
       ================================================== -->
 
-      <section
-        class="section about-section"
-        id="about"
-      >
+      <section class="section about-section" id="about">
 
         <div class="container">
 
@@ -993,11 +781,8 @@
 
             <div class="about-image">
 
-              <img
-                src="https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1200&q=85"
-                alt="Travel adventure"
-                loading="lazy"
-              >
+              <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1200&q=85"
+                alt="Travel adventure" loading="lazy">
 
               <div class="about-floating-card">
 
@@ -1102,11 +887,7 @@
               </div>
 
 
-              <button
-                type="button"
-                class="btn btn-primary"
-                onclick="goTo('#contact')"
-              >
+              <button type="button" class="btn btn-primary" onclick="goTo('#contact')">
                 Contact Us
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
@@ -1121,16 +902,12 @@
 
 
       <!-- =================================================
-           REVIEWS
-      ================================================== -->
+     REVIEWS / TESTIMONIAL CAROUSEL
+================================================== -->
 
-      <section
-        class="section reviews-section"
-        id="reviews"
-      >
+      <section class="section reviews-section" id="reviews">
 
         <div class="container">
-
 
           <div class="section-heading center">
 
@@ -1143,125 +920,63 @@
             </h2>
 
             <p>
-              Real experiences from people who explored
-              the world with Wanderlust.
+              Real experiences from travelers
+              who explored the world with Wanderlust.
             </p>
 
           </div>
 
 
-          <div class="reviews-grid">
+          <div class="reviews-carousel" id="reviewsCarousel">
+
+            <!-- Previous Button -->
+
+            <button type="button" class="review-arrow review-prev" id="reviewPrev" aria-label="Previous reviews">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
 
 
-            <!-- Review 1 -->
+            <!-- Viewport -->
 
-            <article class="review-card">
+            <div class="reviews-viewport">
 
-              <div class="review-stars">
-                ★★★★★
-              </div>
+              <div class="reviews-track" id="reviewsTrack">
 
-              <p>
-                “The Sajek trip was amazing.
-                Everything was well organized and
-                the booking process was very easy.”
-              </p>
-
-              <div class="review-user">
-
-                <div class="review-avatar">
-                  R
-                </div>
-
-                <div>
-
-                  <strong>
-                    Rahim Ahmed
-                  </strong>
-
-                  <span>
-                    Dhaka, Bangladesh
-                  </span>
-
-                </div>
+                <!--
+                        Reviews will be loaded
+                        from traveler-reviews.json
+                    -->
 
               </div>
 
-            </article>
+            </div>
 
 
-            <!-- Review 2 -->
+            <!-- Next Button -->
 
-            <article class="review-card">
+            <button type="button" class="review-arrow review-next" id="reviewNext" aria-label="Next reviews">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
 
-              <div class="review-stars">
-                ★★★★★
-              </div>
-
-              <p>
-                “We booked a Cox's Bazar package
-                for our family. Great hotel,
-                friendly support and beautiful experience.”
-              </p>
-
-              <div class="review-user">
-
-                <div class="review-avatar">
-                  S
-                </div>
-
-                <div>
-
-                  <strong>
-                    Sumaiya Rahman
-                  </strong>
-
-                  <span>
-                    Chattogram, Bangladesh
-                  </span>
-
-                </div>
-
-              </div>
-
-            </article>
+          </div>
 
 
-            <!-- Review 3 -->
+          <!-- Carousel Dots -->
 
-            <article class="review-card">
+          <div class="review-dots" id="reviewDots">
 
-              <div class="review-stars">
-                ★★★★★
-              </div>
+          </div>
 
-              <p>
-                “Our Bali trip was unforgettable.
-                Wanderlust made planning everything
-                much easier than expected.”
-              </p>
 
-              <div class="review-user">
+          <!-- Auto Play Status -->
 
-                <div class="review-avatar">
-                  N
-                </div>
+          <div class="review-carousel-note">
 
-                <div>
+            <span class="review-live-dot"></span>
 
-                  <strong>
-                    Nadia Islam
-                  </strong>
-
-                  <span>
-                    Feni, Bangladesh
-                  </span>
-
-                </div>
-
-              </div>
-
-            </article>
+            <span>
+              Traveler stories updated automatically
+            </span>
 
           </div>
 
@@ -1274,10 +989,7 @@
            BOOKING
       ================================================== -->
 
-      <section
-        class="section booking-section"
-        id="booking"
-      >
+      <section class="section booking-section" id="booking">
 
         <div class="container">
 
@@ -1353,10 +1065,7 @@
 
             <!-- Booking Form -->
 
-            <form
-              class="booking-form"
-              id="bookingForm"
-            >
+            <form class="booking-form" id="bookingForm">
 
               <div class="form-row">
 
@@ -1369,13 +1078,7 @@
                     Full Name
                   </label>
 
-                  <input
-                    type="text"
-                    id="bookingName"
-                    name="name"
-                    placeholder="Enter your name"
-                    required
-                  >
+                  <input type="text" id="bookingName" name="name" placeholder="Enter your name" required>
 
                 </div>
 
@@ -1388,13 +1091,7 @@
                     Email
                   </label>
 
-                  <input
-                    type="email"
-                    id="bookingEmail"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                  >
+                  <input type="email" id="bookingEmail" name="email" placeholder="Enter your email" required>
 
                 </div>
 
@@ -1412,13 +1109,7 @@
                     Phone
                   </label>
 
-                  <input
-                    type="tel"
-                    id="bookingPhone"
-                    name="phone"
-                    placeholder="Enter phone number"
-                    required
-                  >
+                  <input type="tel" id="bookingPhone" name="phone" placeholder="Enter phone number" required>
 
                 </div>
 
@@ -1431,11 +1122,7 @@
                     Destination
                   </label>
 
-                  <select
-                    id="bookingDestination"
-                    name="destination"
-                    required
-                  >
+                  <select id="bookingDestination" name="destination" required>
 
                     <option value="">
                       Select destination
@@ -1515,12 +1202,7 @@
                     Travel Date
                   </label>
 
-                  <input
-                    type="date"
-                    id="bookingDate"
-                    name="date"
-                    required
-                  >
+                  <input type="date" id="bookingDate" name="date" required>
 
                 </div>
 
@@ -1533,11 +1215,7 @@
                     Travelers
                   </label>
 
-                  <select
-                    id="bookingTravelers"
-                    name="travelers"
-                    required
-                  >
+                  <select id="bookingTravelers" name="travelers" required>
 
                     <option value="">
                       Select number
@@ -1586,22 +1264,15 @@
                   Special Request
                 </label>
 
-                <textarea
-                  id="bookingMessage"
-                  name="message"
-                  rows="4"
-                  placeholder="Tell us about your travel requirements..."
-                ></textarea>
+                <textarea id="bookingMessage" name="message" rows="4"
+                  placeholder="Tell us about your travel requirements..."></textarea>
 
               </div>
 
 
               <!-- Submit -->
 
-              <button
-                type="submit"
-                class="btn btn-primary booking-submit"
-              >
+              <button type="submit" class="btn btn-primary booking-submit">
 
                 Confirm Booking
 
@@ -1629,10 +1300,7 @@
            CONTACT
       ================================================== -->
 
-      <section
-        class="section contact-section"
-        id="contact"
-      >
+      <section class="section contact-section" id="contact">
 
         <div class="container">
 
@@ -1728,10 +1396,7 @@
 
             <!-- Contact Form -->
 
-            <form
-              class="contact-form"
-              id="contactForm"
-            >
+            <form class="contact-form" id="contactForm">
 
               <div class="form-row">
 
@@ -1741,13 +1406,7 @@
                     Name
                   </label>
 
-                  <input
-                    type="text"
-                    id="contactName"
-                    name="name"
-                    placeholder="Your name"
-                    required
-                  >
+                  <input type="text" id="contactName" name="name" placeholder="Your name" required>
 
                 </div>
 
@@ -1757,13 +1416,7 @@
                     Email
                   </label>
 
-                  <input
-                    type="email"
-                    id="contactEmail"
-                    name="email"
-                    placeholder="Your email"
-                    required
-                  >
+                  <input type="email" id="contactEmail" name="email" placeholder="Your email" required>
 
                 </div>
 
@@ -1776,13 +1429,7 @@
                   Subject
                 </label>
 
-                <input
-                  type="text"
-                  id="contactSubject"
-                  name="subject"
-                  placeholder="How can we help?"
-                  required
-                >
+                <input type="text" id="contactSubject" name="subject" placeholder="How can we help?" required>
 
               </div>
 
@@ -1793,21 +1440,13 @@
                   Message
                 </label>
 
-                <textarea
-                  id="contactMessage"
-                  name="message"
-                  rows="5"
-                  placeholder="Write your message..."
-                  required
-                ></textarea>
+                <textarea id="contactMessage" name="message" rows="5" placeholder="Write your message..."
+                  required></textarea>
 
               </div>
 
 
-              <button
-                type="submit"
-                class="btn btn-primary"
-              >
+              <button type="submit" class="btn btn-primary">
                 Send Message
                 <i class="fa-solid fa-paper-plane"></i>
               </button>
@@ -1837,10 +1476,7 @@
 
             <div class="footer-brand">
 
-              <a
-                href="#home"
-                class="logo"
-              >
+              <a href="#home" class="logo">
 
                 <span class="logo-icon">
                   <i class="fa-solid fa-plane-departure"></i>
@@ -1860,31 +1496,19 @@
 
               <div class="social-links">
 
-                <a
-                  href="#"
-                  aria-label="Facebook"
-                >
+                <a href="#" aria-label="Facebook">
                   <i class="fa-brands fa-facebook-f"></i>
                 </a>
 
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                >
+                <a href="#" aria-label="Instagram">
                   <i class="fa-brands fa-instagram"></i>
                 </a>
 
-                <a
-                  href="#"
-                  aria-label="YouTube"
-                >
+                <a href="#" aria-label="YouTube">
                   <i class="fa-brands fa-youtube"></i>
                 </a>
 
-                <a
-                  href="#"
-                  aria-label="WhatsApp"
-                >
+                <a href="#" aria-label="WhatsApp">
                   <i class="fa-brands fa-whatsapp"></i>
                 </a>
 
@@ -1969,21 +1593,11 @@
               </p>
 
 
-              <form
-                class="newsletter-form"
-                id="newsletterForm"
-              >
+              <form class="newsletter-form" id="newsletterForm">
 
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  required
-                >
+                <input type="email" placeholder="Your email" required>
 
-                <button
-                  type="submit"
-                  aria-label="Subscribe"
-                >
+                <button type="submit" aria-label="Subscribe">
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
@@ -2026,10 +1640,7 @@
          USER DASHBOARD ROUTE
     ==================================================== -->
 
-    <section
-      class="dashboard-page hidden"
-      id="dashboard"
-    >
+    <section class="dashboard-page hidden" id="dashboard">
 
       <div class="container">
 
@@ -2060,20 +1671,12 @@
 
           <div class="dashboard-actions">
 
-            <button
-              type="button"
-              class="btn btn-ghost"
-              onclick="goTo('#home')"
-            >
+            <button type="button" class="btn btn-ghost" onclick="goTo('#home')">
               <i class="fa-solid fa-house"></i>
               Home
             </button>
 
-            <button
-              type="button"
-              class="btn btn-danger"
-              id="dashboardLogoutBtn"
-            >
+            <button type="button" class="btn btn-danger" id="dashboardLogoutBtn">
               <i class="fa-solid fa-right-from-bracket"></i>
               Logout
             </button>
@@ -2204,10 +1807,7 @@
 
             <div class="dashboard-profile">
 
-              <div
-                class="dashboard-avatar"
-                id="dashboardAvatar"
-              >
+              <div class="dashboard-avatar" id="dashboardAvatar">
                 U
               </div>
 
@@ -2251,11 +1851,7 @@
 
               </div>
 
-              <button
-                type="button"
-                class="text-btn"
-                onclick="goTo('#booking')"
-              >
+              <button type="button" class="text-btn" onclick="goTo('#booking')">
                 Book New
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
@@ -2263,10 +1859,7 @@
             </div>
 
 
-            <div
-              class="dashboard-bookings-list"
-              id="dashboardBookingsList"
-            >
+            <div class="dashboard-bookings-list" id="dashboardBookingsList">
 
               <!-- JS generated -->
 
@@ -2301,10 +1894,7 @@
           </div>
 
 
-          <div
-            class="dashboard-favorites-list"
-            id="dashboardFavoritesList"
-          >
+          <div class="dashboard-favorites-list" id="dashboardFavoritesList">
 
             <!-- JS generated -->
 
@@ -2321,10 +1911,7 @@
          ADMIN DASHBOARD ROUTE
     ==================================================== -->
 
-    <section
-      class="admin-page hidden"
-      id="admin"
-    >
+    <section class="admin-page hidden" id="admin">
 
       <div class="container">
 
@@ -2352,20 +1939,12 @@
 
           <div class="dashboard-actions">
 
-            <button
-              type="button"
-              class="btn btn-ghost"
-              onclick="goTo('#home')"
-            >
+            <button type="button" class="btn btn-ghost" onclick="goTo('#home')">
               <i class="fa-solid fa-house"></i>
               Website
             </button>
 
-            <button
-              type="button"
-              class="btn btn-danger"
-              id="adminLogoutBtn"
-            >
+            <button type="button" class="btn btn-danger" id="adminLogoutBtn">
               <i class="fa-solid fa-right-from-bracket"></i>
               Logout
             </button>
@@ -2524,9 +2103,7 @@
               </thead>
 
 
-              <tbody
-                id="adminBookingsTable"
-              >
+              <tbody id="adminBookingsTable">
 
                 <!-- JS generated -->
 
@@ -2589,9 +2166,7 @@
               </thead>
 
 
-              <tbody
-                id="adminUsersTable"
-              >
+              <tbody id="adminUsersTable">
 
                 <!-- JS generated -->
 
@@ -2614,27 +2189,14 @@
        AUTH MODAL
   ====================================================== -->
 
-  <div
-    class="modal-overlay hidden"
-    id="authModal"
-  >
+  <div class="modal-overlay hidden" id="authModal">
 
-    <div
-      class="auth-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="authModalTitle"
-    >
+    <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
 
 
       <!-- Close -->
 
-      <button
-        type="button"
-        class="modal-close"
-        id="closeAuthModal"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close" id="closeAuthModal" aria-label="Close">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -2666,10 +2228,7 @@
            LOGIN FORM
       ================================================== -->
 
-      <form
-        id="loginForm"
-        class="auth-form"
-      >
+      <form id="loginForm" class="auth-form">
 
         <div class="form-group">
 
@@ -2681,13 +2240,7 @@
 
             <i class="fa-solid fa-envelope"></i>
 
-            <input
-              type="email"
-              id="loginEmail"
-              name="email"
-              placeholder="Enter your email"
-              required
-            >
+            <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
 
           </div>
 
@@ -2704,23 +2257,14 @@
 
             <i class="fa-solid fa-lock"></i>
 
-            <input
-              type="password"
-              id="loginPassword"
-              name="password"
-              placeholder="Enter your password"
-              required
-            >
+            <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
 
           </div>
 
         </div>
 
 
-        <button
-          type="submit"
-          class="btn btn-primary auth-submit"
-        >
+        <button type="submit" class="btn btn-primary auth-submit">
           Login
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -2730,11 +2274,7 @@
 
           Don't have an account?
 
-          <button
-            type="button"
-            id="showRegisterBtn"
-            class="inline-btn"
-          >
+          <button type="button" id="showRegisterBtn" class="inline-btn">
             Create Account
           </button>
 
@@ -2747,10 +2287,7 @@
            REGISTER FORM
       ================================================== -->
 
-      <form
-        id="registerForm"
-        class="auth-form hidden"
-      >
+      <form id="registerForm" class="auth-form hidden">
 
         <div class="form-group">
 
@@ -2758,13 +2295,7 @@
             Full Name
           </label>
 
-          <input
-            type="text"
-            id="registerName"
-            name="name"
-            placeholder="Your full name"
-            required
-          >
+          <input type="text" id="registerName" name="name" placeholder="Your full name" required>
 
         </div>
 
@@ -2777,13 +2308,7 @@
               Email
             </label>
 
-            <input
-              type="email"
-              id="registerEmail"
-              name="email"
-              placeholder="Your email"
-              required
-            >
+            <input type="email" id="registerEmail" name="email" placeholder="Your email" required>
 
           </div>
 
@@ -2794,13 +2319,7 @@
               Phone
             </label>
 
-            <input
-              type="tel"
-              id="registerPhone"
-              name="phone"
-              placeholder="Your phone"
-              required
-            >
+            <input type="tel" id="registerPhone" name="phone" placeholder="Your phone" required>
 
           </div>
 
@@ -2815,13 +2334,7 @@
               Password
             </label>
 
-            <input
-              type="password"
-              id="registerPassword"
-              name="password"
-              placeholder="Create password"
-              required
-            >
+            <input type="password" id="registerPassword" name="password" placeholder="Create password" required>
 
           </div>
 
@@ -2832,23 +2345,15 @@
               Confirm Password
             </label>
 
-            <input
-              type="password"
-              id="registerConfirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm password"
-              required
-            >
+            <input type="password" id="registerConfirmPassword" name="confirmPassword" placeholder="Confirm password"
+              required>
 
           </div>
 
         </div>
 
 
-        <button
-          type="submit"
-          class="btn btn-primary auth-submit"
-        >
+        <button type="submit" class="btn btn-primary auth-submit">
           Create Account
           <i class="fa-solid fa-user-plus"></i>
         </button>
@@ -2858,11 +2363,7 @@
 
           Already have an account?
 
-          <button
-            type="button"
-            id="showLoginBtn"
-            class="inline-btn"
-          >
+          <button type="button" id="showLoginBtn" class="inline-btn">
             Login
           </button>
 
@@ -2879,12 +2380,7 @@
        TOAST
   ====================================================== -->
 
-  <div
-    class="toast"
-    id="toast"
-    role="status"
-    aria-live="polite"
-  >
+  <div class="toast" id="toast" role="status" aria-live="polite">
 
     <span id="toastMessage">
       Message
@@ -2897,12 +2393,7 @@
        BACK TO TOP
   ====================================================== -->
 
-  <button
-    type="button"
-    class="back-to-top"
-    id="backToTop"
-    aria-label="Back to top"
-  >
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 

@@ -1,12 +1,12 @@
 /* =========================================================
    WANDERLUST TRAVEL WEBSITE
-   FULL SCRIPT.JS
+   COMPLETE SCRIPT.JS
    ========================================================= */
 
 
 /* =========================================================
    STORAGE KEYS
-   ========================================================= */
+========================================================= */
 
 const STORAGE = {
     USERS: "wanderlust_users",
@@ -20,7 +20,7 @@ const STORAGE = {
 
 /* =========================================================
    GLOBAL STATE
-   ========================================================= */
+========================================================= */
 
 let pendingAction = null;
 
@@ -36,8 +36,20 @@ let carouselTimer = null;
 
 
 /* =========================================================
+   REVIEW CAROUSEL STATE
+========================================================= */
+
+const reviewState = {
+    reviews: [],
+    currentPage: 0,
+    visible: 3,
+    timer: null
+};
+
+
+/* =========================================================
    DOM REFERENCES
-   ========================================================= */
+========================================================= */
 
 const root = document.documentElement;
 
@@ -103,12 +115,15 @@ const backToTop =
 
 
 /* =========================================================
-   SAFE STORAGE HELPERS
-   ========================================================= */
+   STORAGE HELPERS
+========================================================= */
 
 function readStorage(key, fallback) {
+
     try {
-        const value = localStorage.getItem(key);
+
+        const value =
+            localStorage.getItem(key);
 
         if (value === null) {
             return fallback;
@@ -117,14 +132,22 @@ function readStorage(key, fallback) {
         return JSON.parse(value);
 
     } catch (error) {
-        console.error(`Storage read error: ${key}`, error);
+
+        console.error(
+            "Storage read error:",
+            key,
+            error
+        );
+
         return fallback;
     }
 }
 
 
 function writeStorage(key, value) {
+
     try {
+
         localStorage.setItem(
             key,
             JSON.stringify(value)
@@ -133,7 +156,12 @@ function writeStorage(key, value) {
         return true;
 
     } catch (error) {
-        console.error(`Storage write error: ${key}`, error);
+
+        console.error(
+            "Storage write error:",
+            key,
+            error
+        );
 
         return false;
     }
@@ -142,9 +170,10 @@ function writeStorage(key, value) {
 
 /* =========================================================
    USERS
-   ========================================================= */
+========================================================= */
 
 function getUsers() {
+
     const users =
         readStorage(
             STORAGE.USERS,
@@ -158,6 +187,7 @@ function getUsers() {
 
 
 function saveUsers(users) {
+
     writeStorage(
         STORAGE.USERS,
         users
@@ -167,9 +197,10 @@ function saveUsers(users) {
 
 /* =========================================================
    BOOKINGS
-   ========================================================= */
+========================================================= */
 
 function getBookings() {
+
     const bookings =
         readStorage(
             STORAGE.BOOKINGS,
@@ -183,6 +214,7 @@ function getBookings() {
 
 
 function saveBookings(bookings) {
+
     writeStorage(
         STORAGE.BOOKINGS,
         bookings
@@ -192,20 +224,19 @@ function saveBookings(bookings) {
 
 /* =========================================================
    SESSION
-   ========================================================= */
+========================================================= */
 
 function getSession() {
-    const session =
-        readStorage(
-            STORAGE.SESSION,
-            null
-        );
 
-    return session;
+    return readStorage(
+        STORAGE.SESSION,
+        null
+    );
 }
 
 
 function saveSession(session) {
+
     writeStorage(
         STORAGE.SESSION,
         session
@@ -214,6 +245,7 @@ function saveSession(session) {
 
 
 function clearSession() {
+
     localStorage.removeItem(
         STORAGE.SESSION
     );
@@ -222,17 +254,22 @@ function clearSession() {
 
 /* =========================================================
    PENDING ACTION
-   ========================================================= */
+========================================================= */
 
 function setPendingAction(action) {
-    pendingAction = action || null;
+
+    pendingAction =
+        action || null;
 
     if (pendingAction) {
+
         writeStorage(
             STORAGE.PENDING,
             pendingAction
         );
+
     } else {
+
         localStorage.removeItem(
             STORAGE.PENDING
         );
@@ -241,6 +278,7 @@ function setPendingAction(action) {
 
 
 function loadPendingAction() {
+
     if (pendingAction) {
         return pendingAction;
     }
@@ -256,6 +294,7 @@ function loadPendingAction() {
 
 
 function clearPendingAction() {
+
     pendingAction = null;
 
     localStorage.removeItem(
@@ -266,7 +305,7 @@ function clearPendingAction() {
 
 /* =========================================================
    DEMO ADMIN
-   ========================================================= */
+========================================================= */
 
 function ensureDemoAdmin() {
 
@@ -276,18 +315,22 @@ function ensureDemoAdmin() {
     const adminEmail =
         "admin@wanderlust.com";
 
+
     let admin =
         users.find(
             user =>
-                String(user.email || "")
-                    .toLowerCase()
-                    === adminEmail
+                String(
+                    user.email || ""
+                )
+                .toLowerCase()
+                === adminEmail
         );
 
 
     if (!admin) {
 
         users.push({
+
             id: "admin-demo",
 
             name: "Wanderlust Admin",
@@ -302,7 +345,9 @@ function ensureDemoAdmin() {
 
             createdAt:
                 new Date().toISOString()
+
         });
+
 
         saveUsers(users);
 
@@ -310,16 +355,21 @@ function ensureDemoAdmin() {
     }
 
 
-    let changed = false;
+    let changed =
+        false;
 
 
     if (admin.role !== "admin") {
-        admin.role = "admin";
+
+        admin.role =
+            "admin";
+
         changed = true;
     }
 
 
     if (!admin.name) {
+
         admin.name =
             "Wanderlust Admin";
 
@@ -328,6 +378,7 @@ function ensureDemoAdmin() {
 
 
     if (!admin.phone) {
+
         admin.phone =
             "+8801000000000";
 
@@ -336,6 +387,7 @@ function ensureDemoAdmin() {
 
 
     if (!admin.password) {
+
         admin.password =
             "Admin123";
 
@@ -344,14 +396,15 @@ function ensureDemoAdmin() {
 
 
     if (changed) {
+
         saveUsers(users);
     }
 }
 
 
 /* =========================================================
-   ROLE
-   ========================================================= */
+   USER ROLE
+========================================================= */
 
 function normalizeUser(user) {
 
@@ -360,41 +413,56 @@ function normalizeUser(user) {
     }
 
     return {
+
         ...user,
 
         role:
             user.role === "admin"
                 ? "admin"
                 : "user"
+
     };
 }
 
 
 /* =========================================================
-   NAVIGATION / ROUTES
-   ========================================================= */
+   ROUTING
+========================================================= */
 
 function goTo(route) {
 
     if (!route) {
-        route = "#home";
+
+        route =
+            "#home";
     }
 
-    if (!route.startsWith("#")) {
-        route = "#" + route;
+
+    if (
+        !route.startsWith("#")
+    ) {
+
+        route =
+            "#" + route;
     }
 
 
-    if (window.location.hash === route) {
+    if (
+        window.location.hash === route
+    ) {
+
         renderRoute();
+
     } else {
-        window.location.hash = route;
+
+        window.location.hash =
+            route;
     }
 
 
-    if (navMenu) {
-        navMenu.classList.remove("open");
-    }
+    navMenu?.classList.remove(
+        "open"
+    );
 
 
     menuToggle?.setAttribute(
@@ -406,21 +474,34 @@ function goTo(route) {
 
 function showLanding() {
 
-    landingPage?.classList.remove("hidden");
+    landingPage?.classList.remove(
+        "hidden"
+    );
 
-    dashboardPage?.classList.add("hidden");
+    dashboardPage?.classList.add(
+        "hidden"
+    );
 
-    adminPage?.classList.add("hidden");
+    adminPage?.classList.add(
+        "hidden"
+    );
 }
 
 
 function showDashboard() {
 
-    landingPage?.classList.add("hidden");
+    landingPage?.classList.add(
+        "hidden"
+    );
 
-    dashboardPage?.classList.remove("hidden");
+    dashboardPage?.classList.remove(
+        "hidden"
+    );
 
-    adminPage?.classList.add("hidden");
+    adminPage?.classList.add(
+        "hidden"
+    );
+
 
     renderUserDashboard();
 }
@@ -428,11 +509,18 @@ function showDashboard() {
 
 function showAdminDashboard() {
 
-    landingPage?.classList.add("hidden");
+    landingPage?.classList.add(
+        "hidden"
+    );
 
-    dashboardPage?.classList.add("hidden");
+    dashboardPage?.classList.add(
+        "hidden"
+    );
 
-    adminPage?.classList.remove("hidden");
+    adminPage?.classList.remove(
+        "hidden"
+    );
+
 
     renderAdminDashboard();
 }
@@ -441,15 +529,21 @@ function showAdminDashboard() {
 function renderRoute() {
 
     const route =
-        window.location.hash || "#home";
+        window.location.hash
+        || "#home";
 
 
-    /* USER DASHBOARD */
+    /* -------------------------------------
+       USER DASHBOARD
+    ------------------------------------- */
 
-    if (route === "#dashboard") {
+    if (
+        route === "#dashboard"
+    ) {
 
         const session =
             getSession();
+
 
         if (!session) {
 
@@ -457,11 +551,13 @@ function renderRoute() {
                 type: "dashboard"
             });
 
+
             window.history.replaceState(
                 {},
                 "",
                 "#home"
             );
+
 
             showLanding();
 
@@ -471,7 +567,9 @@ function renderRoute() {
         }
 
 
-        if (session.role === "admin") {
+        if (
+            session.role === "admin"
+        ) {
 
             goTo("#admin");
 
@@ -481,20 +579,24 @@ function renderRoute() {
 
         showDashboard();
 
+
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
 
-        updateNavActive("dashboard");
 
         return;
     }
 
 
-    /* ADMIN DASHBOARD */
+    /* -------------------------------------
+       ADMIN DASHBOARD
+    ------------------------------------- */
 
-    if (route === "#admin") {
+    if (
+        route === "#admin"
+    ) {
 
         const session =
             getSession();
@@ -506,11 +608,13 @@ function renderRoute() {
                 type: "admin"
             });
 
+
             window.history.replaceState(
                 {},
                 "",
                 "#home"
             );
+
 
             showLanding();
 
@@ -520,11 +624,14 @@ function renderRoute() {
         }
 
 
-        if (session.role !== "admin") {
+        if (
+            session.role !== "admin"
+        ) {
 
             showToast(
                 "⛔ Admin access required."
             );
+
 
             goTo("#dashboard");
 
@@ -534,22 +641,29 @@ function renderRoute() {
 
         showAdminDashboard();
 
+
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
 
+
         return;
     }
 
 
-    /* NORMAL LANDING */
+    /* -------------------------------------
+       NORMAL LANDING
+    ------------------------------------- */
 
     showLanding();
 
 
     const target =
-        route.replace("#", "");
+        route.replace(
+            "#",
+            ""
+        );
 
 
     if (
@@ -557,21 +671,26 @@ function renderRoute() {
         target !== "home"
     ) {
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            const section =
-                document.getElementById(target);
+                const section =
+                    document.getElementById(
+                        target
+                    );
 
 
-            if (section) {
+                if (section) {
 
-                section.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            }
+                    section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
 
-        }, 80);
+            },
+            80
+        );
 
     } else {
 
@@ -582,41 +701,56 @@ function renderRoute() {
     }
 
 
-    updateNavActive(target);
+    updateNavActive(
+        target || "home"
+    );
 }
 
 
 /* =========================================================
    ACTIVE NAV
-   ========================================================= */
+========================================================= */
 
-function updateNavActive(current) {
+function updateNavActive(
+    current
+) {
 
     document
-        .querySelectorAll(".nav-link")
-        .forEach(link => {
+        .querySelectorAll(
+            ".nav-link"
+        )
+        .forEach(
+            link => {
 
-            const route =
-                link.dataset.route;
+                const route =
+                    link.dataset.route;
 
-            link.classList.toggle(
-                "active",
-                route === current
-            );
-        });
+
+                link.classList.toggle(
+                    "active",
+                    route === current
+                );
+
+            }
+        );
 }
 
 
 /* =========================================================
    TOAST
-   ========================================================= */
+========================================================= */
 
 let toastTimer = null;
 
 
-function showToast(message) {
+function showToast(
+    message
+) {
 
-    if (!toast || !toastMessage) {
+    if (
+        !toast ||
+        !toastMessage
+    ) {
         return;
     }
 
@@ -625,7 +759,9 @@ function showToast(message) {
         message;
 
 
-    toast.classList.add("show");
+    toast.classList.add(
+        "show"
+    );
 
 
     clearTimeout(
@@ -634,23 +770,29 @@ function showToast(message) {
 
 
     toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            toast.classList.remove("show");
+                toast.classList.remove(
+                    "show"
+                );
 
-        }, 3000);
+            },
+            3000
+        );
 }
 
 
 /* =========================================================
    AUTH MODAL
-   ========================================================= */
+========================================================= */
 
 function openAuthModal() {
 
     authModal?.classList.remove(
         "hidden"
     );
+
 
     document.body.classList.add(
         "modal-open"
@@ -663,6 +805,7 @@ function closeAuthModalBox() {
     authModal?.classList.add(
         "hidden"
     );
+
 
     document.body.classList.remove(
         "modal-open"
@@ -687,18 +830,21 @@ function setLoginMode() {
         "hidden"
     );
 
+
     registerForm?.classList.add(
         "hidden"
     );
 
 
     if (title) {
+
         title.textContent =
             "Welcome Back";
     }
 
 
     if (subtitle) {
+
         subtitle.textContent =
             "Login to continue your journey.";
     }
@@ -722,18 +868,21 @@ function setRegisterMode() {
         "hidden"
     );
 
+
     registerForm?.classList.remove(
         "hidden"
     );
 
 
     if (title) {
+
         title.textContent =
             "Create Your Account";
     }
 
 
     if (subtitle) {
+
         subtitle.textContent =
             "Register now and start planning your next trip.";
     }
@@ -741,30 +890,34 @@ function setRegisterMode() {
 
 
 function openLogin() {
+
     setLoginMode();
+
     openAuthModal();
 }
 
 
-function openRegister(prefillEmail = "") {
+function openRegister(
+    prefillEmail = ""
+) {
 
     setRegisterMode();
 
     openAuthModal();
 
 
-    const emailInput =
+    const input =
         document.getElementById(
             "registerEmail"
         );
 
 
     if (
-        emailInput &&
+        input &&
         prefillEmail
     ) {
 
-        emailInput.value =
+        input.value =
             prefillEmail;
     }
 }
@@ -772,7 +925,7 @@ function openRegister(prefillEmail = "") {
 
 /* =========================================================
    CONTINUE PENDING ACTION
-   ========================================================= */
+========================================================= */
 
 function continuePendingAction() {
 
@@ -818,13 +971,17 @@ function continuePendingAction() {
         goTo("#booking");
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            selectBookingDestination(
-                action.destination
-            );
+                selectBookingDestination(
+                    action.destination
+                );
 
-        }, 250);
+            },
+            250
+        );
+
 
         return;
     }
@@ -834,14 +991,20 @@ function continuePendingAction() {
         action.type === "favorite"
     ) {
 
-        if (action.destination) {
-
-            toggleFavorite(
-                action.destination
-            );
-        }
-
         goTo("#destinations");
+
+
+        setTimeout(
+            () => {
+
+                toggleFavorite(
+                    action.destination
+                );
+
+            },
+            250
+        );
+
 
         return;
     }
@@ -853,7 +1016,7 @@ function continuePendingAction() {
 
 /* =========================================================
    LOGIN
-   ========================================================= */
+========================================================= */
 
 function handleLogin(event) {
 
@@ -862,7 +1025,9 @@ function handleLogin(event) {
 
     const email =
         document
-            .getElementById("loginEmail")
+            .getElementById(
+                "loginEmail"
+            )
             ?.value
             .trim()
             .toLowerCase();
@@ -870,11 +1035,16 @@ function handleLogin(event) {
 
     const password =
         document
-            .getElementById("loginPassword")
+            .getElementById(
+                "loginPassword"
+            )
             ?.value;
 
 
-    if (!email || !password) {
+    if (
+        !email ||
+        !password
+    ) {
 
         showToast(
             "⚠️ Please enter email and password."
@@ -891,35 +1061,46 @@ function handleLogin(event) {
     const user =
         users.find(
             item =>
-                String(item.email || "")
-                    .toLowerCase()
-                    === email
+
+                String(
+                    item.email || ""
+                )
+                .toLowerCase()
+                === email
+
                 &&
-                String(item.password || "")
-                    === password
+
+                String(
+                    item.password || ""
+                )
+                === password
         );
 
 
-    /* USER NOT FOUND */
-
     if (!user) {
 
-        const existingEmail =
+        const existingUser =
             users.find(
                 item =>
-                    String(item.email || "")
-                        .toLowerCase()
-                        === email
+                    String(
+                        item.email || ""
+                    )
+                    .toLowerCase()
+                    === email
             );
 
 
-        if (!existingEmail) {
+        if (!existingUser) {
 
             showToast(
                 "ℹ️ Account not found. Please create an account."
             );
 
-            openRegister(email);
+
+            openRegister(
+                email
+            );
+
 
             return;
         }
@@ -929,28 +1110,41 @@ function handleLogin(event) {
             "❌ Incorrect password."
         );
 
+
         return;
     }
 
 
     const normalizedUser =
-        normalizeUser(user);
+        normalizeUser(
+            user
+        );
 
 
     const session = {
-        id: normalizedUser.id,
 
-        name: normalizedUser.name,
+        id:
+            normalizedUser.id,
 
-        email: normalizedUser.email,
+        name:
+            normalizedUser.name,
 
-        phone: normalizedUser.phone || "",
+        email:
+            normalizedUser.email,
 
-        role: normalizedUser.role
+        phone:
+            normalizedUser.phone || "",
+
+        role:
+            normalizedUser.role
+
     };
 
 
-    saveSession(session);
+    saveSession(
+        session
+    );
+
 
     updateUserUI();
 
@@ -959,6 +1153,7 @@ function handleLogin(event) {
     updateFavoriteButtons();
 
     closeAuthModalBox();
+
 
     loginForm?.reset();
 
@@ -973,53 +1168,62 @@ function handleLogin(event) {
 
 
     if (
-        session.role === "admin" &&
-        (!action || action.type === "admin")
+        session.role === "admin"
     ) {
 
-        continuePendingAction();
+        if (
+            action &&
+            action.type === "admin"
+        ) {
 
-        if (!action) {
+            continuePendingAction();
+
+        } else {
+
             goTo("#admin");
         }
 
+
         return;
     }
 
 
-    if (
-        action
-    ) {
+    if (action) {
 
         continuePendingAction();
 
-        return;
+    } else {
+
+        goTo("#home");
     }
-
-
-    goTo("#home");
 }
 
 
 /* =========================================================
    REGISTER
-   ========================================================= */
+========================================================= */
 
-function handleRegister(event) {
+function handleRegister(
+    event
+) {
 
     event.preventDefault();
 
 
     const name =
         document
-            .getElementById("registerName")
+            .getElementById(
+                "registerName"
+            )
             ?.value
             .trim();
 
 
     const email =
         document
-            .getElementById("registerEmail")
+            .getElementById(
+                "registerEmail"
+            )
             ?.value
             .trim()
             .toLowerCase();
@@ -1027,14 +1231,18 @@ function handleRegister(event) {
 
     const phone =
         document
-            .getElementById("registerPhone")
+            .getElementById(
+                "registerPhone"
+            )
             ?.value
             .trim();
 
 
     const password =
         document
-            .getElementById("registerPassword")
+            .getElementById(
+                "registerPassword"
+            )
             ?.value;
 
 
@@ -1058,15 +1266,19 @@ function handleRegister(event) {
             "⚠️ Please complete all required fields."
         );
 
+
         return;
     }
 
 
-    if (password.length < 6) {
+    if (
+        password.length < 6
+    ) {
 
         showToast(
             "⚠️ Password must be at least 6 characters."
         );
+
 
         return;
     }
@@ -1081,6 +1293,7 @@ function handleRegister(event) {
             "❌ Passwords do not match."
         );
 
+
         return;
     }
 
@@ -1092,9 +1305,11 @@ function handleRegister(event) {
     const existingUser =
         users.find(
             user =>
-                String(user.email || "")
-                    .toLowerCase()
-                    === email
+                String(
+                    user.email || ""
+                )
+                .toLowerCase()
+                === email
         );
 
 
@@ -1104,17 +1319,22 @@ function handleRegister(event) {
             "⚠️ An account with this email already exists."
         );
 
+
         setLoginMode();
+
 
         const loginEmail =
             document.getElementById(
                 "loginEmail"
             );
 
+
         if (loginEmail) {
+
             loginEmail.value =
                 email;
         }
+
 
         return;
     }
@@ -1142,6 +1362,7 @@ function handleRegister(event) {
 
         createdAt:
             new Date().toISOString()
+
     };
 
 
@@ -1149,24 +1370,34 @@ function handleRegister(event) {
         newUser
     );
 
-    saveUsers(users);
+
+    saveUsers(
+        users
+    );
 
 
     const session = {
 
-        id: newUser.id,
+        id:
+            newUser.id,
 
-        name: newUser.name,
+        name:
+            newUser.name,
 
-        email: newUser.email,
+        email:
+            newUser.email,
 
-        phone: newUser.phone,
+        phone:
+            newUser.phone,
 
-        role: "user"
+        role:
+            "user"
     };
 
 
-    saveSession(session);
+    saveSession(
+        session
+    );
 
 
     updateUserUI();
@@ -1177,6 +1408,7 @@ function handleRegister(event) {
 
     closeAuthModalBox();
 
+
     registerForm?.reset();
 
 
@@ -1185,15 +1417,13 @@ function handleRegister(event) {
     );
 
 
-    /* AUTO LOGIN + CONTINUE */
-
     continuePendingAction();
 }
 
 
 /* =========================================================
    LOGOUT
-   ========================================================= */
+========================================================= */
 
 function logout() {
 
@@ -1201,23 +1431,26 @@ function logout() {
 
     clearPendingAction();
 
+
     updateUserUI();
 
     updateBookingFields();
 
     updateFavoriteButtons();
 
+
+    goTo("#home");
+
+
     showToast(
         "✅ You have been logged out successfully."
     );
-
-    goTo("#home");
 }
 
 
 /* =========================================================
    UPDATE USER NAV
-   ========================================================= */
+========================================================= */
 
 function updateUserUI() {
 
@@ -1245,12 +1478,12 @@ function updateUserUI() {
 
 
         document
-            .getElementById("loginNavBtn")
+            .getElementById(
+                "loginNavBtn"
+            )
             ?.addEventListener(
                 "click",
-                () => {
-                    openLogin();
-                }
+                openLogin
             );
 
 
@@ -1259,12 +1492,14 @@ function updateUserUI() {
 
 
     const initial =
-        String(session.name || "U")
-            .charAt(0)
-            .toUpperCase();
+        String(
+            session.name || "U"
+        )
+        .charAt(0)
+        .toUpperCase();
 
 
-    const admin =
+    const isAdmin =
         session.role === "admin";
 
 
@@ -1283,7 +1518,7 @@ function updateUserUI() {
 
                 <span class="profile-name">
                     ${escapeHTML(
-                        admin
+                        isAdmin
                             ? "Admin"
                             : session.name
                     )}
@@ -1299,7 +1534,7 @@ function updateUserUI() {
             <div class="profile-dropdown">
 
                 ${
-                    admin
+                    isAdmin
                         ? `
                             <a href="#admin">
                                 <i class="fa-solid fa-gauge-high"></i>
@@ -1334,28 +1569,46 @@ function updateUserUI() {
         </div>
     `;
 
-const profileNav =
-    userNav.querySelector(".profile-nav");
 
-const profileBtn =
-    userNav.querySelector(".profile-btn");
+    /* Mobile profile click */
 
-if (profileNav && profileBtn) {
+    const profileNav =
+        userNav.querySelector(
+            ".profile-nav"
+        );
 
-    profileBtn.addEventListener(
-        "click",
-        (event) => {
 
-            event.stopPropagation();
+    const profileBtn =
+        userNav.querySelector(
+            ".profile-btn"
+        );
 
-            profileNav.classList.toggle("open");
 
-        }
-    );
-}
+    if (
+        profileNav &&
+        profileBtn
+    ) {
+
+        profileBtn.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                profileNav.classList.toggle(
+                    "open"
+                );
+            }
+        );
+    }
+
+
+    /* Logout */
 
     document
-        .getElementById("logoutNavBtn")
+        .getElementById(
+            "logoutNavBtn"
+        )
         ?.addEventListener(
             "click",
             logout
@@ -1364,8 +1617,39 @@ if (profileNav && profileBtn) {
 
 
 /* =========================================================
+   CLOSE PROFILE MENU OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        document
+            .querySelectorAll(
+                ".profile-nav.open"
+            )
+            .forEach(
+                profile => {
+
+                    if (
+                        !profile.contains(
+                            event.target
+                        )
+                    ) {
+
+                        profile.classList.remove(
+                            "open"
+                        );
+                    }
+                }
+            );
+    }
+);
+
+
+/* =========================================================
    BOOKING FIELD AUTO FILL
-   ========================================================= */
+========================================================= */
 
 function updateBookingFields() {
 
@@ -1378,10 +1662,12 @@ function updateBookingFields() {
             "bookingName"
         );
 
+
     const emailInput =
         document.getElementById(
             "bookingEmail"
         );
+
 
     const phoneInput =
         document.getElementById(
@@ -1408,16 +1694,21 @@ function updateBookingFields() {
 
 
     if (nameInput) {
+
         nameInput.value =
             session.name || "";
     }
 
+
     if (emailInput) {
+
         emailInput.value =
             session.email || "";
     }
 
+
     if (phoneInput) {
+
         phoneInput.value =
             session.phone || "";
     }
@@ -1425,10 +1716,12 @@ function updateBookingFields() {
 
 
 /* =========================================================
-   BOOKING
-   ========================================================= */
+   BOOKING SUBMIT
+========================================================= */
 
-function handleBookingSubmit(event) {
+function handleBookingSubmit(
+    event
+) {
 
     event.preventDefault();
 
@@ -1443,16 +1736,19 @@ function handleBookingSubmit(event) {
             type: "booking"
         });
 
+
         openLogin();
 
         return;
     }
 
 
-    if (session.role === "admin") {
+    if (
+        session.role === "admin"
+    ) {
 
         showToast(
-            "ℹ️ Admin accounts should manage bookings from the Admin Dashboard."
+            "ℹ️ Admin accounts manage bookings from the Admin Dashboard."
         );
 
         return;
@@ -1473,47 +1769,62 @@ function handleBookingSubmit(event) {
             "-" +
             Math.random()
                 .toString(36)
-                .slice(2, 7),
+                .slice(2, 8),
 
         userId:
             session.id,
 
         name:
             String(
-                formData.get("name") || ""
+                formData.get(
+                    "name"
+                ) || ""
             ).trim(),
 
         email:
             String(
-                formData.get("email") || ""
+                formData.get(
+                    "email"
+                ) || ""
             ).trim(),
 
         phone:
             String(
-                formData.get("phone") || ""
+                formData.get(
+                    "phone"
+                ) || ""
             ).trim(),
 
         destination:
             String(
-                formData.get("destination") || ""
+                formData.get(
+                    "destination"
+                ) || ""
             ).trim(),
 
         date:
             String(
-                formData.get("date") || ""
+                formData.get(
+                    "date"
+                ) || ""
             ).trim(),
 
         travelers:
             String(
-                formData.get("travelers") || ""
+                formData.get(
+                    "travelers"
+                ) || ""
             ).trim(),
 
         message:
             String(
-                formData.get("message") || ""
+                formData.get(
+                    "message"
+                ) || ""
             ).trim(),
 
-        status: "Pending",
+        status:
+            "Pending",
 
         createdAt:
             new Date().toISOString()
@@ -1550,6 +1861,7 @@ function handleBookingSubmit(event) {
 
     bookingForm.reset();
 
+
     updateBookingFields();
 
     renderUserDashboard();
@@ -1562,17 +1874,24 @@ function handleBookingSubmit(event) {
     );
 
 
-    setTimeout(() => {
-        goTo("#dashboard");
-    }, 400);
+    setTimeout(
+        () => {
+
+            goTo("#dashboard");
+
+        },
+        400
+    );
 }
 
 
 /* =========================================================
    BOOK DESTINATION
-   ========================================================= */
+========================================================= */
 
-function bookDestination(destination) {
+function bookDestination(
+    destination
+) {
 
     const session =
         getSession();
@@ -1581,9 +1900,13 @@ function bookDestination(destination) {
     if (!session) {
 
         setPendingAction({
+
             type: "booking",
+
             destination
+
         });
+
 
         openLogin();
 
@@ -1591,7 +1914,9 @@ function bookDestination(destination) {
     }
 
 
-    if (session.role === "admin") {
+    if (
+        session.role === "admin"
+    ) {
 
         showToast(
             "ℹ️ Admin cannot create a customer booking."
@@ -1604,19 +1929,22 @@ function bookDestination(destination) {
     goTo("#booking");
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        selectBookingDestination(
-            destination
-        );
+            selectBookingDestination(
+                destination
+            );
 
-    }, 250);
+        },
+        250
+    );
 }
 
 
 /* =========================================================
    SELECT BOOKING DESTINATION
-   ========================================================= */
+========================================================= */
 
 function selectBookingDestination(
     destination
@@ -1628,25 +1956,35 @@ function selectBookingDestination(
         );
 
 
-    if (!select || !destination) {
+    if (
+        !select ||
+        !destination
+    ) {
         return;
     }
 
 
     const target =
-        String(destination)
-            .trim()
-            .toLowerCase();
+        String(
+            destination
+        )
+        .trim()
+        .toLowerCase();
 
 
     let option =
-        [...select.options].find(
+        [
+            ...select.options
+        ].find(
             item =>
+
                 item.value
                     .trim()
                     .toLowerCase()
                     === target
+
                 ||
+
                 item.text
                     .trim()
                     .toLowerCase()
@@ -1657,23 +1995,22 @@ function selectBookingDestination(
     if (!option) {
 
         option =
-            [...select.options].find(
+            [
+                ...select.options
+            ].find(
                 item =>
+
                     item.value
                         .trim()
                         .toLowerCase()
                         .includes(target)
+
                     ||
+
                     item.text
                         .trim()
                         .toLowerCase()
                         .includes(target)
-                    ||
-                    target.includes(
-                        item.value
-                            .trim()
-                            .toLowerCase()
-                    )
             );
     }
 
@@ -1690,15 +2027,19 @@ function selectBookingDestination(
                 "option"
             );
 
+
         newOption.value =
             destination;
+
 
         newOption.textContent =
             destination;
 
+
         select.appendChild(
             newOption
         );
+
 
         select.value =
             destination;
@@ -1717,8 +2058,8 @@ function selectBookingDestination(
 
 
 /* =========================================================
-   FAVORITES STORAGE
-   ========================================================= */
+   FAVORITES
+========================================================= */
 
 function getFavoritesStore() {
 
@@ -1730,24 +2071,23 @@ function getFavoritesStore() {
 
 
     if (
+        !data ||
+        typeof data !== "object" ||
         Array.isArray(data)
     ) {
+
         return {};
     }
 
 
-    return (
-        data &&
-        typeof data === "object"
-    )
-        ? data
-        : {};
+    return data;
 }
 
 
 function saveFavoritesStore(
     store
 ) {
+
     writeStorage(
         STORAGE.FAVORITES,
         store
@@ -1768,19 +2108,13 @@ function getUserFavorites(
         getFavoritesStore();
 
 
-    const favorites =
-        store[email] || [];
-
-
-    return Array.isArray(favorites)
-        ? favorites
+    return Array.isArray(
+        store[email]
+    )
+        ? store[email]
         : [];
 }
 
-
-/* =========================================================
-   FAVORITE CHECK
-   ========================================================= */
 
 function isFavorite(
     destination
@@ -1803,10 +2137,6 @@ function isFavorite(
 }
 
 
-/* =========================================================
-   TOGGLE FAVORITE
-   ========================================================= */
-
 function toggleFavorite(
     destination
 ) {
@@ -1818,9 +2148,13 @@ function toggleFavorite(
     if (!session) {
 
         setPendingAction({
+
             type: "favorite",
+
             destination
+
         });
+
 
         openLogin();
 
@@ -1828,7 +2162,9 @@ function toggleFavorite(
     }
 
 
-    if (session.role === "admin") {
+    if (
+        session.role === "admin"
+    ) {
 
         showToast(
             "ℹ️ Admin accounts do not use customer favorites."
@@ -1842,9 +2178,11 @@ function toggleFavorite(
         getFavoritesStore();
 
 
-    if (!Array.isArray(
-        store[session.email]
-    )) {
+    if (
+        !Array.isArray(
+            store[session.email]
+        )
+    ) {
 
         store[session.email] =
             [];
@@ -1867,6 +2205,7 @@ function toggleFavorite(
             destination
         );
 
+
         showToast(
             `❤️ ${destination} added to favorites.`
         );
@@ -1877,6 +2216,7 @@ function toggleFavorite(
             index,
             1
         );
+
 
         showToast(
             `♡ ${destination} removed from favorites.`
@@ -1897,43 +2237,43 @@ function toggleFavorite(
 }
 
 
-/* =========================================================
-   UPDATE FAVORITE BUTTONS
-   ========================================================= */
-
 function updateFavoriteButtons() {
 
     document
         .querySelectorAll(
             ".favorite-btn"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            const name =
-                button.dataset.destination;
-
-
-            const active =
-                isFavorite(name);
+                const name =
+                    button.dataset.destination;
 
 
-            button.classList.toggle(
-                "active",
-                active
-            );
+                const active =
+                    isFavorite(
+                        name
+                    );
 
 
-            button.textContent =
-                active
-                    ? "♥"
-                    : "♡";
-        });
+                button.classList.toggle(
+                    "active",
+                    active
+                );
+
+
+                button.textContent =
+                    active
+                        ? "♥"
+                        : "♡";
+            }
+        );
 }
 
 
 /* =========================================================
-   DESTINATION JSON
-   ========================================================= */
+   DESTINATIONS JSON
+========================================================= */
 
 async function loadDestinations() {
 
@@ -1950,8 +2290,13 @@ async function loadDestinations() {
 
     grid.innerHTML = `
         <div class="destination-loading">
+
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Loading destinations...</span>
+
+            <span>
+                Loading destinations...
+            </span>
+
         </div>
     `;
 
@@ -1965,6 +2310,7 @@ async function loadDestinations() {
 
 
         if (!response.ok) {
+
             throw new Error(
                 "destinations.json could not be loaded."
             );
@@ -1976,8 +2322,9 @@ async function loadDestinations() {
 
 
         if (!Array.isArray(data)) {
+
             throw new Error(
-                "Destination JSON is not an array."
+                "Destination JSON format is invalid."
             );
         }
 
@@ -1987,7 +2334,9 @@ async function loadDestinations() {
 
 
         destinationState.filtered =
-            [...data];
+            [
+                ...data
+            ];
 
 
         destinationState.currentPage =
@@ -2015,7 +2364,8 @@ async function loadDestinations() {
                 </h3>
 
                 <p>
-                    Make sure <strong>destinations.json</strong>
+                    Make sure
+                    <strong>destinations.json</strong>
                     is in the same folder as index.html.
                 </p>
 
@@ -2026,90 +2376,8 @@ async function loadDestinations() {
 
 
 /* =========================================================
-   RENDER DESTINATIONS
-   ========================================================= */
-
-function renderDestinations() {
-
-    const grid =
-        document.getElementById(
-            "destinationGrid"
-        );
-
-
-    if (!grid) {
-        return;
-    }
-
-
-    const start =
-        (
-            destinationState.currentPage
-            - 1
-        )
-        *
-        destinationState.perPage;
-
-
-    const end =
-        start +
-        destinationState.perPage;
-
-
-    const pageItems =
-        destinationState.filtered.slice(
-            start,
-            end
-        );
-
-
-    if (
-        pageItems.length === 0
-    ) {
-
-        grid.innerHTML = `
-            <div class="destination-empty">
-
-                <i class="fa-solid fa-location-dot"></i>
-
-                <h3>
-                    No destinations found
-                </h3>
-
-                <p>
-                    Try another destination name.
-                </p>
-
-            </div>
-        `;
-
-
-        renderDestinationPagination();
-
-        return;
-    }
-
-
-    grid.innerHTML =
-        pageItems
-            .map(
-                destination =>
-                    createDestinationCard(
-                        destination
-                    )
-            )
-            .join("");
-
-
-    renderDestinationPagination();
-
-    updateFavoriteButtons();
-}
-
-
-/* =========================================================
    CREATE DESTINATION CARD
-   ========================================================= */
+========================================================= */
 
 function createDestinationCard(
     destination
@@ -2152,15 +2420,11 @@ function createDestinationCard(
                     data-destination="${escapeAttribute(
                         destination.name
                     )}"
-                    aria-label="${
-                        favorite
-                            ? "Remove"
-                            : "Add"
-                    } ${
+                    aria-label="Favorite ${
                         escapeAttribute(
                             destination.name
                         )
-                    } favorite"
+                    }"
                 >
                     ${
                         favorite
@@ -2241,8 +2505,87 @@ function createDestinationCard(
 
 
 /* =========================================================
-   PAGINATION
-   ========================================================= */
+   RENDER DESTINATIONS
+========================================================= */
+
+function renderDestinations() {
+
+    const grid =
+        document.getElementById(
+            "destinationGrid"
+        );
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    const start =
+        (
+            destinationState.currentPage -
+            1
+        )
+        *
+        destinationState.perPage;
+
+
+    const end =
+        start +
+        destinationState.perPage;
+
+
+    const pageItems =
+        destinationState.filtered.slice(
+            start,
+            end
+        );
+
+
+    if (
+        pageItems.length === 0
+    ) {
+
+        grid.innerHTML = `
+            <div class="destination-empty">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <h3>
+                    No destinations found
+                </h3>
+
+                <p>
+                    Try another destination name.
+                </p>
+
+            </div>
+        `;
+
+
+        renderDestinationPagination();
+
+        return;
+    }
+
+
+    grid.innerHTML =
+        pageItems
+            .map(
+                createDestinationCard
+            )
+            .join("");
+
+
+    renderDestinationPagination();
+
+    updateFavoriteButtons();
+}
+
+
+/* =========================================================
+   DESTINATION PAGINATION
+========================================================= */
 
 function renderDestinationPagination() {
 
@@ -2264,9 +2607,12 @@ function renderDestinationPagination() {
         );
 
 
-    if (totalPages <= 1) {
+    if (
+        totalPages <= 1
+    ) {
 
-        pagination.innerHTML = "";
+        pagination.innerHTML =
+            "";
 
         return;
     }
@@ -2280,7 +2626,8 @@ function renderDestinationPagination() {
             type="button"
             class="pagination-btn prev-btn"
             onclick="changeDestinationPage(${
-                destinationState.currentPage - 1
+                destinationState.currentPage -
+                1
             })"
             ${
                 destinationState.currentPage === 1
@@ -2321,10 +2668,12 @@ function renderDestinationPagination() {
             type="button"
             class="pagination-btn next-btn"
             onclick="changeDestinationPage(${
-                destinationState.currentPage + 1
+                destinationState.currentPage +
+                1
             })"
             ${
-                destinationState.currentPage === totalPages
+                destinationState.currentPage ===
+                totalPages
                     ? "disabled"
                     : ""
             }
@@ -2338,10 +2687,6 @@ function renderDestinationPagination() {
         html;
 }
 
-
-/* =========================================================
-   CHANGE DESTINATION PAGE
-   ========================================================= */
 
 function changeDestinationPage(
     page
@@ -2387,16 +2732,18 @@ function changeDestinationPage(
 
 /* =========================================================
    DESTINATION SEARCH
-   ========================================================= */
+========================================================= */
 
 function filterDestinations(
     keyword
 ) {
 
     const query =
-        String(keyword || "")
-            .trim()
-            .toLowerCase();
+        String(
+            keyword || ""
+        )
+        .trim()
+        .toLowerCase();
 
 
     destinationState.filtered =
@@ -2406,22 +2753,29 @@ function filterDestinations(
                 const name =
                     String(
                         destination.name || ""
-                    ).toLowerCase();
+                    )
+                    .toLowerCase();
+
 
                 const location =
                     String(
                         destination.location || ""
-                    ).toLowerCase();
+                    )
+                    .toLowerCase();
+
 
                 const tag =
                     String(
                         destination.tag || ""
-                    ).toLowerCase();
+                    )
+                    .toLowerCase();
+
 
                 const description =
                     String(
                         destination.description || ""
-                    ).toLowerCase();
+                    )
+                    .toLowerCase();
 
 
                 return (
@@ -2445,6 +2799,7 @@ function filterDestinations(
 function setupDestinationSearch() {
 
     const inputs = [
+
         document.getElementById(
             "destinationSearch"
         ),
@@ -2452,66 +2807,69 @@ function setupDestinationSearch() {
         document.getElementById(
             "searchDestination"
         )
+
     ].filter(Boolean);
 
 
-    if (!inputs.length) {
-        return;
-    }
+    inputs.forEach(
+        input => {
+
+            input.addEventListener(
+                "input",
+                event => {
+
+                    const value =
+                        event.target.value;
 
 
-    inputs.forEach(input => {
+                    inputs.forEach(
+                        other => {
 
-        input.addEventListener(
-            "input",
-            event => {
+                            if (
+                                other !==
+                                event.target
+                            ) {
 
-                const value =
-                    event.target.value;
+                                other.value =
+                                    value;
+                            }
+                        }
+                    );
 
 
-                inputs.forEach(other => {
+                    filterDestinations(
+                        value
+                    );
+                }
+            );
+
+
+            input.addEventListener(
+                "keydown",
+                event => {
 
                     if (
-                        other !==
-                        event.target
+                        event.key ===
+                        "Enter"
                     ) {
-                        other.value =
-                            value;
+
+                        event.preventDefault();
+
+
+                        goTo(
+                            "#destinations"
+                        );
                     }
-
-                });
-
-
-                filterDestinations(
-                    value
-                );
-            }
-        );
-
-
-        input.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    event.preventDefault();
-
-                    goTo("#destinations");
                 }
-            }
-        );
-    });
+            );
+        }
+    );
 }
 
 
 /* =========================================================
    DESTINATION ACTIONS
-   ========================================================= */
+========================================================= */
 
 function setupDestinationActions() {
 
@@ -2540,10 +2898,12 @@ function setupDestinationActions() {
 
                 event.preventDefault();
 
+
                 toggleFavorite(
                     favoriteButton.dataset
                         .destination
                 );
+
 
                 return;
             }
@@ -2559,6 +2919,7 @@ function setupDestinationActions() {
 
                 event.preventDefault();
 
+
                 bookDestination(
                     bookButton.dataset
                         .destination
@@ -2571,7 +2932,7 @@ function setupDestinationActions() {
 
 /* =========================================================
    PACKAGE ACTIONS
-   ========================================================= */
+========================================================= */
 
 function setupPackageActions() {
 
@@ -2579,29 +2940,27 @@ function setupPackageActions() {
         .querySelectorAll(
             ".package-book-btn"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    const destination =
-                        button.dataset
-                            .destination;
-
-
-                    bookDestination(
-                        destination
-                    );
-                }
-            );
-        });
+                        bookDestination(
+                            button.dataset
+                                .destination
+                        );
+                    }
+                );
+            }
+        );
 }
 
 
 /* =========================================================
    USER DASHBOARD
-   ========================================================= */
+========================================================= */
 
 function renderUserDashboard() {
 
@@ -2609,12 +2968,8 @@ function renderUserDashboard() {
         getSession();
 
 
-    if (!session) {
-        return;
-    }
-
-
     if (
+        !session ||
         session.role === "admin"
     ) {
         return;
@@ -2628,16 +2983,23 @@ function renderUserDashboard() {
     const userBookings =
         bookings.filter(
             booking =>
+
                 booking.userId ===
                     session.id
+
                 ||
+
                 (
                     booking.email &&
-                    booking.email
-                        .toLowerCase()
-                        ===
-                    session.email
-                        .toLowerCase()
+                    String(
+                        booking.email
+                    )
+                    .toLowerCase()
+                    ===
+                    String(
+                        session.email
+                    )
+                    .toLowerCase()
                 )
         );
 
@@ -2648,14 +3010,16 @@ function renderUserDashboard() {
         );
 
 
-    /* Header Name */
+    /* Name */
 
     const dashboardUserName =
         document.getElementById(
             "dashboardUserName"
         );
 
+
     if (dashboardUserName) {
+
         dashboardUserName.textContent =
             session.name;
     }
@@ -2668,15 +3032,18 @@ function renderUserDashboard() {
             "dashboardProfileName"
         );
 
+
     const profileEmail =
         document.getElementById(
             "dashboardProfileEmail"
         );
 
+
     const profilePhone =
         document.getElementById(
             "dashboardProfilePhone"
         );
+
 
     const avatar =
         document.getElementById(
@@ -2685,21 +3052,29 @@ function renderUserDashboard() {
 
 
     if (profileName) {
+
         profileName.textContent =
             session.name;
     }
 
+
     if (profileEmail) {
+
         profileEmail.textContent =
             session.email;
     }
 
+
     if (profilePhone) {
+
         profilePhone.textContent =
-            session.phone || "Phone not added";
+            session.phone ||
+            "Phone not added";
     }
 
+
     if (avatar) {
+
         avatar.textContent =
             String(
                 session.name || "U"
@@ -2709,27 +3084,31 @@ function renderUserDashboard() {
     }
 
 
-    /* Booking Count */
+    /* Total bookings */
 
     const bookingCount =
         document.getElementById(
             "dashboardBookingCount"
         );
 
+
     if (bookingCount) {
+
         bookingCount.textContent =
             userBookings.length;
     }
 
 
-    /* Favorite Count */
+    /* Favorites */
 
     const favoriteCount =
         document.getElementById(
             "dashboardFavoriteCount"
         );
 
+
     if (favoriteCount) {
+
         favoriteCount.textContent =
             favorites.length;
     }
@@ -2740,10 +3119,10 @@ function renderUserDashboard() {
     const pendingCount =
         userBookings.filter(
             booking =>
-                String(
+                normalizeStatus(
                     booking.status
-                ).toLowerCase()
-                === "pending"
+                ).className ===
+                "pending"
         ).length;
 
 
@@ -2752,7 +3131,9 @@ function renderUserDashboard() {
             "dashboardPendingCount"
         );
 
+
     if (pendingElement) {
+
         pendingElement.textContent =
             pendingCount;
     }
@@ -2763,10 +3144,10 @@ function renderUserDashboard() {
     const confirmedCount =
         userBookings.filter(
             booking =>
-                String(
+                normalizeStatus(
                     booking.status
-                ).toLowerCase()
-                === "confirmed"
+                ).className ===
+                "confirmed"
         ).length;
 
 
@@ -2775,7 +3156,9 @@ function renderUserDashboard() {
             "dashboardConfirmedCount"
         );
 
+
     if (confirmedElement) {
+
         confirmedElement.textContent =
             confirmedCount;
     }
@@ -2794,7 +3177,7 @@ function renderUserDashboard() {
 
 /* =========================================================
    DASHBOARD BOOKINGS
-   ========================================================= */
+========================================================= */
 
 function renderDashboardBookings(
     bookings
@@ -2811,7 +3194,9 @@ function renderDashboardBookings(
     }
 
 
-    if (!bookings.length) {
+    if (
+        !bookings.length
+    ) {
 
         container.innerHTML = `
             <div class="destination-empty">
@@ -2828,6 +3213,7 @@ function renderDashboardBookings(
 
             </div>
         `;
+
 
         return;
     }
@@ -2897,7 +3283,7 @@ function renderDashboardBookings(
 
 /* =========================================================
    DASHBOARD FAVORITES
-   ========================================================= */
+========================================================= */
 
 function renderDashboardFavorites(
     favorites
@@ -2914,7 +3300,9 @@ function renderDashboardFavorites(
     }
 
 
-    if (!favorites.length) {
+    if (
+        !favorites.length
+    ) {
 
         container.innerHTML = `
             <div class="destination-empty">
@@ -2932,24 +3320,32 @@ function renderDashboardFavorites(
             </div>
         `;
 
+
         return;
     }
 
 
     const favoriteDestinations =
-        favorites.map(
-            name =>
-                destinationState.all.find(
-                    destination =>
-                        destination.name
+        favorites
+            .map(
+                name =>
+                    destinationState.all.find(
+                        destination =>
+                            String(
+                                destination.name
+                            )
                             .toLowerCase()
                             ===
-                        name.toLowerCase()
-                )
-        ).filter(Boolean);
+                            String(name)
+                                .toLowerCase()
+                    )
+            )
+            .filter(Boolean);
 
 
-    if (!favoriteDestinations.length) {
+    if (
+        !favoriteDestinations.length
+    ) {
 
         container.innerHTML = `
             <div class="destination-empty">
@@ -2962,6 +3358,7 @@ function renderDashboardFavorites(
 
             </div>
         `;
+
 
         return;
     }
@@ -2985,7 +3382,9 @@ function renderDashboardFavorites(
                             loading="lazy"
                         >
 
-                        <div class="dashboard-favorite-overlay">
+                        <div
+                            class="dashboard-favorite-overlay"
+                        >
 
                             <strong>
                                 ${escapeHTML(
@@ -3004,7 +3403,7 @@ function renderDashboardFavorites(
 
 /* =========================================================
    ADMIN DASHBOARD
-   ========================================================= */
+========================================================= */
 
 function renderAdminDashboard() {
 
@@ -3028,30 +3427,16 @@ function renderAdminDashboard() {
         getBookings();
 
 
-    /* Stats */
+    /* Total users */
 
     const totalUsers =
         document.getElementById(
             "adminTotalUsers"
         );
 
-    const totalBookings =
-        document.getElementById(
-            "adminTotalBookings"
-        );
-
-    const pendingBookings =
-        document.getElementById(
-            "adminPendingBookings"
-        );
-
-    const confirmedBookings =
-        document.getElementById(
-            "adminConfirmedBookings"
-        );
-
 
     if (totalUsers) {
+
         totalUsers.textContent =
             users.filter(
                 user =>
@@ -3060,10 +3445,27 @@ function renderAdminDashboard() {
     }
 
 
+    /* Total bookings */
+
+    const totalBookings =
+        document.getElementById(
+            "adminTotalBookings"
+        );
+
+
     if (totalBookings) {
+
         totalBookings.textContent =
             bookings.length;
     }
+
+
+    /* Pending */
+
+    const pendingBookings =
+        document.getElementById(
+            "adminPendingBookings"
+        );
 
 
     if (pendingBookings) {
@@ -3073,10 +3475,18 @@ function renderAdminDashboard() {
                 booking =>
                     normalizeStatus(
                         booking.status
-                    ).className
-                    === "pending"
+                    ).className ===
+                    "pending"
             ).length;
     }
+
+
+    /* Confirmed */
+
+    const confirmedBookings =
+        document.getElementById(
+            "adminConfirmedBookings"
+        );
 
 
     if (confirmedBookings) {
@@ -3086,8 +3496,8 @@ function renderAdminDashboard() {
                 booking =>
                     normalizeStatus(
                         booking.status
-                    ).className
-                    === "confirmed"
+                    ).className ===
+                    "confirmed"
             ).length;
     }
 
@@ -3104,8 +3514,8 @@ function renderAdminDashboard() {
 
 
 /* =========================================================
-   ADMIN BOOKING TABLE
-   ========================================================= */
+   ADMIN BOOKINGS
+========================================================= */
 
 function renderAdminBookings(
     bookings
@@ -3122,7 +3532,9 @@ function renderAdminBookings(
     }
 
 
-    if (!bookings.length) {
+    if (
+        !bookings.length
+    ) {
 
         table.innerHTML = `
             <tr>
@@ -3136,6 +3548,7 @@ function renderAdminBookings(
 
             </tr>
         `;
+
 
         return;
     }
@@ -3274,7 +3687,7 @@ function renderAdminBookings(
 
 /* =========================================================
    UPDATE BOOKING STATUS
-   ========================================================= */
+========================================================= */
 
 function updateBookingStatus(
     bookingId,
@@ -3294,6 +3707,7 @@ function updateBookingStatus(
             "⛔ Admin access required."
         );
 
+
         return;
     }
 
@@ -3305,9 +3719,13 @@ function updateBookingStatus(
     const booking =
         bookings.find(
             item =>
-                String(item.id)
-                    ===
-                String(bookingId)
+                String(
+                    item.id
+                )
+                ===
+                String(
+                    bookingId
+                )
         );
 
 
@@ -3316,6 +3734,7 @@ function updateBookingStatus(
         showToast(
             "❌ Booking not found."
         );
+
 
         return;
     }
@@ -3344,8 +3763,8 @@ function updateBookingStatus(
 
 
 /* =========================================================
-   ADMIN USERS TABLE
-   ========================================================= */
+   ADMIN USERS
+========================================================= */
 
 function renderAdminUsers(
     users
@@ -3362,7 +3781,9 @@ function renderAdminUsers(
     }
 
 
-    if (!users.length) {
+    if (
+        !users.length
+    ) {
 
         table.innerHTML = `
             <tr>
@@ -3377,6 +3798,7 @@ function renderAdminUsers(
             </tr>
         `;
 
+
         return;
     }
 
@@ -3387,7 +3809,8 @@ function renderAdminUsers(
                 user => {
 
                     const isAdmin =
-                        user.role === "admin";
+                        user.role ===
+                        "admin";
 
 
                     return `
@@ -3445,7 +3868,7 @@ function renderAdminUsers(
 
 /* =========================================================
    STATUS HELPER
-   ========================================================= */
+========================================================= */
 
 function normalizeStatus(
     status
@@ -3453,17 +3876,26 @@ function normalizeStatus(
 
     const value =
         String(
-            status || "Pending"
+            status ||
+            "Pending"
         )
         .trim()
         .toLowerCase();
 
 
-    if (value === "confirmed") {
+    if (
+        value ===
+        "confirmed"
+    ) {
 
         return {
-            className: "confirmed",
-            label: "Confirmed"
+
+            className:
+                "confirmed",
+
+            label:
+                "Confirmed"
+
         };
     }
 
@@ -3474,22 +3906,32 @@ function normalizeStatus(
     ) {
 
         return {
-            className: "cancelled",
-            label: "Cancelled"
+
+            className:
+                "cancelled",
+
+            label:
+                "Cancelled"
+
         };
     }
 
 
     return {
-        className: "pending",
-        label: "Pending"
+
+        className:
+            "pending",
+
+        label:
+            "Pending"
+
     };
 }
 
 
 /* =========================================================
    FORMAT DATE
-   ========================================================= */
+========================================================= */
 
 function formatDate(
     value
@@ -3500,14 +3942,18 @@ function formatDate(
     }
 
 
+    const hasOnlyDate =
+        /^\d{4}-\d{2}-\d{2}$/
+            .test(
+                String(value)
+            );
+
+
     const date =
         new Date(
-            value + (
-                /^\d{4}-\d{2}-\d{2}$/
-                    .test(value)
-                    ? "T00:00:00"
-                    : ""
-            )
+            hasOnlyDate
+                ? `${value}T00:00:00`
+                : value
         );
 
 
@@ -3516,6 +3962,7 @@ function formatDate(
             date.getTime()
         )
     ) {
+
         return value;
     }
 
@@ -3533,16 +3980,16 @@ function formatDate(
 
 /* =========================================================
    THEME
-   ========================================================= */
+========================================================= */
 
 function applyTheme(
     theme
 ) {
 
     const finalTheme =
-        theme === "light"
-            ? "light"
-            : "dark";
+        theme === "dark"
+            ? "dark"
+            : "light";
 
 
     root.dataset.theme =
@@ -3566,22 +4013,22 @@ function updateThemeIcon() {
     }
 
 
-    const light =
+    const isDark =
         root.dataset.theme ===
-        "light";
+        "dark";
 
 
     themeToggle.innerHTML =
-        light
+        isDark
             ? '<i class="fa-solid fa-sun"></i>'
             : '<i class="fa-solid fa-moon"></i>';
 
 
     themeToggle.setAttribute(
         "aria-label",
-        light
-            ? "Switch to dark theme"
-            : "Switch to light theme"
+        isDark
+            ? "Switch to light theme"
+            : "Switch to dark theme"
     );
 }
 
@@ -3594,32 +4041,20 @@ function setupTheme() {
         );
 
 
-    if (savedTheme) {
-
-        applyTheme(
-            savedTheme
-        );
-
-    } else {
-
-        applyTheme(
-            "light"
-        );
-    }
+    applyTheme(
+        savedTheme || "light"
+    );
 
 
     themeToggle?.addEventListener(
         "click",
         () => {
 
-            const current =
-                root.dataset.theme;
-
-
             applyTheme(
-                current === "light"
-                    ? "dark"
-                    : "light"
+                root.dataset.theme ===
+                    "dark"
+                    ? "light"
+                    : "dark"
             );
         }
     );
@@ -3628,7 +4063,7 @@ function setupTheme() {
 
 /* =========================================================
    MOBILE MENU
-   ========================================================= */
+========================================================= */
 
 function setupMobileMenu() {
 
@@ -3656,29 +4091,32 @@ function setupMobileMenu() {
         .querySelectorAll(
             ".nav-link"
         )
-        .forEach(link => {
+        .forEach(
+            link => {
 
-            link.addEventListener(
-                "click",
-                () => {
+                link.addEventListener(
+                    "click",
+                    () => {
 
-                    navMenu?.classList.remove(
-                        "open"
-                    );
+                        navMenu?.classList.remove(
+                            "open"
+                        );
 
-                    menuToggle?.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-                }
-            );
-        });
+
+                        menuToggle?.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+                    }
+                );
+            }
+        );
 }
 
 
 /* =========================================================
    SCROLL EVENTS
-   ========================================================= */
+========================================================= */
 
 function setupScrollEvents() {
 
@@ -3686,19 +4124,19 @@ function setupScrollEvents() {
         "scroll",
         () => {
 
-            const scrollY =
+            const y =
                 window.scrollY;
 
 
             siteHeader?.classList.toggle(
                 "scrolled",
-                scrollY > 15
+                y > 15
             );
 
 
             backToTop?.classList.toggle(
                 "show",
-                scrollY > 600
+                y > 600
             );
 
 
@@ -3712,8 +4150,8 @@ function setupScrollEvents() {
 
 
 /* =========================================================
-   ACTIVE SECTION ON SCROLL
-   ========================================================= */
+   ACTIVE SECTION
+========================================================= */
 
 function updateActiveSection() {
 
@@ -3723,6 +4161,7 @@ function updateActiveSection() {
             "hidden"
         )
     ) {
+
         return;
     }
 
@@ -3740,7 +4179,8 @@ function updateActiveSection() {
 
 
     for (
-        const section of sections
+        const section
+        of sections
     ) {
 
         const rect =
@@ -3768,7 +4208,7 @@ function updateActiveSection() {
 
 /* =========================================================
    BACK TO TOP
-   ========================================================= */
+========================================================= */
 
 function setupBackToTop() {
 
@@ -3787,7 +4227,7 @@ function setupBackToTop() {
 
 /* =========================================================
    HERO CAROUSEL
-   ========================================================= */
+========================================================= */
 
 function setupCarousel() {
 
@@ -3812,6 +4252,12 @@ function setupCarousel() {
     const next =
         document.getElementById(
             "carouselNext"
+        );
+
+
+    const carousel =
+        document.getElementById(
+            "heroCarousel"
         );
 
 
@@ -3858,21 +4304,23 @@ function setupCarousel() {
     }
 
 
-    function nextSlide() {
+    function goNext() {
+
         showSlide(
             currentSlide + 1
         );
     }
 
 
-    function previousSlide() {
+    function goPrevious() {
+
         showSlide(
             currentSlide - 1
         );
     }
 
 
-    function startCarousel() {
+    function start() {
 
         clearInterval(
             carouselTimer
@@ -3881,13 +4329,13 @@ function setupCarousel() {
 
         carouselTimer =
             setInterval(
-                nextSlide,
+                goNext,
                 5000
             );
     }
 
 
-    function stopCarousel() {
+    function stop() {
 
         clearInterval(
             carouselTimer
@@ -3899,9 +4347,9 @@ function setupCarousel() {
         "click",
         () => {
 
-            previousSlide();
+            goPrevious();
 
-            startCarousel();
+            start();
         }
     );
 
@@ -3910,9 +4358,9 @@ function setupCarousel() {
         "click",
         () => {
 
-            nextSlide();
+            goNext();
 
-            startCarousel();
+            start();
         }
     );
 
@@ -3930,28 +4378,23 @@ function setupCarousel() {
                         )
                     );
 
-                    startCarousel();
+
+                    start();
                 }
             );
         }
     );
 
 
-    const carousel =
-        document.getElementById(
-            "heroCarousel"
-        );
-
-
     carousel?.addEventListener(
         "mouseenter",
-        stopCarousel
+        stop
     );
 
 
     carousel?.addEventListener(
         "mouseleave",
-        startCarousel
+        start
     );
 
 
@@ -3960,13 +4403,13 @@ function setupCarousel() {
     );
 
 
-    startCarousel();
+    start();
 }
 
 
 /* =========================================================
    CONTACT FORM
-   ========================================================= */
+========================================================= */
 
 function setupContactForm() {
 
@@ -3990,7 +4433,7 @@ function setupContactForm() {
 
 /* =========================================================
    NEWSLETTER
-   ========================================================= */
+========================================================= */
 
 function setupNewsletter() {
 
@@ -4014,7 +4457,7 @@ function setupNewsletter() {
 
 /* =========================================================
    AUTH EVENTS
-   ========================================================= */
+========================================================= */
 
 function setupAuthEvents() {
 
@@ -4022,15 +4465,17 @@ function setupAuthEvents() {
         "click",
         () => {
 
-            const currentEmail =
-                document.getElementById(
-                    "loginEmail"
-                )?.value
-                ?.trim();
+            const email =
+                document
+                    .getElementById(
+                        "loginEmail"
+                    )
+                    ?.value
+                    .trim();
 
 
             openRegister(
-                currentEmail || ""
+                email || ""
             );
         }
     );
@@ -4038,19 +4483,13 @@ function setupAuthEvents() {
 
     showLoginBtn?.addEventListener(
         "click",
-        () => {
-
-            setLoginMode();
-        }
+        setLoginMode
     );
 
 
     closeAuthModal?.addEventListener(
         "click",
-        () => {
-
-            closeAuthModalBox();
-        }
+        closeAuthModalBox
     );
 
 
@@ -4099,7 +4538,7 @@ function setupAuthEvents() {
 
 /* =========================================================
    BOOKING EVENTS
-   ========================================================= */
+========================================================= */
 
 function setupBooking() {
 
@@ -4107,12 +4546,6 @@ function setupBooking() {
         "submit",
         handleBookingSubmit
     );
-
-
-    const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
 
 
     const dateInput =
@@ -4123,6 +4556,12 @@ function setupBooking() {
 
     if (dateInput) {
 
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+
         dateInput.min =
             today;
     }
@@ -4130,8 +4569,8 @@ function setupBooking() {
 
 
 /* =========================================================
-   DASHBOARD LOGOUT
-   ========================================================= */
+   DASHBOARD EVENTS
+========================================================= */
 
 function setupDashboardActions() {
 
@@ -4157,8 +4596,732 @@ function setupDashboardActions() {
 
 
 /* =========================================================
+   TRAVELER REVIEW CAROUSEL
+========================================================= */
+
+
+/* -----------------------------------------
+   Visible cards
+----------------------------------------- */
+
+function getReviewVisibleCount() {
+
+    if (
+        window.innerWidth <= 620
+    ) {
+
+        return 1;
+    }
+
+
+    if (
+        window.innerWidth <= 900
+    ) {
+
+        return 2;
+    }
+
+
+    return 3;
+}
+
+
+/* -----------------------------------------
+   Load Review JSON
+----------------------------------------- */
+
+async function loadTravelerReviews() {
+
+    const track =
+        document.getElementById(
+            "reviewsTrack"
+        );
+
+
+    if (!track) {
+        return;
+    }
+
+
+    track.innerHTML = `
+        <div class="review-page">
+
+            <div class="reviews-loading">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <span>
+                    Loading traveler reviews...
+                </span>
+
+            </div>
+
+        </div>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "traveler-reviews.json"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "traveler-reviews.json could not be loaded."
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!Array.isArray(data)) {
+
+            throw new Error(
+                "Review JSON format is invalid."
+            );
+        }
+
+
+        reviewState.reviews =
+            data;
+
+
+        reviewState.currentPage =
+            0;
+
+
+        reviewState.visible =
+            getReviewVisibleCount();
+
+
+        renderReviewCarousel();
+
+
+    } catch (error) {
+
+        console.error(
+            "Review loading error:",
+            error
+        );
+
+
+        track.innerHTML = `
+            <div class="review-page">
+
+                <div class="reviews-loading">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <span>
+                        Unable to load traveler reviews.
+                        Check traveler-reviews.json.
+                    </span>
+
+                </div>
+
+            </div>
+        `;
+    }
+}
+
+
+/* -----------------------------------------
+   Create Review Card
+----------------------------------------- */
+
+function createReviewCard(
+    review
+) {
+
+    const rating =
+        Math.max(
+            0,
+            Math.min(
+                5,
+                Number(
+                    review.rating || 5
+                )
+            )
+        );
+
+
+    let stars = "";
+
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        stars +=
+            i <= rating
+                ? '<i class="fa-solid fa-star"></i>'
+                : '<i class="fa-regular fa-star"></i>';
+    }
+
+
+    const initial =
+        review.avatar ||
+        String(
+            review.name ||
+            "T"
+        )
+        .charAt(0)
+        .toUpperCase();
+
+
+    return `
+        <article class="review-card">
+
+            <div class="review-stars">
+
+                ${stars}
+
+                <span class="review-rating-text">
+                    ${rating}.0 / 5
+                </span>
+
+            </div>
+
+
+            <p class="review-text">
+                “${escapeHTML(
+                    review.review ||
+                    ""
+                )}”
+            </p>
+
+
+            <div class="review-user">
+
+                <div class="review-avatar">
+                    ${escapeHTML(
+                        initial
+                    )}
+                </div>
+
+
+                <div class="review-user-info">
+
+                    <strong>
+                        ${escapeHTML(
+                            review.name ||
+                            "Traveler"
+                        )}
+                    </strong>
+
+
+                    <span>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        ${escapeHTML(
+                            review.location ||
+                            ""
+                        )}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+    `;
+}
+
+
+/* -----------------------------------------
+   Render Review Pages
+----------------------------------------- */
+
+function renderReviewCarousel() {
+
+    const track =
+        document.getElementById(
+            "reviewsTrack"
+        );
+
+
+    const dotsContainer =
+        document.getElementById(
+            "reviewDots"
+        );
+
+
+    if (
+        !track ||
+        !dotsContainer
+    ) {
+        return;
+    }
+
+
+    reviewState.visible =
+        getReviewVisibleCount();
+
+
+    const visible =
+        reviewState.visible;
+
+
+    const totalPages =
+        Math.ceil(
+            reviewState.reviews.length /
+            visible
+        );
+
+
+    if (
+        totalPages <= 0
+    ) {
+
+        return;
+    }
+
+
+    if (
+        reviewState.currentPage >=
+        totalPages
+    ) {
+
+        reviewState.currentPage =
+            totalPages - 1;
+    }
+
+
+    let pagesHTML =
+        "";
+
+
+    for (
+        let i = 0;
+        i < reviewState.reviews.length;
+        i += visible
+    ) {
+
+        const group =
+            reviewState.reviews.slice(
+                i,
+                i + visible
+            );
+
+
+        pagesHTML += `
+            <div class="review-page">
+
+                ${group
+                    .map(
+                        createReviewCard
+                    )
+                    .join("")}
+
+            </div>
+        `;
+    }
+
+
+    track.innerHTML =
+        pagesHTML;
+
+
+    dotsContainer.innerHTML =
+        Array.from(
+            {
+                length:
+                    totalPages
+            },
+            (_, index) => `
+
+                <button
+                    type="button"
+                    class="review-dot ${
+                        index ===
+                        reviewState.currentPage
+                            ? "active"
+                            : ""
+                    }"
+                    data-review-page="${index}"
+                    aria-label="Go to review page ${
+                        index + 1
+                    }"
+                ></button>
+
+            `
+        )
+        .join("");
+
+
+    updateReviewCarousel(
+        false
+    );
+
+
+    dotsContainer
+        .querySelectorAll(
+            ".review-dot"
+        )
+        .forEach(
+            dot => {
+
+                dot.addEventListener(
+                    "click",
+                    () => {
+
+                        reviewState.currentPage =
+                            Number(
+                                dot.dataset
+                                    .reviewPage
+                            );
+
+
+                        updateReviewCarousel(
+                            true
+                        );
+
+
+                        restartReviewAutoplay();
+                    }
+                );
+            }
+        );
+}
+
+
+/* -----------------------------------------
+   Update Carousel
+----------------------------------------- */
+
+function updateReviewCarousel(
+    animate = true
+) {
+
+    const track =
+        document.getElementById(
+            "reviewsTrack"
+        );
+
+
+    const dots =
+        document.querySelectorAll(
+            ".review-dot"
+        );
+
+
+    if (!track) {
+        return;
+    }
+
+
+    track.style.transition =
+        animate
+            ? "transform 0.65s cubic-bezier(.22,1,.36,1)"
+            : "none";
+
+
+    track.style.transform =
+        `translateX(-${
+            reviewState.currentPage *
+            100
+        }%)`;
+
+
+    dots.forEach(
+        (dot, index) => {
+
+            dot.classList.toggle(
+                "active",
+                index ===
+                reviewState.currentPage
+            );
+        }
+    );
+
+
+    if (!animate) {
+
+        requestAnimationFrame(
+            () => {
+
+                track.style.transition =
+                    "transform 0.65s cubic-bezier(.22,1,.36,1)";
+            }
+        );
+    }
+}
+
+
+/* -----------------------------------------
+   Next Review
+----------------------------------------- */
+
+function nextReviewPage() {
+
+    const totalPages =
+        Math.ceil(
+            reviewState.reviews.length /
+            reviewState.visible
+        );
+
+
+    if (
+        totalPages <= 1
+    ) {
+
+        return;
+    }
+
+
+    reviewState.currentPage =
+        (
+            reviewState.currentPage +
+            1
+        )
+        %
+        totalPages;
+
+
+    updateReviewCarousel(
+        true
+    );
+}
+
+
+/* -----------------------------------------
+   Previous Review
+----------------------------------------- */
+
+function previousReviewPage() {
+
+    const totalPages =
+        Math.ceil(
+            reviewState.reviews.length /
+            reviewState.visible
+        );
+
+
+    if (
+        totalPages <= 1
+    ) {
+
+        return;
+    }
+
+
+    reviewState.currentPage =
+        (
+            reviewState.currentPage -
+            1 +
+            totalPages
+        )
+        %
+        totalPages;
+
+
+    updateReviewCarousel(
+        true
+    );
+}
+
+
+/* -----------------------------------------
+   Review Autoplay
+----------------------------------------- */
+
+function startReviewAutoplay() {
+
+    stopReviewAutoplay();
+
+
+    reviewState.timer =
+        setInterval(
+            () => {
+
+                nextReviewPage();
+
+            },
+            4500
+        );
+}
+
+
+function stopReviewAutoplay() {
+
+    if (
+        reviewState.timer
+    ) {
+
+        clearInterval(
+            reviewState.timer
+        );
+
+
+        reviewState.timer =
+            null;
+    }
+}
+
+
+function restartReviewAutoplay() {
+
+    startReviewAutoplay();
+}
+
+
+/* -----------------------------------------
+   Setup Review Carousel
+----------------------------------------- */
+
+function setupReviewCarousel() {
+
+    const carousel =
+        document.getElementById(
+            "reviewsCarousel"
+        );
+
+
+    const previous =
+        document.getElementById(
+            "reviewPrev"
+        );
+
+
+    const next =
+        document.getElementById(
+            "reviewNext"
+        );
+
+
+    if (!carousel) {
+        return;
+    }
+
+
+    previous?.addEventListener(
+        "click",
+        () => {
+
+            previousReviewPage();
+
+            restartReviewAutoplay();
+        }
+    );
+
+
+    next?.addEventListener(
+        "click",
+        () => {
+
+            nextReviewPage();
+
+            restartReviewAutoplay();
+        }
+    );
+
+
+    /* Desktop hover pause */
+
+    carousel.addEventListener(
+        "mouseenter",
+        stopReviewAutoplay
+    );
+
+
+    carousel.addEventListener(
+        "mouseleave",
+        startReviewAutoplay
+    );
+
+
+    /* Mobile touch */
+
+    carousel.addEventListener(
+        "touchstart",
+        stopReviewAutoplay,
+        {
+            passive: true
+        }
+    );
+
+
+    carousel.addEventListener(
+        "touchend",
+        () => {
+
+            setTimeout(
+                startReviewAutoplay,
+                1000
+            );
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    startReviewAutoplay();
+}
+
+
+/* -----------------------------------------
+   Review Responsive
+----------------------------------------- */
+
+let reviewResizeTimer =
+    null;
+
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        clearTimeout(
+            reviewResizeTimer
+        );
+
+
+        reviewResizeTimer =
+            setTimeout(
+                () => {
+
+                    const newVisible =
+                        getReviewVisibleCount();
+
+
+                    if (
+                        newVisible !==
+                        reviewState.visible
+                    ) {
+
+                        reviewState.visible =
+                            newVisible;
+
+
+                        reviewState.currentPage =
+                            0;
+
+
+                        renderReviewCarousel();
+                    }
+
+                },
+                200
+            );
+    }
+);
+
+
+/* =========================================================
    ESCAPE HTML
-   ========================================================= */
+========================================================= */
 
 function escapeHTML(
     value
@@ -4167,26 +5330,26 @@ function escapeHTML(
     return String(
         value ?? ""
     )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 }
 
 
@@ -4201,8 +5364,28 @@ function escapeAttribute(
 
 
 /* =========================================================
-   HASHCHANGE
-   ========================================================= */
+   GLOBAL FUNCTIONS
+========================================================= */
+
+window.goTo =
+    goTo;
+
+window.bookDestination =
+    bookDestination;
+
+window.toggleFavorite =
+    toggleFavorite;
+
+window.changeDestinationPage =
+    changeDestinationPage;
+
+window.updateBookingStatus =
+    updateBookingStatus;
+
+
+/* =========================================================
+   HASH CHANGE
+========================================================= */
 
 window.addEventListener(
     "hashchange",
@@ -4211,137 +5394,167 @@ window.addEventListener(
 
 
 /* =========================================================
-   GLOBAL FUNCTIONS
-   =========================================================
-   Inline HTML onclick / onchange functions
-   must remain globally accessible.
-   ========================================================= */
-
-window.goTo =
-    goTo;
-
-window.changeDestinationPage =
-    changeDestinationPage;
-
-window.updateBookingStatus =
-    updateBookingStatus;
-
-window.bookDestination =
-    bookDestination;
-
-window.toggleFavorite =
-    toggleFavorite;
-
-
-/* =========================================================
    INITIALIZATION
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        /* Demo Admin */
+        /* ---------------------------------
+           Admin
+        --------------------------------- */
+
         ensureDemoAdmin();
 
 
-        /* Theme */
+        /* ---------------------------------
+           Theme
+        --------------------------------- */
+
         setupTheme();
 
 
-        /* Mobile Navigation */
+        /* ---------------------------------
+           Mobile Nav
+        --------------------------------- */
+
         setupMobileMenu();
 
 
-        /* Scroll */
+        /* ---------------------------------
+           Scroll
+        --------------------------------- */
+
         setupScrollEvents();
 
 
-        /* Back To Top */
+        /* ---------------------------------
+           Back Top
+        --------------------------------- */
+
         setupBackToTop();
 
 
-        /* Auth */
+        /* ---------------------------------
+           Authentication
+        --------------------------------- */
+
         setupAuthEvents();
 
 
-        /* Booking */
+        /* ---------------------------------
+           Booking
+        --------------------------------- */
+
         setupBooking();
 
 
-        /* Dashboard */
+        /* ---------------------------------
+           Dashboard
+        --------------------------------- */
+
         setupDashboardActions();
 
 
-        /* Contact */
+        /* ---------------------------------
+           Contact
+        --------------------------------- */
+
         setupContactForm();
 
 
-        /* Newsletter */
+        /* ---------------------------------
+           Newsletter
+        --------------------------------- */
+
         setupNewsletter();
 
 
-        /* Packages */
+        /* ---------------------------------
+           Packages
+        --------------------------------- */
+
         setupPackageActions();
 
 
-        /* Destination buttons */
+        /* ---------------------------------
+           Destinations
+        --------------------------------- */
+
         setupDestinationActions();
 
-
-        /* Search */
         setupDestinationSearch();
 
 
-        /* Load JSON */
+        /* ---------------------------------
+           Load Destination JSON
+        --------------------------------- */
+
         await loadDestinations();
 
 
-        /* User UI */
+        /* ---------------------------------
+           Load Review JSON
+        --------------------------------- */
+
+        await loadTravelerReviews();
+
+
+        /* ---------------------------------
+           Review Carousel
+        --------------------------------- */
+
+        setupReviewCarousel();
+
+
+        /* ---------------------------------
+           User UI
+        --------------------------------- */
+
         updateUserUI();
 
 
-        /* Booking fields */
+        /* ---------------------------------
+           Booking Fields
+        --------------------------------- */
+
         updateBookingFields();
 
 
-        /* Hero */
+        /* ---------------------------------
+           Hero Carousel
+        --------------------------------- */
+
         setupCarousel();
 
 
-        /* Route */
+        /* ---------------------------------
+           Route
+        --------------------------------- */
+
         renderRoute();
 
 
-        /* Dashboard data */
+        /* ---------------------------------
+           User Dashboard
+        --------------------------------- */
+
         renderUserDashboard();
 
 
-        /* Admin data */
+        /* ---------------------------------
+           Admin Dashboard
+        --------------------------------- */
+
         renderAdminDashboard();
 
 
-        /* Update favorite state */
+        /* ---------------------------------
+           Favorites
+        --------------------------------- */
+
         updateFavoriteButtons();
-
-    }
-);
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        document
-            .querySelectorAll(".profile-nav.open")
-            .forEach(profile => {
-
-                if (
-                    !profile.contains(event.target)
-                ) {
-                    profile.classList.remove("open");
-                }
-
-            });
 
     }
 );

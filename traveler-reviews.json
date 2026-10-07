@@ -1,0 +1,98 @@
+[
+    {
+        "id": 1,
+        "name": "Rahim Ahmed",
+        "location": "Dhaka, Bangladesh",
+        "rating": 5,
+        "review": "The Sajek trip was amazing. Everything was well organized, and the booking process was very easy from start to finish.",
+        "avatar": "R"
+    },
+    {
+        "id": 2,
+        "name": "Sumaiya Rahman",
+        "location": "Chattogram, Bangladesh",
+        "rating": 5,
+        "review": "We booked a Cox's Bazar package for our family. The hotel, transport, and support were excellent. Highly recommended!",
+        "avatar": "S"
+    },
+    {
+        "id": 3,
+        "name": "Nadia Islam",
+        "location": "Feni, Bangladesh",
+        "rating": 5,
+        "review": "Our Bali trip was unforgettable. Wanderlust made planning everything simple, and the whole experience felt smooth and comfortable.",
+        "avatar": "N"
+    },
+    {
+        "id": 4,
+        "name": "Tanvir Hossain",
+        "location": "Sylhet, Bangladesh",
+        "rating": 4,
+        "review": "The Sylhet package was a great value for money. The itinerary was well planned and the support team responded quickly.",
+        "avatar": "T"
+    },
+    {
+        "id": 5,
+        "name": "Mim Akter",
+        "location": "Cumilla, Bangladesh",
+        "rating": 5,
+        "review": "I loved the travel experience with Wanderlust. The destination suggestions were beautiful and the booking process was hassle-free.",
+        "avatar": "M"
+    },
+    {
+        "id": 6,
+        "name": "Arif Hasan",
+        "location": "Rajshahi, Bangladesh",
+        "rating": 5,
+        "review": "Dubai was beyond expectations. The package details were clear, and the trip planning support made everything easier for us.",
+        "avatar": "A"
+    },
+    {
+        "id": 7,
+        "name": "Jannatul Ferdous",
+        "location": "Noakhali, Bangladesh",
+        "rating": 5,
+        "review": "Our family trip to Maldives was fantastic. The service was professional, friendly, and well organized throughout the journey.",
+        "avatar": "J"
+    },
+    {
+        "id": 8,
+        "name": "Sakib Chowdhury",
+        "location": "Khulna, Bangladesh",
+        "rating": 4,
+        "review": "I really liked how easy it was to compare destinations and packages. The overall booking experience was smooth and convenient.",
+        "avatar": "S"
+    },
+    {
+        "id": 9,
+        "name": "Farzana Yasmin",
+        "location": "Dhaka, Bangladesh",
+        "rating": 5,
+        "review": "The Cox's Bazar trip was perfectly planned. We enjoyed the beach, sunset, and food without worrying about the arrangements.",
+        "avatar": "F"
+    },
+    {
+        "id": 10,
+        "name": "Mehedi Hasan",
+        "location": "Bogra, Bangladesh",
+        "rating": 5,
+        "review": "The team was responsive and helpful whenever we had questions. I would definitely use Wanderlust again for my next trip.",
+        "avatar": "M"
+    },
+    {
+        "id": 11,
+        "name": "Nusrat Jahan",
+        "location": "Mymensingh, Bangladesh",
+        "rating": 5,
+        "review": "From choosing the destination to completing the booking, everything felt simple and professional. A great travel experience.",
+        "avatar": "N"
+    },
+    {
+        "id": 12,
+        "name": "Imran Kabir",
+        "location": "Chattogram, Bangladesh",
+        "rating": 5,
+        "review": "Wanderlust made our international travel planning much easier. The package information was clear and the service was excellent.",
+        "avatar": "I"
+    }
+]
